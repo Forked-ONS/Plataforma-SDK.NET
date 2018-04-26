@@ -2,7 +2,7 @@
 
 namespace Plataforma_SDK.NET
 {
-    public interface ProcessApp
+    public interface IProcessApp
     {
     }
 }

@@ -1,11 +1,18 @@
-using System;
+using ONS.PlataformaSDK.Http;
 
 namespace ONS.PlataformaSDK.ProcessMemory
 {
     public class ProcessMemoryClient
     {
-        public string Head() {
-            return "";
+        private HttpClient HttpClient;
+        public ProcessMemoryClient(HttpClient httpClient)
+        {
+            this.HttpClient = httpClient;
+        }
+        public string Head(string processInstanceId)
+        {
+
+            return HttpClient.get("");
         }
     }
 }

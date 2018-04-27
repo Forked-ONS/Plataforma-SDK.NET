@@ -3,7 +3,7 @@ namespace ONS.PlataformaSDK.Http
 
     public class HttpClient
     {
-        public string get(string url)
+        public virtual string Get(string url)
         {
             return "";
         }

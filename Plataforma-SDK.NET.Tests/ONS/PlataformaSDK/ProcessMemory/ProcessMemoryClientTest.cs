@@ -3,6 +3,7 @@ using NUnit.Framework;
 using ONS.PlataformaSDK.ProcessMemory;
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Environment;
+using System.Threading.Tasks;
 
 namespace ONS.PlataformaSDK.ProcessMemory
 {
@@ -18,7 +19,8 @@ namespace ONS.PlataformaSDK.ProcessMemory
         public void Setup()
         {
             HttpClientMock = new Mock<HttpClient>();
-            HttpClientMock.Setup(mock => mock.Get(URL_HEAD)).Returns("{head:head}");
+            var task = Task.FromResult("{head:head}");
+            HttpClientMock.Setup(mock => mock.Get(URL_HEAD)).Returns(task);
             EnvironmentProperties = new EnvironmentProperties("http", "localhost", "9091");
             ProcessMemoryClient = new ProcessMemoryClient(HttpClientMock.Object, EnvironmentProperties);
         }
@@ -26,8 +28,9 @@ namespace ONS.PlataformaSDK.ProcessMemory
         [Test]
         public void Head()
         {   
-            Assert.AreEqual("{head:head}", ProcessMemoryClient.Head(PROCESS_INSTANCE_ID));
-            HttpClientMock.Verify(httpClient => httpClient.Get(URL_HEAD), Times.Once);
+            Assert.AreEqual("{head:head}", ProcessMemoryClient.Head(PROCESS_INSTANCE_ID).Result);
+            Http ClientMock.Verify(httpClient => httpClient.Get(URL_HEAD), Times.Once);
         }
+
     }
 }

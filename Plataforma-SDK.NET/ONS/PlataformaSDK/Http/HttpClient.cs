@@ -1,11 +1,21 @@
+using System.Net.Http;
+using System.Threading.Tasks;
+
 namespace ONS.PlataformaSDK.Http
 {
 
     public class HttpClient
     {
-        public virtual string Get(string url)
+        private System.Net.Http.HttpClient client;
+        public HttpClient() {
+            client = new System.Net.Http.HttpClient();
+        }
+        async public virtual Task<string> Get(string url)
         {
-            return "";
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody;
         }
 
     }

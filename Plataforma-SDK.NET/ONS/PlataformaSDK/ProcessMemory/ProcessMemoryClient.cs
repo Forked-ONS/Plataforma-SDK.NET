@@ -1,5 +1,6 @@
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Environment;
+using System.Threading.Tasks;
 
 namespace ONS.PlataformaSDK.ProcessMemory
 {
@@ -12,11 +13,8 @@ namespace ONS.PlataformaSDK.ProcessMemory
             this.HttpClient = httpClient;
             this.ProcessMemoryEnvironmentProperties = processMemoryEnvironmentProperties;
         }
-        public string Head(string processInstanceId)
+        public Task<string> Head(string processInstanceId)
         {
-            System.Console.WriteLine($"{ProcessMemoryEnvironmentProperties.Scheme}://{ProcessMemoryEnvironmentProperties.Host}:{ProcessMemoryEnvironmentProperties.Port}" +
-                $"/{processInstanceId}/head");
-            System.Console.WriteLine("--------------");
             return HttpClient.Get($"{ProcessMemoryEnvironmentProperties.Scheme}://{ProcessMemoryEnvironmentProperties.Host}:{ProcessMemoryEnvironmentProperties.Port}" +
                 $"/{processInstanceId}/head");
         }

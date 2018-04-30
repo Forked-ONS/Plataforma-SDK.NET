@@ -25,7 +25,6 @@ namespace ONS.PlataformaSDK.ProcessApp
         public Event ParseEvent(string processMemoryValue) {
             var Object = JObject.Parse(processMemoryValue);
             Event Event = new Event(Object);
-            System.Console.WriteLine(Object);
             return Event;
         }
     }

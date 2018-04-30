@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ONS.PlataformaSDK.ProcessMemory;
+using Newtonsoft.Json.Linq;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
@@ -19,6 +20,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             Task<string> HeadTask = ProcessMemoryClient.Head(this.ProcessInstanceId);
             var head = await HeadTask;
             System.Console.WriteLine(head);
+        }
+
+        public Event ParseEvent(string processMemoryValue) {
+            var Object = JObject.Parse(processMemoryValue);
+            Event Event = new Event(Object);
+            System.Console.WriteLine(Object);
+            return Event;
         }
     }
 }

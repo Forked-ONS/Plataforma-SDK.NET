@@ -1,13 +1,18 @@
-using System;
+using Newtonsoft.Json.Linq;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
-    class Event
+    public class Event
     {
-        private string name;
-        private string InstanceId;
-        private DateTime ReferenceDate;
-        private string Scope;
-        private string payload;
+        public JObject Values;
+
+        public Event(JObject values) {
+            this.Values = values;
+        }
+
+        public string Name() {
+            System.Console.WriteLine(Values);
+            return (string) Values["name"];
+        }
     }
 }

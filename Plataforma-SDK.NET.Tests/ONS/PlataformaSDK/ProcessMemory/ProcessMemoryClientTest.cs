@@ -29,7 +29,7 @@ namespace ONS.PlataformaSDK.ProcessMemory
         public void Head()
         {   
             Assert.AreEqual("{head:head}", ProcessMemoryClient.Head(PROCESS_INSTANCE_ID).Result);
-            Http ClientMock.Verify(httpClient => httpClient.Get(URL_HEAD), Times.Once);
+            HttpClientMock.Verify(httpClient => httpClient.Get(URL_HEAD), Times.Once);
         }
 
     }

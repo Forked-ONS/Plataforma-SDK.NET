@@ -4,13 +4,14 @@ using ONS.PlataformaSDK.Core;
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Environment;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ONS.PlataformaSDK.Core
 {
     public class CoreClientTest
     {
-        private const string PROCESS_INSTANCE_ID = "11de37cb-2a69-45d9-9a46-3b24f57eb25b";
-        private const string URL_HEAD = "http://localhost:9110/core/operation?filter=byProcessId&processId=1448a166-a191-40e7-8c05-b1621f34ad73";
+        private const string PROCESS_ID = "1448a166-a191-40e7-8c05-b1621f34ad73";
+        private const string URL_FIND_OPERATION_BY_PROCESS_ID = "http://localhost:9110/core/operation?filter=byProcessId&processId=1448a166-a191-40e7-8c05-b1621f34ad73";
         private CoreClient CoreClient;
         private Mock<HttpClient> HttpClientMock;
         private EnvironmentProperties EnvironmentProperties;
@@ -20,7 +21,7 @@ namespace ONS.PlataformaSDK.Core
         {
             HttpClientMock = new Mock<HttpClient>();
             var task = Task.FromResult(GetJsonOperationByProcessId());
-            HttpClientMock.Setup(mock => mock.Get(URL_HEAD)).Returns(task);
+            HttpClientMock.Setup(mock => mock.Get(URL_FIND_OPERATION_BY_PROCESS_ID)).Returns(task);
             EnvironmentProperties = new EnvironmentProperties("http", "localhost", "9110");
             CoreClient = new CoreClient(HttpClientMock.Object, EnvironmentProperties);
         }
@@ -28,8 +29,9 @@ namespace ONS.PlataformaSDK.Core
         [Test]
         public void operationByProcessId()
         {
-            Assert.AreEqual(new Operation(), CoreClient.OperationByProcessId());
-            HttpClientMock.Verify(httpClient => httpClient.Get(URL_HEAD), Times.Once);
+            List<Operation> Operations = CoreClient.OperationByProcessId(PROCESS_ID);
+            HttpClientMock.Verify(httpClient => httpClient.Get(URL_FIND_OPERATION_BY_PROCESS_ID), Times.Once);
+            // Assert.NotNull(Operations);
         }
 
         public string GetJsonOperationByProcessId()

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ONS.PlataformaSDK.Core;
 using ONS.PlataformaSDK.ProcessMemory;
@@ -23,7 +24,16 @@ namespace ONS.PlataformaSDK.ProcessApp
         public async void Start()
         {
             Task<string> HeadTask = ProcessMemoryClient.Head(this.ProcessInstanceId);
-            var head = await HeadTask;
+            var HeadString = await HeadTask;
+            ParseHead(HeadString);
+        }
+
+        private void ParseHead(string headString) 
+        {
+            var Head = JObject.Parse(headString);
+            if(Head["event"] == null) {
+                Context.Event = JsonConvert.DeserializeObject<Event>(headString);
+            }
         }
 
     }

@@ -28,7 +28,10 @@ namespace ONS.PlataformaSDK.ProcessApp
         {   
             ProcessApp.Start();
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(PROCESS_INSTANCE_ID), Times.Once);
-            // Assert.AreEqual("presentation.exclui.tarefa.request", Event.Name());
+            Assert.AreEqual("presentation.exclui.tarefa.request", ProcessApp.Context.Event.Name);
+            Assert.AreEqual("execution", ProcessApp.Context.Event.Scope);
+            Assert.NotNull(ProcessApp.Context.Event.Payload);
+            Assert.AreEqual("Teste", (string) ProcessApp.Context.Event.Payload["nomeTarefa"]);
         }
 
         private void CreateProcessMemoryClientMock(){

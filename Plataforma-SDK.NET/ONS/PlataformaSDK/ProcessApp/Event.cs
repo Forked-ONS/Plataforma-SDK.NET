@@ -4,15 +4,8 @@ namespace ONS.PlataformaSDK.ProcessApp
 {
     public class Event
     {
-        public JObject Values;
-
-        public Event(JObject values) {
-            this.Values = values;
-        }
-
-        public string Name() {
-            System.Console.WriteLine(Values);
-            return (string) Values["name"];
-        }
+        public string Name{get; set;}
+        public string Scope{get; set;}
+        public JObject Payload{get; set;}
     }
 }

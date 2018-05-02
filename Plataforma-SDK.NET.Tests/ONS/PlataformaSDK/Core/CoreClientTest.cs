@@ -3,14 +3,15 @@ using NUnit.Framework;
 using ONS.PlataformaSDK.Core;
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Environment;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ONS.PlataformaSDK.Core
 {
     public class CoreClientTest
     {
         private const string PROCESS_ID = "1448a166-a191-40e7-8c05-b1621f34ad73";
+        
         private const string URL_FIND_OPERATION_BY_PROCESS_ID = "http://localhost:9110/core/operation?filter=byProcessId&processId=1448a166-a191-40e7-8c05-b1621f34ad73";
         private CoreClient CoreClient;
         private Mock<HttpClient> HttpClientMock;

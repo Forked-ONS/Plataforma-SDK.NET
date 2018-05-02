@@ -1,6 +1,7 @@
 namespace ONS.PlataformaSDK.ProcessApp
 {
-    class Context
+    public class Context
     {
+        public Event Event{get; set;}
     }
 }

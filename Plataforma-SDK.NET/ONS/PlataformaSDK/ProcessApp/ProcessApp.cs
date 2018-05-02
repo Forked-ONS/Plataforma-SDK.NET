@@ -1,6 +1,7 @@
-using System.Threading.Tasks;
-using ONS.PlataformaSDK.ProcessMemory;
 using Newtonsoft.Json.Linq;
+using ONS.PlataformaSDK.Core;
+using ONS.PlataformaSDK.ProcessMemory;
+using System.Threading.Tasks;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
@@ -8,24 +9,22 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         private string ProcessInstanceId;
         private ProcessMemoryClient ProcessMemoryClient;
+        private CoreClient CoreClient;
+        public Context Context{get; set;}
 
-        public ProcessApp(string processInstanceId, ProcessMemoryClient processMemoryClient)
+        public ProcessApp(string processInstanceId, ProcessMemoryClient processMemoryClient, CoreClient coreClient)
         { 
             this.ProcessInstanceId = processInstanceId;
             this.ProcessMemoryClient = processMemoryClient;
+            this.CoreClient = coreClient; 
+            this.Context = new Context();  
         }
 
-        public async Task Start()
+        public async void Start()
         {
             Task<string> HeadTask = ProcessMemoryClient.Head(this.ProcessInstanceId);
             var head = await HeadTask;
-            System.Console.WriteLine(head);
         }
 
-        public Event ParseEvent(string processMemoryValue) {
-            var Object = JObject.Parse(processMemoryValue);
-            Event Event = new Event(Object);
-            return Event;
-        }
     }
 }

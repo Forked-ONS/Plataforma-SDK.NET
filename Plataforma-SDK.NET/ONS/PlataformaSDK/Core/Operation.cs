@@ -10,8 +10,5 @@ namespace ONS.PlataformaSDK.Core
         public string Name{ get; set; }
         public string ProcessId{ get; set; }
         public string SystemId{ get; set; }
-        public Operation()
-        {
-        }
     }
 }

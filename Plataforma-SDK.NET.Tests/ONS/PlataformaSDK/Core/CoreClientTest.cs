@@ -29,9 +29,27 @@ namespace ONS.PlataformaSDK.Core
         [Test]
         public void operationByProcessId()
         {
-            List<Operation> Operations = CoreClient.OperationByProcessId(PROCESS_ID);
+            var OperationsTask = CoreClient.OperationByProcessIdAsync(PROCESS_ID);
             HttpClientMock.Verify(httpClient => httpClient.Get(URL_FIND_OPERATION_BY_PROCESS_ID), Times.Once);
-            // Assert.NotNull(Operations);
+            var Operations = OperationsTask.Result;
+
+            Assert.IsTrue(Operations[0].Commit);
+            Assert.AreEqual("presentation.insere.tarefa.request", Operations[0].Event_In);
+            Assert.AreEqual("presentation.insere.tarefa.request.done", Operations[0].Event_Out);
+            Assert.AreEqual("d89036a1-de71-446e-a3f9-7b519c4247ac", Operations[0].Id);
+            Assert.AreEqual("registry:5000/mantertarefasretificacaopresentation.app:fe6c0c2d-5859-48d9-9828-27578d7c975e", Operations[0].Image);
+            Assert.AreEqual("presentation.insere.tarefa.request", Operations[0].Name);
+            Assert.AreEqual("1448a166-a191-40e7-8c05-b1621f34ad73", Operations[0].ProcessId);
+            Assert.AreEqual("eb60a12f-130d-4b8b-8b0d-a5f94d39cb0b", Operations[0].SystemId);
+
+            Assert.IsTrue(Operations[1].Commit);
+            Assert.AreEqual("presentation.uploadplanilha.tarefa.request", Operations[1].Event_In);
+            Assert.AreEqual("presentation.uploadplanilha.tarefa.request.done", Operations[1].Event_Out);
+            Assert.AreEqual("a2eedc5e-749a-4118-9780-98a09b308c4b", Operations[1].Id);
+            Assert.AreEqual("registry:5000/mantertarefasretificacaopresentation.app:fe6c0c2d-5859-48d9-9828-27578d7c975e", Operations[1].Image);
+            Assert.AreEqual("presentation.uploadplanilha.tarefa.request", Operations[1].Name);
+            Assert.AreEqual("1448a166-a191-40e7-8c05-b1621f34ad73", Operations[1].ProcessId);
+            Assert.AreEqual("eb60a12f-130d-4b8b-8b0d-a5f94d39cb0b", Operations[1].SystemId);
         }
 
         public string GetJsonOperationByProcessId()

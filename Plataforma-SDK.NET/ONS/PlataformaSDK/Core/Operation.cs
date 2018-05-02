@@ -2,14 +2,14 @@ namespace ONS.PlataformaSDK.Core
 {
     public class Operation
     {
-        private bool commit;
-        private string EventIn;
-        private string EventOut;
-        private string Id;
-        private string image;   
-        private string name;
-        private string ProcessId;
-        private string SystemId;
+        public bool Commit{ get; set; }
+        public string Event_In{ get; set; }
+        public string Event_Out{ get; set; }
+        public string Id{ get; set; }
+        public string Image{ get; set; }   
+        public string Name{ get; set; }
+        public string ProcessId{ get; set; }
+        public string SystemId{ get; set; }
         public Operation()
         {
         }

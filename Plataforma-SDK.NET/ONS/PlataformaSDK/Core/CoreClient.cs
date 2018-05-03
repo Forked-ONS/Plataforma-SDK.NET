@@ -20,7 +20,7 @@ namespace ONS.PlataformaSDK.Core
             this.HttpClient = httpClient;
             this.CoreEnvironmentProperties = coreEnvironmentProperties;
         }
-        public async Task<List<Operation>> OperationByProcessIdAsync(string processId) {
+        public virtual async Task<List<Operation>> OperationByProcessIdAsync(string processId) {
             var OperationJsonTask = HttpClient.Get($"{CoreEnvironmentProperties.Scheme}://{CoreEnvironmentProperties.Host}:{CoreEnvironmentProperties.Port}" +
                 $"/core/operation?filter=byProcessId&processId={processId}");
             var OperationJson = await OperationJsonTask;

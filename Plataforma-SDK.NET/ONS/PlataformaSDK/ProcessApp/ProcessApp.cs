@@ -1,7 +1,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ONS.PlataformaSDK.Core;
-using ONS.PlataformaSDK.ProcessMemory;
+using ONS.PlataformaSDK.Entities;
+using ONS.PlataformaSDK.ProcessMemoryClient;
 using ONS.PlataformaSDK.Util;
 using ONS.PlataformaSDK.Exception;
 using System.Threading.Tasks;
@@ -13,11 +14,11 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         private string ProcessInstanceId;
         private string ProcessId;
-        private ProcessMemoryClient ProcessMemoryClient;
+        private ProcessMemoryHttpClient ProcessMemoryClient;
         private CoreClient CoreClient;
         public Context Context { get; set; }
 
-        public ProcessApp(string processInstanceId, string processId, ProcessMemoryClient processMemoryClient, CoreClient coreClient)
+        public ProcessApp(string processInstanceId, string processId, ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient)
         {
             this.ProcessInstanceId = processInstanceId;
             this.ProcessId = processId;
@@ -29,8 +30,8 @@ namespace ONS.PlataformaSDK.ProcessApp
         public async void Start()
         {
             var HeadTask = ProcessMemoryClient.Head(this.ProcessInstanceId);
-            var HeadString = await HeadTask;
-            ParseHead(HeadString);
+            var ProcessMemory = await HeadTask;
+            Context.Event = ProcessMemory.Event;
 
             var OperationTask = CoreClient.OperationByProcessIdAsync(ProcessId);
             var Operations = await OperationTask;
@@ -44,15 +45,6 @@ namespace ONS.PlataformaSDK.ProcessApp
                 throw new PlataformaException($"Operation not found for process {this.ProcessId}");
             }
 
-        }
-
-        private void ParseHead(string headString)
-        {
-            var Head = JObject.Parse(headString);
-            if (Head["event"] == null)
-            {
-                Context.Event = JsonConvert.DeserializeObject<Event>(headString);
-            }
         }
 
     }

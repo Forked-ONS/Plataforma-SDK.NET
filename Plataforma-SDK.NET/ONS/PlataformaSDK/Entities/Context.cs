@@ -1,4 +1,4 @@
-namespace ONS.PlataformaSDK.ProcessApp
+namespace ONS.PlataformaSDK.Entities
 {
     public class Context
     {

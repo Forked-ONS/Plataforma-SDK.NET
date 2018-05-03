@@ -1,10 +1,10 @@
 using Moq;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Core;
+using ONS.PlataformaSDK.Entities;
 using ONS.PlataformaSDK.Exception;
 using ONS.PlataformaSDK.ProcessApp;
-using ONS.PlataformaSDK.ProcessMemory;
-using System;
+using ONS.PlataformaSDK.ProcessMemoryClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,7 +16,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         private const string PROCESS_INSTANCE_ID = "abaf4fbe-5359-41e7-a07c-8bd60191de56";
         private const string PROCESS_ID = "1448a166-a191-40e7-8c05-b1621f34ad73";
         private ProcessApp ProcessApp;
-        private Mock<ProcessMemoryClient> ProcessMemoryClientMock;
+        private Mock<ProcessMemoryHttpClient> ProcessMemoryClientMock;
         private Mock<CoreClient> CoreClientMock;
 
         [SetUp]
@@ -33,12 +33,9 @@ namespace ONS.PlataformaSDK.ProcessApp
             ProcessApp.Start();
 
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(PROCESS_INSTANCE_ID), Times.Once);
-            Assert.AreEqual("presentation.exclui.tarefa.request", ProcessApp.Context.Event.Name);
-            Assert.AreEqual("execution", ProcessApp.Context.Event.Scope);
-            Assert.NotNull(ProcessApp.Context.Event.Payload);
-            Assert.AreEqual("Teste", (string)ProcessApp.Context.Event.Payload["nomeTarefa"]);
-
             CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessIdAsync(PROCESS_ID), Times.Once);
+            //FIXME Equals            
+            Assert.AreEqual("presentation.insere.tarefa.request", ProcessApp.Context.Event.Name);
         }
 
         [Test]
@@ -49,7 +46,7 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void CreateProcessMemoryClientMock()
         {
-            ProcessMemoryClientMock = new Mock<ProcessMemoryClient>();
+            ProcessMemoryClientMock = new Mock<ProcessMemoryHttpClient>();
             ProcessMemoryClientMock.Setup(mock => mock.Head(PROCESS_INSTANCE_ID)).Returns(Task.FromResult(GetProcessMemoryHead()));
         }
 
@@ -65,17 +62,25 @@ namespace ONS.PlataformaSDK.ProcessApp
             CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(Task.FromResult(new List<Operation>()));
         }
 
-        private string GetProcessMemoryHead()
+        private ProcessMemoryEntity GetProcessMemoryHead()
         {
-            return "{\"name\":\"presentation.exclui.tarefa.request\",\"instance_id\":null,\"reference_date\":null,\"scope\":\"execution\",\"reproduction\":{},\"reprocess\":{},\"payload\":{\"tarefa\":{\"_metadata\":{\"branch\":\"master\",\"instance_id\":\"2c086980-de88-4990-8e33-683b6d871ee4\",\"type\":\"tarefaretificacao\"},\"id\":\"85fd51bb-3739-409f-bcb0-40fe6a52593f\",\"nome\":\"Teste\",\"situacao\":null},\"nomeTarefa\":\"Teste\"}}";
+            var ProcessMemoryEntity = new ProcessMemoryEntity();
+            ProcessMemoryEntity.Event = GetEvent();
+            return ProcessMemoryEntity;
         }
 
-        public List<Operation> GetOperationList()
+        private List<Operation> GetOperationList()
         {
             var Operation = new Operation();
             var OperationsList = new List<Operation>();
             OperationsList.Add(Operation);
             return OperationsList;
+        }
+
+        private Event GetEvent() {
+            var Event = new Event();
+            Event.Name = "presentation.insere.tarefa.request";
+            return Event;
         }
 
     }

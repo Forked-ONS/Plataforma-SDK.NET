@@ -11,7 +11,6 @@ namespace ONS.PlataformaSDK.Entities
         public JObject Reproduction{get; set;}
         public JObject Reprocess{get; set;}
         public JObject Payload{get; set;}
-
         
     }
 }

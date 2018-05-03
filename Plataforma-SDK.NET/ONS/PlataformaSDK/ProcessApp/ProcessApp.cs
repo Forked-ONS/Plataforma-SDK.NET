@@ -27,7 +27,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.Context = new Context();
         }
 
-        public async void Start()
+        public async Task Start()
         {
             var HeadTask = ProcessMemoryClient.Head(this.ProcessInstanceId);
             var ProcessMemory = await HeadTask;

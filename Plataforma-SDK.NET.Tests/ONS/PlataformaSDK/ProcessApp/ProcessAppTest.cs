@@ -28,14 +28,19 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
 
         [Test]
-        public void Start()
+        public async Task Start()
         {
-            ProcessApp.Start();
+            await ProcessApp.Start();
 
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(PROCESS_INSTANCE_ID), Times.Once);
             CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessIdAsync(PROCESS_ID), Times.Once);
             //FIXME Equals            
             Assert.AreEqual("presentation.insere.tarefa.request", ProcessApp.Context.Event.Name);
+            Assert.AreEqual("1448a166-a191-40e7-8c05-b1621f34ad73", ProcessApp.Context.ProcessId);
+            Assert.AreEqual("eb60a12f-130d-4b8b-8b0d-a5f94d39cb0", ProcessApp.Context.SystemId);
+            Assert.AreEqual(PROCESS_INSTANCE_ID, ProcessApp.Context.InstanceId);
+            Assert.AreEqual("presentation.insere.tarefa.request.done", ProcessApp.Context.EventOut);
+            Assert.True(ProcessApp.Context.Commit);
         }
 
         [Test]
@@ -72,6 +77,10 @@ namespace ONS.PlataformaSDK.ProcessApp
         private List<Operation> GetOperationList()
         {
             var Operation = new Operation();
+            Operation.ProcessId = "1448a166-a191-40e7-8c05-b1621f34ad73";
+            Operation.SystemId = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
+            Operation.Event_Out = "presentation.insere.tarefa.request.done" ;
+            Operation.Commit = true;
             var OperationsList = new List<Operation>();
             OperationsList.Add(Operation);
             return OperationsList;

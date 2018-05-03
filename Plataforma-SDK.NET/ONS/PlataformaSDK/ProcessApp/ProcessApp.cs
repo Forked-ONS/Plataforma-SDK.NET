@@ -36,6 +36,12 @@ namespace ONS.PlataformaSDK.ProcessApp
             var OperationTask = CoreClient.OperationByProcessIdAsync(ProcessId);
             var Operations = await OperationTask;
             VerifyOperationList(Operations);
+
+            Context.InstanceId = this.ProcessInstanceId;
+            Context.ProcessId = Operations[0].ProcessId;
+            Context.SystemId = Operations[0].SystemId;
+            Context.EventOut = Operations[0].Event_Out;
+            Context.Commit = Operations[0].Commit;
         }
 
         public void VerifyOperationList(List<Operation> Operations)

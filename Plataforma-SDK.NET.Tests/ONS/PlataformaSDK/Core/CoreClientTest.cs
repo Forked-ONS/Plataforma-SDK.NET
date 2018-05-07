@@ -18,6 +18,7 @@ namespace ONS.PlataformaSDK.Core
 
         private const string URL_FIND_MAP_BY_PROCESS_ID = "http://localhost:9110/core/map?filter=byProcessId&processId=1448a166-a191-40e7-8c05-b1621f34ad73";
 
+        private const string CONTENT_STR = "unidadegeradora:\n  model: tb_unidade_geradora\n  fields:\n    idUge:\n      column: id_uge\n    potenciaDisponivel:\n      column: pot_disp\n    dataInicioOperacao:\n      column: data_inicio_operacao\n    idUsina:\n      column: id_usina\n  filters:\n    byIdUsina:  \"id_usina in ($idsUsinas)\"";
         private CoreClient CoreClient;
         private Mock<HttpClient> HttpClientMock;
         private EnvironmentProperties EnvironmentProperties;
@@ -68,6 +69,10 @@ namespace ONS.PlataformaSDK.Core
             var Maps = MapTask.Result;
 
             Assert.AreEqual("c81957b6-4fd7-47b5-aaa0-27d9f93a8277", Maps[0].Id);
+            Assert.AreEqual("mantertarefas", Maps[0].Name);
+            Assert.AreEqual("1448a166-a191-40e7-8c05-b1621f34ad73", Maps[0].ProcessId);
+            Assert.AreEqual("eb60a12f-130d-4b8b-8b0d-a5f94d39cb0b", Maps[0].SystemId);
+            Assert.AreEqual(CONTENT_STR, Maps[0].Content);
         }
 
 

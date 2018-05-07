@@ -15,6 +15,8 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         private const string PROCESS_INSTANCE_ID = "abaf4fbe-5359-41e7-a07c-8bd60191de56";
         private const string PROCESS_ID = "1448a166-a191-40e7-8c05-b1621f34ad73";
+        private const string EVENT_IN = "presentation.insere.tarefa.request";
+        private const string SYSTEM_ID = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
         private ProcessApp ProcessApp;
         private Mock<ProcessMemoryHttpClient> ProcessMemoryClientMock;
         private Mock<CoreClient> CoreClientMock;
@@ -24,7 +26,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             CreateProcessMemoryClientMock();
             CreateCoreClientMock();
-            ProcessApp = new ProcessApp(PROCESS_INSTANCE_ID, PROCESS_ID, ProcessMemoryClientMock.Object, CoreClientMock.Object);
+            ProcessApp = new ProcessApp(SYSTEM_ID, PROCESS_INSTANCE_ID, PROCESS_ID, EVENT_IN, ProcessMemoryClientMock.Object, CoreClientMock.Object);
         }
 
         [Test]
@@ -35,11 +37,12 @@ namespace ONS.PlataformaSDK.ProcessApp
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(PROCESS_INSTANCE_ID), Times.Once);
             CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessIdAsync(PROCESS_ID), Times.Once);
             //FIXME Equals            
-            Assert.AreEqual("presentation.insere.tarefa.request", ProcessApp.Context.Event.Name);
+            Assert.AreEqual(EVENT_IN, ProcessApp.Context.Event.Name);
             Assert.AreEqual("1448a166-a191-40e7-8c05-b1621f34ad73", ProcessApp.Context.ProcessId);
-            Assert.AreEqual("eb60a12f-130d-4b8b-8b0d-a5f94d39cb0", ProcessApp.Context.SystemId);
+            Assert.AreEqual(SYSTEM_ID, ProcessApp.Context.SystemId);
             Assert.AreEqual(PROCESS_INSTANCE_ID, ProcessApp.Context.InstanceId);
             Assert.AreEqual("presentation.insere.tarefa.request.done", ProcessApp.Context.EventOut);
+            Assert.AreEqual(EVENT_IN, ProcessApp.EventIn);
             Assert.True(ProcessApp.Context.Commit);
         }
 
@@ -77,16 +80,26 @@ namespace ONS.PlataformaSDK.ProcessApp
         private List<Operation> GetOperationList()
         {
             var Operation = new Operation();
-            Operation.ProcessId = "1448a166-a191-40e7-8c05-b1621f34ad73";
-            Operation.SystemId = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
-            Operation.Event_Out = "presentation.insere.tarefa.request.done" ;
-            Operation.Commit = true;
             var OperationsList = new List<Operation>();
-            OperationsList.Add(Operation);
+            OperationsList.Add(createOperation("presentation.exclui.tarefa.request"));
+            OperationsList.Add(createOperation("presentation.insere.tarefa.request"));
             return OperationsList;
         }
 
-        private Event GetEvent() {
+
+        private Operation createOperation(string eventInName)
+        {
+            var Operation = new Operation();
+            Operation.ProcessId = "1448a166-a191-40e7-8c05-b1621f34ad73";
+            Operation.SystemId = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
+            Operation.Event_In = eventInName;
+            Operation.Event_Out = eventInName + ".done";
+            Operation.Commit = true;
+            return Operation;
+        }
+
+        private Event GetEvent()
+        {
             var Event = new Event();
             Event.Name = "presentation.insere.tarefa.request";
             return Event;

@@ -1,4 +1,4 @@
-namespace ONS.PlataformaSDK.Core
+namespace ONS.PlataformaSDK.Entities
 {
     public class Operation
     {

@@ -48,11 +48,15 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.EventOut = Operation.Event_Out;
             Context.Commit = Operation.Commit;
 
-            this.StartProcess(Context);
+            this.StartProcess();
         }
 
-        private void StartProcess(Context context)
+        private void StartProcess()
         {
+        }
+
+        private void loadDataFromDomain() {
+            System.Console.WriteLine("Loading data from domain by SDK");
         }
 
         public void VerifyOperationList(List<Operation> Operations)

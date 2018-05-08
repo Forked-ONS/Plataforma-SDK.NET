@@ -8,5 +8,6 @@ namespace ONS.PlataformaSDK.Entities
         public string InstanceId{get; set;}
         public string EventOut{get; set;}
         public bool Commit{get; set;}
+        public string Map{get; set;}
     }
 }

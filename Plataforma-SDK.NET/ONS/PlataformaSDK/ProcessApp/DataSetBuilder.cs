@@ -32,6 +32,13 @@ namespace ONS.PlataformaSDK.ProcessApp
                 EntitiesFilters.Add(EntityFilter);
 
                 var YamlFilter = YamlObject[key]["filters"];
+                if(YamlFilter != null) {
+                    var Filters = ((Dictionary<object, object>) YamlFilter);
+                    foreach(var filterKey in Filters.Keys)
+                    {
+                        EntityFilter.addFilter(new Filter((string) filterKey, (string) Filters[filterKey]));
+                    }
+                }
             }
         }
 

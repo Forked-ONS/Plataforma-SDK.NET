@@ -15,6 +15,7 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         public Context Context { get; set; }
         public string EventIn { get; set; }
+        public DataSetBuilder DataSetBuilder { get; set; }
         private string ProcessInstanceId;
         private string ProcessId;
         private ProcessMemoryHttpClient ProcessMemoryClient;
@@ -27,11 +28,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.EventIn = eventIn;
             this.ProcessMemoryClient = processMemoryClient;
             this.CoreClient = coreClient;
+
             this.Context = new Context();
             //FIXME Construtor
             Context.InstanceId = this.ProcessInstanceId;
             Context.ProcessId = this.ProcessId;
             Context.SystemId = systemId;
+            this.DataSetBuilder = new DataSetBuilder();
         }
 
         public async Task Start()
@@ -48,17 +51,17 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.EventOut = Operation.Event_Out;
             Context.Commit = Operation.Commit;
 
-            this.StartProcessAsync();
+            await this.StartProcess();
         }
 
-        private async void StartProcessAsync()
+        public async Task StartProcess()
         {
             var PlatformMapTask = CoreClient.MapByProcessId(this.ProcessId);
-            // var PlatformMap = await PlatformMapTask;
-        }
-
-        private void loadDataFromDomain() {
-            System.Console.WriteLine("Loading data from domain by SDK");
+            var PlatformsMaps = await PlatformMapTask;
+            if(!PlatformsMaps.isEmpty()) 
+            {
+                DataSetBuilder.Build(PlatformsMaps[0]);
+            }
         }
 
         public void VerifyOperationList(List<Operation> Operations)

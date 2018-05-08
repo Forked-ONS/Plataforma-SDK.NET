@@ -1,18 +1,38 @@
 using System;
 using ONS.PlataformaSDK.Entities;
+using System.IO;
+using YamlDotNet.Serialization;
+using System.Collections.Generic;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
     public class DataSetBuilder
     {
+        public List<EntityFilter> EntitiesFilters;
+
+        public DataSetBuilder()
+        {
+            EntitiesFilters = new List<EntityFilter>();
+        }
         public virtual void Build(PlatformMap platformMap)
         {
-
+            buildFilters(platformMap);
         }
 
-        private object getFilters(PlatformMap platformMap)
+        private void buildFilters(PlatformMap platformMap)
         {
-            throw new NotImplementedException();
+            var StringReader = new StringReader(platformMap.Content);
+            var deserializer = new DeserializerBuilder().Build();
+            var YamlObject = deserializer.Deserialize<Dictionary<string, Dictionary<object, object>>>(StringReader);
+
+            foreach (var key in YamlObject.Keys)
+            {
+                var EntityFilter = new EntityFilter();
+                EntityFilter.EntityName = key;
+                EntitiesFilters.Add(EntityFilter);
+
+                var YamlFilter = YamlObject[key]["filters"];
+            }
         }
 
     }

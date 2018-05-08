@@ -48,7 +48,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.True(ProcessApp.Context.Commit);
 
             //FIXME
-            // Assert.NotNull(ProcessApp.Context.Map);
+            // Assert.NotNull(ProcessApp.Context.PlatformMap);
         }
 
         [Test]

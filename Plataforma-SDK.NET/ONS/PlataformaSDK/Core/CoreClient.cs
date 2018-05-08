@@ -28,13 +28,13 @@ namespace ONS.PlataformaSDK.Core
             return JsonConvert.DeserializeObject<List<Operation>>(OperationJson);
         }
 
-        public async Task<List<Map>> MapByProcessId(string processId) {
+        public virtual async Task<List<PlatformMap>> MapByProcessId(string processId) {
             System.Console.WriteLine($"get maps from api core for process id: {processId}");
             var MapJsonTask = HttpClient.Get($"{CoreEnvironmentProperties.Scheme}://{CoreEnvironmentProperties.Host}:{CoreEnvironmentProperties.Port}" +
                 $"/core/map?filter=byProcessId&processId={processId}");
             var MapJson = await MapJsonTask;
             System.Console.WriteLine(MapJson);
-            return JsonConvert.DeserializeObject<List<Map>>(MapJson);
+            return JsonConvert.DeserializeObject<List<PlatformMap>>(MapJson);
         }
     }
 }

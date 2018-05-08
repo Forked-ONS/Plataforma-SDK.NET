@@ -48,11 +48,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.EventOut = Operation.Event_Out;
             Context.Commit = Operation.Commit;
 
-            this.StartProcess();
+            this.StartProcessAsync();
         }
 
-        private void StartProcess()
+        private async void StartProcessAsync()
         {
+            var PlatformMapTask = CoreClient.MapByProcessId(this.ProcessId);
+            // var PlatformMap = await PlatformMapTask;
         }
 
         private void loadDataFromDomain() {

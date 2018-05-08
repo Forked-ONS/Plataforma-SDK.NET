@@ -1,6 +1,6 @@
 namespace ONS.PlataformaSDK.Entities
 {
-    public class Map
+    public class PlatformMap
     {
         public string Id{get; set;}
         public string Name{get; set;}

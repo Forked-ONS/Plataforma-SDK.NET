@@ -43,6 +43,9 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.AreEqual("data_verificada >= :dataInicial and data_verificada <= :dataFinal and id_uge in ($idsUges) order by data_verificada", FilterEventoOperativo.Filters[2].Query);
             Assert.AreEqual("byIdsEventos", FilterEventoOperativo.Filters[3].Name);
             Assert.AreEqual("id_evento in ($idsEventos!)", FilterEventoOperativo.Filters[3].Query);
+            Assert.AreEqual("all", FilterEventoOperativo.Filters[4].Name);
+            Assert.Null(FilterEventoOperativo.Filters[4].Query);
+            Assert.True(FilterEventoOperativo.Filters[4].ShouldBeExecuted);
         }
 
         private PlatformMap CreatePlatformMap()

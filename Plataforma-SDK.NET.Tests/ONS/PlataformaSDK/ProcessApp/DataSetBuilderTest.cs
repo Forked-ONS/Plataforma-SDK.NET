@@ -18,7 +18,9 @@ namespace ONS.PlataformaSDK.ProcessApp
         [Test]
         public void Build()
         {
-            DataSetBuilder.Build(CreatePlatformMap(), new TesteEntity());
+            var TesteEntity = new TesteEntity();
+            TesteEntity.data = "2018-10-11";
+            DataSetBuilder.Build(CreatePlatformMap(), TesteEntity);
             AssertFiltroUnidadeGeradora(DataSetBuilder);
             AssertFiltroMudancaEstadoOperativo(DataSetBuilder);
         }
@@ -44,7 +46,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.True(FilterEventoOperativo.Filters[1].ShouldBeExecuted);
             Assert.AreEqual("byIntervaloDatas", FilterEventoOperativo.Filters[2].Name);
             Assert.AreEqual("data_verificada >= :dataInicial and data_verificada <= :dataFinal and id_uge in ($idsUges) order by data_verificada", FilterEventoOperativo.Filters[2].Query);
-            Assert.True(FilterEventoOperativo.Filters[2].ShouldBeExecuted);
+            Assert.False(FilterEventoOperativo.Filters[2].ShouldBeExecuted);
             Assert.AreEqual("byIdsEventos", FilterEventoOperativo.Filters[3].Name);
             Assert.AreEqual("id_evento in ($idsEventos!)", FilterEventoOperativo.Filters[3].Query);
             Assert.False(FilterEventoOperativo.Filters[3].ShouldBeExecuted);

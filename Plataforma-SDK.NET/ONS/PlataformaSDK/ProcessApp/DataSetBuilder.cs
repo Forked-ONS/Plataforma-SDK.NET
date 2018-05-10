@@ -10,6 +10,7 @@ namespace ONS.PlataformaSDK.ProcessApp
     public class DataSetBuilder<T>
     {
         public List<EntityFilter> EntitiesFilters;
+        private T Payload;
 
         public DataSetBuilder()
         {
@@ -17,6 +18,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
         public virtual void Build(PlatformMap platformMap, T payload)
         {
+            this.Payload = payload;
             buildFilters(platformMap);
             ShouldBeExecuted();
         }
@@ -58,8 +60,21 @@ namespace ONS.PlataformaSDK.ProcessApp
                     else
                     {
                         var filterParameters = GetFilterParameters(Filter.Query);
-
+                        verifyEntityAttributes(Filter, filterParameters);
                     }
+                }
+            }
+        }
+
+        private void verifyEntityAttributes(Filter filter, List<string> filterParameters)
+        {
+            var EntityProperties = Payload.GetType().GetProperties();
+            foreach (var property in EntityProperties)
+            {
+                var propertyValue = property.GetValue(Payload);
+                if (propertyValue != null && filterParameters.IndexOf(property.Name) >= 0)
+                {
+                    filter.ShouldBeExecuted = true;
                 }
             }
         }

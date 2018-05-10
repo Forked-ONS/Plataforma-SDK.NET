@@ -15,7 +15,7 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         public Context Context { get; set; }
         public string EventIn { get; set; }
-        public DataSetBuilder DataSetBuilder { get; set; }
+        public DataSetBuilder<Object> DataSetBuilder { get; set; }
         private string ProcessInstanceId;
         private string ProcessId;
         private ProcessMemoryHttpClient ProcessMemoryClient;
@@ -34,7 +34,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.InstanceId = this.ProcessInstanceId;
             Context.ProcessId = this.ProcessId;
             Context.SystemId = systemId;
-            this.DataSetBuilder = new DataSetBuilder();
+            this.DataSetBuilder = new DataSetBuilder<Object>();
         }
 
         public async Task Start()
@@ -60,7 +60,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var PlatformsMaps = await PlatformMapTask;
             if(!PlatformsMaps.isEmpty()) 
             {
-                DataSetBuilder.Build(PlatformsMaps[0]);
+                DataSetBuilder.Build(PlatformsMaps[0], new object());
             }
         }
 

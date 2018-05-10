@@ -2,11 +2,12 @@ using System;
 using ONS.PlataformaSDK.Entities;
 using System.IO;
 using YamlDotNet.Serialization;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
-    public class DataSetBuilder
+    public class DataSetBuilder<T>
     {
         public List<EntityFilter> EntitiesFilters;
 
@@ -14,9 +15,10 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             EntitiesFilters = new List<EntityFilter>();
         }
-        public virtual void Build(PlatformMap platformMap)
+        public virtual void Build(PlatformMap platformMap, T payload)
         {
             buildFilters(platformMap);
+            ShouldBeExecuted();
         }
 
         private void buildFilters(PlatformMap platformMap)
@@ -32,16 +34,45 @@ namespace ONS.PlataformaSDK.ProcessApp
                 EntitiesFilters.Add(EntityFilter);
 
                 var YamlFilter = YamlObject[key]["filters"];
-                if(YamlFilter != null) {
-                    var Filters = ((Dictionary<object, object>) YamlFilter);
-                    foreach(var filterKey in Filters.Keys)
+                if (YamlFilter != null)
+                {
+                    var Filters = ((Dictionary<object, object>)YamlFilter);
+                    foreach (var filterKey in Filters.Keys)
                     {
-                        EntityFilter.addFilter(new Filter((string) filterKey, (string) Filters[filterKey]));
+                        EntityFilter.addFilter(new Filter((string)filterKey, (string)Filters[filterKey]));
                     }
                 }
             }
         }
 
+        private void ShouldBeExecuted()
+        {
+            foreach (var EntityFilter in EntitiesFilters)
+            {
+                foreach (var Filter in EntityFilter.Filters)
+                {
+                    if ("all".Equals(Filter.Name))
+                    {
+                        Filter.ShouldBeExecuted = true;
+                    }
+                    else
+                    {
+                        var filterParameters = GetFilterParameters(Filter.Query);
+
+                    }
+                }
+            }
+        }
+
+        private List<string> GetFilterParameters(string query)
+        {
+            var Parameters = new List<string>();
+            foreach (Match m in Regex.Matches(query, @"[$|:]\w+"))
+            {
+                Parameters.Add(m.Value.Substring(1));
+            }
+            return Parameters;
+        }
     }
 
 }

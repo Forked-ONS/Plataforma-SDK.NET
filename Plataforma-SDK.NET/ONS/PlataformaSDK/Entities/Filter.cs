@@ -4,6 +4,7 @@ namespace ONS.PlataformaSDK.Entities
     {
         public string Name { get; set; }
         public string Query { get; set; }
+        public bool ShouldBeExecuted{ get; set; }
 
         public Filter(string name, string query)
         {

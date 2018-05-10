@@ -19,11 +19,11 @@ namespace ONS.PlataformaSDK.ProcessApp
         public virtual void Build(PlatformMap platformMap, T payload)
         {
             this.Payload = payload;
-            buildFilters(platformMap);
+            BuildFilters(platformMap);
             ShouldBeExecuted();
         }
 
-        private void buildFilters(PlatformMap platformMap)
+        private void BuildFilters(PlatformMap platformMap)
         {
             var StringReader = new StringReader(platformMap.Content);
             var deserializer = new DeserializerBuilder().Build();
@@ -72,7 +72,8 @@ namespace ONS.PlataformaSDK.ProcessApp
             foreach (var property in EntityProperties)
             {
                 var propertyValue = property.GetValue(Payload);
-                if (propertyValue != null && filterParameters.IndexOf(property.Name) >= 0)
+                if (propertyValue != null && 
+                        filterParameters.FindIndex(filterParameter => filterParameter.Substring(1).Equals(property.Name)) >= 0)
                 {
                     filter.ShouldBeExecuted = true;
                 }
@@ -84,7 +85,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var Parameters = new List<string>();
             foreach (Match m in Regex.Matches(query, @"[$|:]\w+"))
             {
-                Parameters.Add(m.Value.Substring(1));
+                Parameters.Add(m.Value);
             }
             return Parameters;
         }

@@ -5,7 +5,7 @@ namespace ONS.PlataformaSDK.Entities
 {
     public class DomainContext : IDomainContext
     {
-        public List<EventoMudancaEstadoOperativo> EventoMudancaEstadoOperativo;
-        public List<UnidadeGeradora> UnidadeGeradora;
+        public IEnumerable<EventoMudancaEstadoOperativo> EventoMudancaEstadoOperativo{get;set;}
+        public IEnumerable<UnidadeGeradora> UnidadeGeradora{get;set;}
     }
 }

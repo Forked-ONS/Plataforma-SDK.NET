@@ -33,7 +33,6 @@ namespace ONS.PlataformaSDK.Core
             var MapJsonTask = HttpClient.Get($"{CoreEnvironmentProperties.Scheme}://{CoreEnvironmentProperties.Host}:{CoreEnvironmentProperties.Port}" +
                 $"/core/map?filter=byProcessId&processId={processId}");
             var MapJson = await MapJsonTask;
-            System.Console.WriteLine(MapJson);
             return JsonConvert.DeserializeObject<List<PlatformMap>>(MapJson);
         }
     }

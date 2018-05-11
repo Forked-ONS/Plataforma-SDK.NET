@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Entities;
 
@@ -10,31 +11,36 @@ namespace ONS.PlataformaSDK.ProcessApp
         private const string DATA = "2018-10-11";
         private DataSetBuilder DataSetBuilder;
 
+        private DomainTestContext DomainContext;
+
         [SetUp]
         public void Setup()
         {
-            DataSetBuilder = new DataSetBuilder();
+            DomainContext = new DomainTestContext();
+            DataSetBuilder = new DataSetBuilder(DomainContext);
         }
 
         [Test]
         public void Build()
         {
-            var TesteEntity = new TesteEntity();
-            TesteEntity.data = DATA;
-            DataSetBuilder.Build(CreatePlatformMap(), TesteEntity);
-            AssertFiltroUnidadeGeradora(DataSetBuilder);
-            AssertFiltroMudancaEstadoOperativo(DataSetBuilder);
+            var Payload = new TesteEntity();
+            Payload.data = DATA;
+            DataSetBuilder.Build(CreatePlatformMap(), Payload);
+            AssertFiltroUnidadeGeradora();
+            AssertFiltroMudancaEstadoOperativo();
+            AssertDomainContext();
         }
 
-        private void AssertFiltroUnidadeGeradora(DataSetBuilder dataSetBuilder)
+        private void AssertFiltroUnidadeGeradora()
         {
             var FilterUnidadeGeradora = DataSetBuilder.EntitiesFilters[0];
             Assert.AreEqual("unidadegeradora", FilterUnidadeGeradora.EntityName);
             Assert.AreEqual("byIdUsina", FilterUnidadeGeradora.Filters[0].Name);
             Assert.AreEqual("id_usina in ($idsUsinas)", FilterUnidadeGeradora.Filters[0].Query);
+            Assert.False(FilterUnidadeGeradora.Filters[0].ShouldBeExecuted);
         }
 
-        private void AssertFiltroMudancaEstadoOperativo(DataSetBuilder dataSetBuilder)
+        private void AssertFiltroMudancaEstadoOperativo()
         {
             EntityFilter FilterEventoOperativo = DataSetBuilder.EntitiesFilters[1];
             Assert.AreEqual(5, FilterEventoOperativo.Filters.Count);
@@ -61,6 +67,11 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.AreEqual("all", FilterEventoOperativo.Filters[4].Name);
             Assert.Null(FilterEventoOperativo.Filters[4].Query);
             Assert.True(FilterEventoOperativo.Filters[4].ShouldBeExecuted);
+        }
+
+        private void AssertDomainContext()
+        {
+            Assert.AreEqual(3, Enumerable.Count<EventoMudancaEstadoOperativo>(DomainContext.EventoMudancaEstadoOperativo));
         }
 
         private PlatformMap CreatePlatformMap()

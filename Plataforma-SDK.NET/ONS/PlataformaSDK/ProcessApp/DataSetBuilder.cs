@@ -4,16 +4,19 @@ using System.IO;
 using YamlDotNet.Serialization;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using ONS.PlataformaSDK.Domain;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
     public class DataSetBuilder
     {
         public List<EntityFilter> EntitiesFilters;
+        public IDomainContext DomainContext { get; set; }
         private Object Payload;
 
-        public DataSetBuilder()
+        public DataSetBuilder(IDomainContext domainContext)
         {
+            this.DomainContext = domainContext;
             EntitiesFilters = new List<EntityFilter>();
         }
         public virtual void Build(PlatformMap platformMap, Object payload)
@@ -51,19 +54,28 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             foreach (var EntityFilter in EntitiesFilters)
             {
-                foreach (var Filter in EntityFilter.Filters)
+                if (DomainContextContains(EntityFilter))
                 {
-                    if ("all".Equals(Filter.Name))
+                    foreach (var Filter in EntityFilter.Filters)
                     {
-                        Filter.ShouldBeExecuted = true;
-                    }
-                    else
-                    {
-                        var filterParameters = GetFilterParameters(Filter.Query);
-                        VerifyEntityAttributes(Filter, filterParameters);
+                        if ("all".Equals(Filter.Name))
+                        {
+                            Filter.ShouldBeExecuted = true;
+                        }
+                        else
+                        {
+                            var filterParameters = GetFilterParameters(Filter.Query);
+                            VerifyEntityAttributes(Filter, filterParameters);
+                        }
                     }
                 }
             }
+        }
+
+        private bool DomainContextContains(EntityFilter entityFilter)
+        {
+            var Properties = DomainContext.GetType().GetProperties();
+            return true;
         }
 
         private void VerifyEntityAttributes(Filter filter, List<string> filterParameters)
@@ -72,7 +84,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             foreach (var property in EntityProperties)
             {
                 var PropertyValue = property.GetValue(Payload);
-                if (PropertyValue != null && 
+                if (PropertyValue != null &&
                         filterParameters.FindIndex(filterParameter => filterParameter.Substring(1).Equals(property.Name)) >= 0)
                 {
                     filter.ShouldBeExecuted = true;

@@ -8,6 +8,7 @@ using ONS.PlataformaSDK.Exception;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
+using ONS.PlataformaSDK.Domain;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
@@ -20,6 +21,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         private string ProcessId;
         private ProcessMemoryHttpClient ProcessMemoryClient;
         private CoreClient CoreClient;
+        private IDomainContext DomainContext;
 
         public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn, ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient)
         {
@@ -34,7 +36,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.InstanceId = this.ProcessInstanceId;
             Context.ProcessId = this.ProcessId;
             Context.SystemId = systemId;
-            this.DataSetBuilder = new DataSetBuilder();
+            this.DataSetBuilder = new DataSetBuilder(DomainContext);
         }
 
         public async Task Start()

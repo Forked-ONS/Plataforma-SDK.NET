@@ -15,7 +15,7 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         public Context Context { get; set; }
         public string EventIn { get; set; }
-        public DataSetBuilder<Object> DataSetBuilder { get; set; }
+        public DataSetBuilder DataSetBuilder { get; set; }
         private string ProcessInstanceId;
         private string ProcessId;
         private ProcessMemoryHttpClient ProcessMemoryClient;
@@ -34,7 +34,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.InstanceId = this.ProcessInstanceId;
             Context.ProcessId = this.ProcessId;
             Context.SystemId = systemId;
-            this.DataSetBuilder = new DataSetBuilder<Object>();
+            this.DataSetBuilder = new DataSetBuilder();
         }
 
         public async Task Start()

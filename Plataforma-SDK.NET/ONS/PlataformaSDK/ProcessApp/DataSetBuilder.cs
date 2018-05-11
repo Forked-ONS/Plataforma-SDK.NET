@@ -7,16 +7,16 @@ using System.Collections.Generic;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
-    public class DataSetBuilder<T>
+    public class DataSetBuilder
     {
         public List<EntityFilter> EntitiesFilters;
-        private T Payload;
+        private Object Payload;
 
         public DataSetBuilder()
         {
             EntitiesFilters = new List<EntityFilter>();
         }
-        public virtual void Build(PlatformMap platformMap, T payload)
+        public virtual void Build(PlatformMap platformMap, Object payload)
         {
             this.Payload = payload;
             BuildFilters(platformMap);
@@ -60,13 +60,13 @@ namespace ONS.PlataformaSDK.ProcessApp
                     else
                     {
                         var filterParameters = GetFilterParameters(Filter.Query);
-                        verifyEntityAttributes(Filter, filterParameters);
+                        VerifyEntityAttributes(Filter, filterParameters);
                     }
                 }
             }
         }
 
-        private void verifyEntityAttributes(Filter filter, List<string> filterParameters)
+        private void VerifyEntityAttributes(Filter filter, List<string> filterParameters)
         {
             var EntityProperties = Payload.GetType().GetProperties();
             foreach (var property in EntityProperties)

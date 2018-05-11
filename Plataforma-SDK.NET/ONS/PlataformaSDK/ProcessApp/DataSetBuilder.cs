@@ -71,11 +71,12 @@ namespace ONS.PlataformaSDK.ProcessApp
             var EntityProperties = Payload.GetType().GetProperties();
             foreach (var property in EntityProperties)
             {
-                var propertyValue = property.GetValue(Payload);
-                if (propertyValue != null && 
+                var PropertyValue = property.GetValue(Payload);
+                if (PropertyValue != null && 
                         filterParameters.FindIndex(filterParameter => filterParameter.Substring(1).Equals(property.Name)) >= 0)
                 {
                     filter.ShouldBeExecuted = true;
+                    filter.Parameters.Add(property.Name, PropertyValue);
                 }
             }
         }

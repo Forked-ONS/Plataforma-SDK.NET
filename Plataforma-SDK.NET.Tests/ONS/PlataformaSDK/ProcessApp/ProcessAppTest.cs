@@ -2,6 +2,7 @@ using Moq;
 using Moq.Protected;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Core;
+using ONS.PlataformaSDK.Domain;
 using ONS.PlataformaSDK.Entities;
 using ONS.PlataformaSDK.Exception;
 using ONS.PlataformaSDK.ProcessApp;
@@ -19,14 +20,16 @@ namespace ONS.PlataformaSDK.ProcessApp
         private ProcessApp ProcessApp;
         private Mock<ProcessMemoryHttpClient> ProcessMemoryClientMock;
         private Mock<CoreClient> CoreClientMock;
+        private Mock<DomainClient> DomainClientMock;
 
         [SetUp]
         public void Setup()
         {
             ProcessMemoryClientMock = ProcessAppTestHelper.CreateProcessMemoryClientMock();
             CoreClientMock = ProcessAppTestHelper.CreateCoreClientMock();
+            DomainClientMock = ProcessAppTestHelper.CreateDomainClientMock();
             ProcessApp = new ProcessApp(SYSTEM_ID, ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
-                EVENT_IN, ProcessMemoryClientMock.Object, CoreClientMock.Object);
+                EVENT_IN, ProcessMemoryClientMock.Object, CoreClientMock.Object, DomainClientMock.Object);
         }
 
         [Test]

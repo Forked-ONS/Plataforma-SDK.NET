@@ -2,6 +2,7 @@ using Moq;
 using Moq.Protected;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Core;
+using ONS.PlataformaSDK.Domain;
 using ONS.PlataformaSDK.Entities;
 using ONS.PlataformaSDK.Exception;
 using ONS.PlataformaSDK.ProcessApp;
@@ -30,6 +31,11 @@ namespace ONS.PlataformaSDK.ProcessApp
             CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(Task.FromResult(GetOperationList()));
             CoreClientMock.Setup(mock => mock.MapByProcessId(PROCESS_ID)).Returns(Task.FromResult(GetMapList()));
             return CoreClientMock;
+        }
+
+        internal static Mock<DomainClient> CreateDomainClientMock()
+        {
+            return new Mock<DomainClient>();
         }
 
         public static Mock<CoreClient> CreateCoreClientWithEmptyOperationsListMock()

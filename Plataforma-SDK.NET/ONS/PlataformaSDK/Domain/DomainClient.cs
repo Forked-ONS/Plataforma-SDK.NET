@@ -20,7 +20,7 @@ namespace ONS.PlataformaSDK.Domain
             this.CoreEnvironmentProperties = coreEnvironmentProperties;
         }
 
-        public void FindByFilter(Filter filter)
+        public virtual void FindByFilter(string processName, Filter filter)
         {
         }
     }

@@ -21,9 +21,9 @@ namespace ONS.PlataformaSDK.ProcessApp
         private string ProcessId;
         private ProcessMemoryHttpClient ProcessMemoryClient;
         private CoreClient CoreClient;
-        private IDomainContext DomainContext;
 
-        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn, ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient)
+        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn, 
+            IDomainContext domainContext, ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient, DomainClient domainClient)
         {
             this.ProcessInstanceId = processInstanceId;
             this.ProcessId = processId;
@@ -36,7 +36,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.InstanceId = this.ProcessInstanceId;
             Context.ProcessId = this.ProcessId;
             Context.SystemId = systemId;
-            this.DataSetBuilder = new DataSetBuilder(DomainContext);
+            this.DataSetBuilder = new DataSetBuilder(domainContext, domainClient);
         }
 
         public async Task Start()

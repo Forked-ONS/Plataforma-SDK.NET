@@ -29,7 +29,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             CoreClientMock = ProcessAppTestHelper.CreateCoreClientMock();
             DomainClientMock = ProcessAppTestHelper.CreateDomainClientMock();
             ProcessApp = new ProcessApp(SYSTEM_ID, ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
-                EVENT_IN, ProcessMemoryClientMock.Object, CoreClientMock.Object, DomainClientMock.Object);
+                EVENT_IN, new DomainTestContext(), ProcessMemoryClientMock.Object, CoreClientMock.Object, DomainClientMock.Object);
         }
 
         [Test]

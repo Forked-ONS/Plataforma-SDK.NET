@@ -84,7 +84,7 @@ namespace ONS.PlataformaSDK.ProcessApp
                 {
                     if (Filter.ShouldBeExecuted)
                     {
-                        DomainClient.FindByFilter(EntityFilter.MapName, Filter);
+                        // DomainClient.FindByFilterAsync(EntityFilter.MapName, Filter);
                         // AddToDomainContext(EntityFilter.EntityName, Filter);
                     }
                 }

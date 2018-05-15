@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using ONS.PlataformaSDK.Entities;
 using ONS.PlataformaSDK.Environment;
 using ONS.PlataformaSDK.Http;
@@ -8,20 +11,30 @@ namespace ONS.PlataformaSDK.Domain
     public class DomainClient
     {
         private HttpClient HttpClient;
-        private EnvironmentProperties CoreEnvironmentProperties;
+        private EnvironmentProperties DomainEnvironmentProperties;
 
         public DomainClient()
         {
         }
         
-        public DomainClient(HttpClient httpClient, EnvironmentProperties coreEnvironmentProperties)
+        public DomainClient(HttpClient httpClient, EnvironmentProperties domainEnvironmentProperties)
         {
             this.HttpClient = httpClient;
-            this.CoreEnvironmentProperties = coreEnvironmentProperties;
+            this.DomainEnvironmentProperties = domainEnvironmentProperties;
         }
 
-        public virtual void FindByFilter(string processName, Filter filter)
+        public virtual async Task<List<T>> FindByFilterAsync<T>(EntityFilter entityFilter, Filter filter)
         {
+            var UrlBuilder = new StringBuilder($"{DomainEnvironmentProperties.Scheme}://{DomainEnvironmentProperties.Host}:{DomainEnvironmentProperties.Port}" +
+                $"/{entityFilter.MapName}/{entityFilter.EntityName}?filter={filter.Name}");
+            foreach (KeyValuePair<string, object> item in filter.Parameters)
+            {
+                UrlBuilder.Append($"&{item.Key}={item.Value}");
+            }
+            System.Console.WriteLine(UrlBuilder.ToString());
+            var EntityStrTask = HttpClient.Get(UrlBuilder.ToString());
+            var EntityTask = await EntityStrTask;
+            return JsonConvert.DeserializeObject<List<T>>(EntityTask);
         }
     }
 }

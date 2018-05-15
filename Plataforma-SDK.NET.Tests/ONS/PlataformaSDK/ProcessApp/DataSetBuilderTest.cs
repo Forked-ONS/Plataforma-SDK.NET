@@ -33,7 +33,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             AssertFiltroUnidadeGeradora();
             AssertFiltroMudancaEstadoOperativo();
             AssertDomainClient();
-            // AssertDomainContext();
+            AssertDomainContext();
         }
 
         private void AssertFiltroUnidadeGeradora()
@@ -78,8 +78,9 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void AssertDomainClient()
         {
-            // var ExecutedFilter = DataSetBuilder.EntitiesFilters[1].Filters[1];
-            // DomainClientMock.Verify(domainClient => domainClient.FindByFilter("mantertarefas", ExecutedFilter), Times.Once);
+            var EntityFilter = DataSetBuilder.EntitiesFilters[1];
+            var ExecutedFilter = EntityFilter.Filters[1];
+            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, ExecutedFilter), Times.Once);
         }
 
         private void AssertDomainContext()

@@ -16,7 +16,7 @@ namespace ONS.PlataformaSDK.Domain
         public DomainClient()
         {
         }
-        
+
         public DomainClient(HttpClient httpClient, EnvironmentProperties domainEnvironmentProperties)
         {
             this.HttpClient = httpClient;
@@ -25,8 +25,18 @@ namespace ONS.PlataformaSDK.Domain
 
         public virtual async Task<List<T>> FindByFilterAsync<T>(EntityFilter entityFilter, Filter filter)
         {
-            var UrlBuilder = new StringBuilder($"{DomainEnvironmentProperties.Scheme}://{DomainEnvironmentProperties.Host}:{DomainEnvironmentProperties.Port}" +
-                $"/{entityFilter.MapName}/{entityFilter.EntityName}?filter={filter.Name}");
+            StringBuilder UrlBuilder;
+            if ("all".Equals(filter.Name))
+            {
+                UrlBuilder = new StringBuilder($"{DomainEnvironmentProperties.Scheme}://{DomainEnvironmentProperties.Host}:{DomainEnvironmentProperties.Port}" +
+                    $"/{entityFilter.MapName}/{entityFilter.EntityName}");
+            }
+            else
+            {
+                UrlBuilder = new StringBuilder($"{DomainEnvironmentProperties.Scheme}://{DomainEnvironmentProperties.Host}:{DomainEnvironmentProperties.Port}" +
+                    $"/{entityFilter.MapName}/{entityFilter.EntityName}?filter={filter.Name}");
+            }
+
             foreach (KeyValuePair<string, object> item in filter.Parameters)
             {
                 UrlBuilder.Append($"&{item.Key}={item.Value}");

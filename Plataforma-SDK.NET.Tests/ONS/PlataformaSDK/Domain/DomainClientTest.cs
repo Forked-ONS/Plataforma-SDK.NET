@@ -25,6 +25,7 @@ namespace ONS.PlataformaSDK.Domain
                 "&data=2015-01-01")).Returns(EntityTask);
             HttpClientMock.Setup(mock => mock.Get("http://localhost:8087/mantertarefas/eventomudancaestadooperativo?filter=byIntervaloDatas" +
                 "&dataInicial=2015-01-01&dataFinal=2015-01-10")).Returns(EntityTask);
+            HttpClientMock.Setup(mock => mock.Get("http://localhost:8087/mantertarefas/eventomudancaestadooperativo")).Returns(EntityTask);
             EnvironmentProperties = new EnvironmentProperties("http", "localhost", "8087");
             DomainClient = new DomainClient(HttpClientMock.Object, EnvironmentProperties);
         }
@@ -51,6 +52,18 @@ namespace ONS.PlataformaSDK.Domain
             var Filter = new Filter("byIntervaloDatas", "data_verificada >= :dataInicial and data_verificada <= :dataFinal");
             Filter.Parameters.Add("dataInicial", "2015-01-01");
             Filter.Parameters.Add("dataFinal", "2015-01-10");
+            var DomainTask = DomainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, Filter);
+            var Eventos = DomainTask.Result;
+            Assert.NotNull(Eventos);
+        }
+        
+        [Test]
+        public void GetAll()
+        {
+            var EntityFilter = new EntityFilter();
+            EntityFilter.MapName = "mantertarefas";
+            EntityFilter.EntityName = "eventomudancaestadooperativo";
+            var Filter = new Filter("all", "");
             var DomainTask = DomainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, Filter);
             var Eventos = DomainTask.Result;
             Assert.NotNull(Eventos);

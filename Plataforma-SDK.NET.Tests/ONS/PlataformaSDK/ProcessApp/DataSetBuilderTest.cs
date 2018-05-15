@@ -33,7 +33,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             AssertFiltroUnidadeGeradora();
             AssertFiltroMudancaEstadoOperativo();
             AssertDomainClient();
-            AssertDomainContext();
+            // AssertDomainContext();
         }
 
         private void AssertFiltroUnidadeGeradora()

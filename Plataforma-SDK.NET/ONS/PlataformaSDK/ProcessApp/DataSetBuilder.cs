@@ -84,8 +84,17 @@ namespace ONS.PlataformaSDK.ProcessApp
                 {
                     if (Filter.ShouldBeExecuted)
                     {
-                        // DomainClient.FindByFilterAsync(EntityFilter.MapName, Filter);
-                        // AddToDomainContext(EntityFilter.EntityName, Filter);
+                        var Properties = DomainContext.GetType().GetProperties();
+                        foreach (var Property in Properties)
+                        {
+                            if (Property.Name.ToLower().Equals(EntityFilter.EntityName.ToLower()))
+                            {
+                                var GenericType = Property.PropertyType.GenericTypeArguments[0];
+                                var FindByFilterMethod = DomainClient.GetType().GetMethod("FindByFilterAsync");
+                                var GenericMethod = FindByFilterMethod.MakeGenericMethod(GenericType);
+                                var Result = GenericMethod.Invoke(DomainClient, new object[] { EntityFilter, Filter});
+                            }
+                        }
                     }
                 }
             }

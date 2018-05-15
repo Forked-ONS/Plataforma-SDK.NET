@@ -79,8 +79,12 @@ namespace ONS.PlataformaSDK.ProcessApp
         private void AssertDomainClient()
         {
             var EntityFilter = DataSetBuilder.EntitiesFilters[1];
-            var ExecutedFilter = EntityFilter.Filters[1];
-            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, ExecutedFilter), Times.Once);
+            var MenorQueDataFilter = EntityFilter.Filters[0];
+            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, MenorQueDataFilter), Times.Once);
+            var MaiorQueDataFilter = EntityFilter.Filters[1];
+            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, MaiorQueDataFilter), Times.Once);
+            var AllFilter = EntityFilter.Filters[4];
+            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, AllFilter), Times.Once);
         }
 
         private void AssertDomainContext()

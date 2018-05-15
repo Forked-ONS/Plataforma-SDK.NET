@@ -45,7 +45,6 @@ namespace ONS.PlataformaSDK.Domain
         [Test]
         public void GetAsyncWithMultipleParameters()
         {
-            //byIntervaloDatas: "data_verificada >= :dataInicial and data_verificada <= :dataFinal and id_uge in ($idsUges) order by data_verificada"
             var EntityFilter = new EntityFilter();
             EntityFilter.MapName = "mantertarefas";
             EntityFilter.EntityName = "eventomudancaestadooperativo";

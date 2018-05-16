@@ -66,9 +66,9 @@ namespace ONS.PlataformaSDK.ProcessApp
             }
         }
 
-        public void VerifyOperationList(List<Operation> Operations)
+        public void VerifyOperationList(List<Operation> operations)
         {
-            if (Operations.isEmpty())
+            if (operations.isEmpty())
             {
                 throw new PlataformaException($"Operation not found for process {this.ProcessId}");
             }

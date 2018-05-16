@@ -30,7 +30,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         private void SetupDomainClientMock()
         {
             var EventosTask = Task.FromResult(GetEventosList());
-            DomainClientMock.Setup(mock => 
+            DomainClientMock.Setup(mock =>
                 mock.FindByFilterAsync<EventoMudancaEstadoOperativo>(It.IsAny<EntityFilter>(), It.IsAny<Filter>())).Returns(EventosTask);
         }
 
@@ -103,6 +103,10 @@ namespace ONS.PlataformaSDK.ProcessApp
             DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, MenorQueDataFilter), Times.Once);
             var MaiorQueDataFilter = EntityFilter.Filters[1];
             DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, MaiorQueDataFilter), Times.Once);
+            var ByIntervaloDatasFilter = EntityFilter.Filters[2];
+            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, ByIntervaloDatasFilter), Times.Never);
+            var ByIdsEventosFilter = EntityFilter.Filters[3];
+            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, ByIdsEventosFilter), Times.Never);
             var AllFilter = EntityFilter.Filters[4];
             DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, AllFilter), Times.Once);
         }

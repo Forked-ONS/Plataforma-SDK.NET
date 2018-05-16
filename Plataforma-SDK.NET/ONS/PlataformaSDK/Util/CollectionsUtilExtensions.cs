@@ -29,9 +29,22 @@ namespace ONS.PlataformaSDK.Util
         public static void Delete<T>(this List<T> list, T entity) where T : BaseEntity
         {
             VerifyEntity(entity);
-            var DbEntity = list.Find(dbEntity => dbEntity.Id.Equals(entity.Id));
+            var DbEntity = FindById(list, entity);
             VerifyEntity(DbEntity);
             DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_DELETE;
+        }
+
+        public static void Update<T>(this List<T> list, T entity) where T : BaseEntity
+        {
+            VerifyEntity(entity);
+            var DbEntity = FindById(list, entity);
+            VerifyEntity(DbEntity);
+            DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_UPDATE;
+        }
+
+        private static T FindById<T>(List<T> list, T entity) where T : BaseEntity
+        {
+            return list.Find(dbEntity => dbEntity.Id.Equals(entity.Id));
         }
 
         private static void VerifyEntity<T>(T entity)

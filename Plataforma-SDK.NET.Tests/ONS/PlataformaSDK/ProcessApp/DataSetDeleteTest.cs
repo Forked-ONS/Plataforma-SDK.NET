@@ -11,9 +11,36 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         [Test]
         public void Delete()
-        { 
+        {
             var DomainContext = new DomainTestContext();
+            var Evento1 = CreateEventoWithId("1");
+            DomainContext.EventoMudancaEstadoOperativo.Add(Evento1);
+            var Evento2 = CreateEventoWithId("2");
+            DomainContext.EventoMudancaEstadoOperativo.Add(Evento2);
+
+            DomainContext.EventoMudancaEstadoOperativo.Delete(Evento1);
+
+            var DeletedEntity = DomainContext.EventoMudancaEstadoOperativo[0];
+            Assert.NotNull(DeletedEntity._Metadata);
+            Assert.AreEqual("master", DeletedEntity._Metadata.Branch);
+            Assert.AreEqual("destroy", DeletedEntity._Metadata.ChangeTrack);
+            Assert.AreEqual("EventoMudancaEstadoOperativo", DeletedEntity._Metadata.Type);
+
+            var NonDeletedEntity = DomainContext.EventoMudancaEstadoOperativo[1];
+            Assert.NotNull(DeletedEntity._Metadata);
+            Assert.AreEqual("master", NonDeletedEntity._Metadata.Branch);
+            Assert.Null(NonDeletedEntity._Metadata.ChangeTrack);
+            Assert.AreEqual("EventoMudancaEstadoOperativo", NonDeletedEntity._Metadata.Type);
+
+            new List<BaseEntity>().Find(dbEntity => dbEntity.Id.Equals("1"));
         }
 
+        private static EventoMudancaEstadoOperativo CreateEventoWithId(string id)
+        {
+            var Evento = new EventoMudancaEstadoOperativo();
+            Evento.Id = id;
+            Evento._Metadata = new Metadata("master", "EventoMudancaEstadoOperativo", null);
+            return Evento;
+        }
     }
 }

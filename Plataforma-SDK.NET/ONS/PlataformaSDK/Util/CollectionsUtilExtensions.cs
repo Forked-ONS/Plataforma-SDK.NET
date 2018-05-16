@@ -18,16 +18,28 @@ namespace ONS.PlataformaSDK.Util
             return list == null || list.Count == 0;
         }
 
-        public static void Insert<T>(this List<T> list, T entity)
+        public static void Insert<T>(this List<T> list, T entity) where T : BaseEntity
         {
-            if (entity == null)
-            { 
-                throw new PlataformaException("Entity is not defined");
-            }
+            VerifyEntity(entity);
             var Metadata = new Metadata(MASTER_BRANCH, entity.GetType().Name, CHANGE_TRACK_CREATE);
-            ((BaseEntity)(object)entity)._Metadata = Metadata;
+            entity._Metadata = Metadata;
             list.Add(entity);
         }
 
+        public static void Delete<T>(this List<T> list, T entity) where T : BaseEntity
+        {
+            VerifyEntity(entity);
+            var DbEntity = list.Find(dbEntity => dbEntity.Id.Equals(entity.Id));
+            VerifyEntity(DbEntity);
+            DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_DELETE;
+        }
+
+        private static void VerifyEntity<T>(T entity)
+        {
+            if (entity == null)
+            {
+                throw new PlataformaException("Entity is not defined");
+            }
+        }
     }
 }

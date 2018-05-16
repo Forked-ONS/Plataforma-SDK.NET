@@ -62,7 +62,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var PlatformsMaps = await PlatformMapTask;
             if(!PlatformsMaps.isEmpty()) 
             {
-                DataSetBuilder.Build(PlatformsMaps[0], new object());
+                await DataSetBuilder.BuildAsync(PlatformsMaps[0], new object());
             }
         }
 

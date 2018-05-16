@@ -1,3 +1,6 @@
+using System;
+using System.Threading.Tasks;
+
 namespace ONS.PlataformaSDK.Domain
 {
     public class BaseEntity

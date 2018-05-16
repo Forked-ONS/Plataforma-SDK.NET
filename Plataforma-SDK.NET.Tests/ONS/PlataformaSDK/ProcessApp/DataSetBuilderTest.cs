@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Domain;
@@ -22,18 +24,36 @@ namespace ONS.PlataformaSDK.ProcessApp
             DomainContext = new DomainTestContext();
             DomainClientMock = new Mock<DomainClient>();
             DataSetBuilder = new DataSetBuilder(DomainContext, DomainClientMock.Object);
+            SetupDomainClientMock();
+        }
+
+        private void SetupDomainClientMock()
+        {
+            var EventosTask = Task.FromResult(GetEventosList());
+            DomainClientMock.Setup(mock => 
+                mock.FindByFilterAsync<EventoMudancaEstadoOperativo>(It.IsAny<EntityFilter>(), It.IsAny<Filter>())).Returns(EventosTask);
+        }
+
+        private List<EventoMudancaEstadoOperativo> GetEventosList()
+        {
+            var Eventos = new List<EventoMudancaEstadoOperativo>();
+            for (int i = 0; i < 3; i++)
+            {
+                Eventos.Add(new EventoMudancaEstadoOperativo());
+            }
+            return Eventos;
         }
 
         [Test]
-        public void Build()
+        public async Task BuildAsync()
         {
             var Payload = new TesteEntity();
             Payload.data = DATA;
-            DataSetBuilder.Build(CreatePlatformMap(), Payload);
+            await DataSetBuilder.BuildAsync(CreatePlatformMap(), Payload);
             AssertFiltroUnidadeGeradora();
             AssertFiltroMudancaEstadoOperativo();
             AssertDomainClient();
-            // AssertDomainContext();
+            AssertDomainContext();
         }
 
         private void AssertFiltroUnidadeGeradora()
@@ -89,7 +109,7 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void AssertDomainContext()
         {
-            Assert.AreEqual(3, Enumerable.Count<EventoMudancaEstadoOperativo>(DomainContext.EventoMudancaEstadoOperativo));
+            Assert.AreEqual(9, Enumerable.Count<EventoMudancaEstadoOperativo>(DomainContext.EventoMudancaEstadoOperativo));
         }
 
         private PlatformMap CreatePlatformMap()

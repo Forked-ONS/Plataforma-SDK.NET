@@ -5,6 +5,8 @@ using YamlDotNet.Serialization;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using ONS.PlataformaSDK.Domain;
+using System.Threading.Tasks;
+using System.Reflection;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
@@ -21,12 +23,12 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.DomainClient = domainClient;
             EntitiesFilters = new List<EntityFilter>();
         }
-        public virtual void Build(PlatformMap platformMap, Object payload)
+        public virtual async Task BuildAsync(PlatformMap platformMap, Object payload)
         {
             this.Payload = payload;
             BuildFilters(platformMap);
             ShouldBeExecuted();
-            LoadDataSet();
+            await LoadDataSetAsync();
         }
 
         private void BuildFilters(PlatformMap platformMap)
@@ -76,7 +78,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             }
         }
 
-        private void LoadDataSet()
+        private async Task LoadDataSetAsync()
         {
             foreach (var EntityFilter in EntitiesFilters)
             {
@@ -92,7 +94,10 @@ namespace ONS.PlataformaSDK.ProcessApp
                                 var GenericType = Property.PropertyType.GenericTypeArguments[0];
                                 var FindByFilterMethod = DomainClient.GetType().GetMethod("FindByFilterAsync");
                                 var GenericMethod = FindByFilterMethod.MakeGenericMethod(GenericType);
-                                var Result = GenericMethod.Invoke(DomainClient, new object[] { EntityFilter, Filter});
+                                var ResultTask = (Task) GenericMethod.Invoke(DomainClient, new object[] { EntityFilter, Filter});
+                                await ResultTask;
+                                var ResultProperty = ResultTask.GetType().GetProperty("Result");
+                                AddToDomainContext(ResultProperty.GetValue(ResultTask), Property);
                             }
                         }
                     }
@@ -100,18 +105,12 @@ namespace ONS.PlataformaSDK.ProcessApp
             }
         }
 
-        private void AddToDomainContext(string entityName, Filter filter)
+        private void AddToDomainContext(object result, PropertyInfo property)
         {
-            var EnumerateType = DomainContext.GetType().GetProperty(entityName).PropertyType;
-            // var Properties = DomainContext.GetType().GetProperties();
-            // foreach (var Property in Properties)
-            // {
-            //     if (Property.Name.ToLower().Equals(entityName.ToLower()))
-            //     {
-            //         var EnumerateType = Property.GetType().GenericTypeArguments[0];
-            //     }
-            // }
-
+            var PropertyType = property.PropertyType;
+            var ConcatMethod = PropertyType.GetMethod("AddRange");
+            var DataSetList = property.GetValue(DomainContext, null);
+            ConcatMethod.Invoke(DataSetList, new object[]{result});
         }
 
         private bool DomainContextContainsCollection(EntityFilter entityFilter)

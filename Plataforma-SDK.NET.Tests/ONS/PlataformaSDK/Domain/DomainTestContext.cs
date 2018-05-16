@@ -5,7 +5,7 @@ namespace ONS.PlataformaSDK.Entities
 {
     public class DomainTestContext : IDomainContext
     {
-        public IEnumerable<EventoMudancaEstadoOperativo> EventoMudancaEstadoOperativo { get; set; }
+        public List<EventoMudancaEstadoOperativo> EventoMudancaEstadoOperativo { get; set; }
 
         public DomainTestContext()
         { 

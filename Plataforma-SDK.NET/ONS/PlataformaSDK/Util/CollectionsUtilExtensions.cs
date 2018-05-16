@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ONS.PlataformaSDK.Core;
 using ONS.PlataformaSDK.Domain;
+using ONS.PlataformaSDK.Exception;
 
 namespace ONS.PlataformaSDK.Util
 {
@@ -19,6 +20,10 @@ namespace ONS.PlataformaSDK.Util
 
         public static void Insert<T>(this List<T> list, T entity)
         {
+            if (entity == null)
+            { 
+                throw new PlataformaException("Entity is not defined");
+            }
             var Metadata = new Metadata(MASTER_BRANCH, entity.GetType().Name, CHANGE_TRACK_CREATE);
             ((BaseEntity)(object)entity)._Metadata = Metadata;
             list.Add(entity);

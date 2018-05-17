@@ -46,20 +46,10 @@ namespace ONS.PlataformaSDK.Util
 
         public static void Update<T>(this List<T> list, T entity) where T : BaseEntity
         {
-            VerifyEntity(entity);
-            var DbEntity = FindById(list, entity);
-            VerifyEntity(DbEntity);
-            DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_UPDATE;
-        }
-
-        public static void Update<T>(this List<T> list, Predicate<T> filter) where T : BaseEntity
-        {
-            VerifyFilter(filter);
-            var DbEntities = list.FindAll(filter);
-            foreach (var DbEntity in DbEntities)
-            {
-                DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_UPDATE;
-            }
+            VerifyEntityToUpdate(entity);
+            var Index = IndexById(list, entity);
+            entity._Metadata.ChangeTrack = CHANGE_TRACK_UPDATE;
+            list[Index] = entity;
         }
 
         private static T FindById<T>(List<T> list, T entity) where T : BaseEntity
@@ -67,9 +57,32 @@ namespace ONS.PlataformaSDK.Util
             return list.Find(dbEntity => dbEntity.Id.Equals(entity.Id));
         }
 
+        private static int IndexById<T>(List<T> list, T entity) where T : BaseEntity
+        {
+            var Index = list.FindLastIndex(dbEntity => dbEntity.Id.Equals(entity.Id));
+            VerifyIndex(Index, entity);
+            return Index;
+        }
+
         private static void VerifyEntity<T>(T entity)
         {
             if (entity == null)
+            {
+                throw new PlataformaException("Entity not found.");
+            }
+        }
+
+        private static void VerifyIndex<T>(int index, T entity) where T : BaseEntity
+        {
+            if (index < 0)
+            {
+                throw new PlataformaException("Entity not found");
+            }
+        }
+
+        private static void VerifyEntityToUpdate<T>(T entity) where T : BaseEntity
+        {
+            if (entity == null || entity.Id == null)
             {
                 throw new PlataformaException("Entity is not defined");
             }

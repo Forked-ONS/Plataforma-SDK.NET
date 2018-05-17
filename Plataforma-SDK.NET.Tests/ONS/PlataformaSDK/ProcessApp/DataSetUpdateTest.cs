@@ -28,14 +28,8 @@ namespace ONS.PlataformaSDK.ProcessApp
         [Test]
         public void Update()
         {
+            Evento1.NumONS = "324";
             DomainContext.EventoMudancaEstadoOperativo.Update(Evento1);
-            AssertUpdate();
-        }
-
-        [Test]
-        public void UpdateWithPredicate()
-        {
-            DomainContext.EventoMudancaEstadoOperativo.Update(entity => entity.Id.Equals("1"));
             AssertUpdate();
         }
 
@@ -47,23 +41,24 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
         
         [Test]
-        public void UpdateWithNullPredicate()
-        {
-            Predicate<EventoMudancaEstadoOperativo> NullPredicate = null;
-            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Update(NullPredicate));
-        }
-
-        [Test]
         public void UpdateWithInvalidId()
         {
             var Evento3 = CreateEventoWithId("3");
             Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Update(Evento3));
         }
 
+        [Test]
+        public void UpdateWithNullId()
+        {
+            var EventoNullId = new EventoMudancaEstadoOperativo();
+            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Update(EventoNullId));
+        }
+
         private void AssertUpdate()
         {
             var UpdatedEntity = DomainContext.EventoMudancaEstadoOperativo[0];
             Assert.NotNull(UpdatedEntity._Metadata);
+            Assert.AreEqual("324", UpdatedEntity.NumONS);
             Assert.AreEqual("master", UpdatedEntity._Metadata.Branch);
             Assert.AreEqual("update", UpdatedEntity._Metadata.ChangeTrack);
             Assert.AreEqual("EventoMudancaEstadoOperativo", UpdatedEntity._Metadata.Type);
@@ -79,6 +74,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var Evento = new EventoMudancaEstadoOperativo();
             Evento.Id = id;
             Evento._Metadata = new Metadata("master", "EventoMudancaEstadoOperativo", null);
+            Evento.NumONS = "123";  
             return Evento;
         }
     }

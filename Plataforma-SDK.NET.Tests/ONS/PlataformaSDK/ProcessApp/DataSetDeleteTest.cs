@@ -31,7 +31,18 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
 
             DomainContext.EventoMudancaEstadoOperativo.Delete(Evento1);
+            AssertDelete();
+        }
 
+        [Test]
+        public void DeleteWithPredicate()
+        {
+            DomainContext.EventoMudancaEstadoOperativo.Delete(bdEntity => bdEntity.Id.Equals("1"));
+            AssertDelete();
+        }
+
+        private void AssertDelete()
+        {
             var DeletedEntity = DomainContext.EventoMudancaEstadoOperativo[0];
             Assert.NotNull(DeletedEntity._Metadata);
             Assert.AreEqual("master", DeletedEntity._Metadata.Branch);
@@ -46,15 +57,10 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
 
         [Test]
-        public void DeleteWithPredicate()
-        {
-
-        }
-
-        [Test]
         public void DeleteWithNullEntity()
         {
-            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(null));
+            EventoMudancaEstadoOperativo EventoNull = null;
+            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(EventoNull));
         }
 
         [Test]

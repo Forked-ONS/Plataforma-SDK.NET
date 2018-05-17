@@ -34,6 +34,13 @@ namespace ONS.PlataformaSDK.Util
             DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_DELETE;
         }
 
+        public static void Delete<T>(this List<T> list, Predicate<T> filter) where T : BaseEntity
+        {
+            VerifyFilter(filter);
+            var DbEntity = list.Find(filter);
+            DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_DELETE;
+        }
+
         public static void Update<T>(this List<T> list, T entity) where T : BaseEntity
         {
             VerifyEntity(entity);
@@ -54,5 +61,15 @@ namespace ONS.PlataformaSDK.Util
                 throw new PlataformaException("Entity is not defined");
             }
         }
+
+        private static void VerifyFilter<T>(Predicate<T> filter) where T : BaseEntity
+        {
+            if (filter == null)
+            {
+                throw new PlataformaException("Filter is not defined");
+            }
+
+        }
+
     }
 }

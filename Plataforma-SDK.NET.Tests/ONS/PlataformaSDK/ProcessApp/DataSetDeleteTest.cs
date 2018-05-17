@@ -48,20 +48,6 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(NullPredicate));
         }
 
-        private void AssertDelete()
-        {
-            var DeletedEntity = DomainContext.EventoMudancaEstadoOperativo[0];
-            Assert.NotNull(DeletedEntity._Metadata);
-            Assert.AreEqual("master", DeletedEntity._Metadata.Branch);
-            Assert.AreEqual("destroy", DeletedEntity._Metadata.ChangeTrack);
-            Assert.AreEqual("EventoMudancaEstadoOperativo", DeletedEntity._Metadata.Type);
-
-            var NonDeletedEntity1 = DomainContext.EventoMudancaEstadoOperativo[1];
-            Assert.NotNull(NonDeletedEntity1._Metadata);
-            Assert.AreEqual("master", NonDeletedEntity1._Metadata.Branch);
-            Assert.Null(NonDeletedEntity1._Metadata.ChangeTrack);
-            Assert.AreEqual("EventoMudancaEstadoOperativo", NonDeletedEntity1._Metadata.Type);
-        }
 
         [Test]
         public void DeleteWithNullEntity()
@@ -75,6 +61,21 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             var Evento4 = CreateEventoWithId("4");
             Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(Evento4));
+        }
+
+        private void AssertDelete()
+        {
+            var DeletedEntity = DomainContext.EventoMudancaEstadoOperativo[0];
+            Assert.NotNull(DeletedEntity._Metadata);
+            Assert.AreEqual("master", DeletedEntity._Metadata.Branch);
+            Assert.AreEqual("destroy", DeletedEntity._Metadata.ChangeTrack);
+            Assert.AreEqual("EventoMudancaEstadoOperativo", DeletedEntity._Metadata.Type);
+
+            var NonDeletedEntity1 = DomainContext.EventoMudancaEstadoOperativo[1];
+            Assert.NotNull(NonDeletedEntity1._Metadata);
+            Assert.AreEqual("master", NonDeletedEntity1._Metadata.Branch);
+            Assert.Null(NonDeletedEntity1._Metadata.ChangeTrack);
+            Assert.AreEqual("EventoMudancaEstadoOperativo", NonDeletedEntity1._Metadata.Type);
         }
 
         private static EventoMudancaEstadoOperativo CreateEventoWithId(string id)

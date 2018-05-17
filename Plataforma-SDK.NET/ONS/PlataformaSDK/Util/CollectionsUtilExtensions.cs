@@ -37,8 +37,11 @@ namespace ONS.PlataformaSDK.Util
         public static void Delete<T>(this List<T> list, Predicate<T> filter) where T : BaseEntity
         {
             VerifyFilter(filter);
-            var DbEntity = list.Find(filter);
-            DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_DELETE;
+            var DbEntities = list.FindAll(filter);
+            foreach (var DbEntity in DbEntities)
+            {
+                DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_DELETE;
+            }
         }
 
         public static void Update<T>(this List<T> list, T entity) where T : BaseEntity
@@ -47,6 +50,16 @@ namespace ONS.PlataformaSDK.Util
             var DbEntity = FindById(list, entity);
             VerifyEntity(DbEntity);
             DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_UPDATE;
+        }
+
+        public static void Update<T>(this List<T> list, Predicate<T> filter) where T : BaseEntity
+        {
+            VerifyFilter(filter);
+            var DbEntities = list.FindAll(filter);
+            foreach (var DbEntity in DbEntities)
+            {
+                DbEntity._Metadata.ChangeTrack = CHANGE_TRACK_UPDATE;
+            }
         }
 
         private static T FindById<T>(List<T> list, T entity) where T : BaseEntity

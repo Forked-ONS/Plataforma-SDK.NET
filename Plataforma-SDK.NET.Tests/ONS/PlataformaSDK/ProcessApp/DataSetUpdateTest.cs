@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Domain;
@@ -27,9 +28,40 @@ namespace ONS.PlataformaSDK.ProcessApp
         [Test]
         public void Update()
         {
-
             DomainContext.EventoMudancaEstadoOperativo.Update(Evento1);
+            AssertUpdate();
+        }
 
+        [Test]
+        public void UpdateWithPredicate()
+        {
+            DomainContext.EventoMudancaEstadoOperativo.Update(entity => entity.Id.Equals("1"));
+            AssertUpdate();
+        }
+
+        [Test]
+        public void UpdateWithNullEntity()
+        {
+            EventoMudancaEstadoOperativo NullEvento = null;
+            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Update(NullEvento));
+        }
+        
+        [Test]
+        public void UpdateWithNullPredicate()
+        {
+            Predicate<EventoMudancaEstadoOperativo> NullPredicate = null;
+            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Update(NullPredicate));
+        }
+
+        [Test]
+        public void UpdateWithInvalidId()
+        {
+            var Evento3 = CreateEventoWithId("3");
+            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Update(Evento3));
+        }
+
+        private void AssertUpdate()
+        {
             var UpdatedEntity = DomainContext.EventoMudancaEstadoOperativo[0];
             Assert.NotNull(UpdatedEntity._Metadata);
             Assert.AreEqual("master", UpdatedEntity._Metadata.Branch);
@@ -41,21 +73,6 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.AreEqual("master", NonUpdatedEntity._Metadata.Branch);
             Assert.Null(NonUpdatedEntity._Metadata.ChangeTrack);
             Assert.AreEqual("EventoMudancaEstadoOperativo", NonUpdatedEntity._Metadata.Type);
-
-            new List<BaseEntity>().Find(dbEntity => dbEntity.Id.Equals("1"));
-        }
-
-        [Test]
-        public void UpdateWithNullEntity()
-        {
-            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Update(null));
-        }
-
-        [Test]
-        public void UpdateWithInvalidId()
-        {
-            var Evento3 = CreateEventoWithId("3");
-            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Update(Evento3));
         }
         private static EventoMudancaEstadoOperativo CreateEventoWithId(string id)
         {

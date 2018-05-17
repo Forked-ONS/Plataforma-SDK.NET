@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Domain;
@@ -29,7 +30,6 @@ namespace ONS.PlataformaSDK.ProcessApp
         [Test]
         public void Delete()
         {
-
             DomainContext.EventoMudancaEstadoOperativo.Delete(Evento1);
             AssertDelete();
         }
@@ -39,6 +39,13 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             DomainContext.EventoMudancaEstadoOperativo.Delete(bdEntity => bdEntity.Id.Equals("1"));
             AssertDelete();
+        }
+
+        [Test]
+        public void DeleteWithNullPredicate()
+        {
+            Predicate<EventoMudancaEstadoOperativo> NullPredicate = null;
+            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(NullPredicate));
         }
 
         private void AssertDelete()
@@ -59,8 +66,8 @@ namespace ONS.PlataformaSDK.ProcessApp
         [Test]
         public void DeleteWithNullEntity()
         {
-            EventoMudancaEstadoOperativo EventoNull = null;
-            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(EventoNull));
+            EventoMudancaEstadoOperativo NullEvento = null;
+            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(NullEvento));
         }
 
         [Test]

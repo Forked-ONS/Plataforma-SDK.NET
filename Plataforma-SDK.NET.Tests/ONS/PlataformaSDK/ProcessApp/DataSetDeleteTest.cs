@@ -21,6 +21,8 @@ namespace ONS.PlataformaSDK.ProcessApp
             DomainContext.EventoMudancaEstadoOperativo.Add(Evento1);
             var Evento2 = CreateEventoWithId("2");
             DomainContext.EventoMudancaEstadoOperativo.Add(Evento2);
+            var Evento3 = CreateEventoWithId("3");
+            DomainContext.EventoMudancaEstadoOperativo.Add(Evento3);
         }
 
 
@@ -36,13 +38,17 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.AreEqual("destroy", DeletedEntity._Metadata.ChangeTrack);
             Assert.AreEqual("EventoMudancaEstadoOperativo", DeletedEntity._Metadata.Type);
 
-            var NonDeletedEntity = DomainContext.EventoMudancaEstadoOperativo[1];
-            Assert.NotNull(DeletedEntity._Metadata);
-            Assert.AreEqual("master", NonDeletedEntity._Metadata.Branch);
-            Assert.Null(NonDeletedEntity._Metadata.ChangeTrack);
-            Assert.AreEqual("EventoMudancaEstadoOperativo", NonDeletedEntity._Metadata.Type);
+            var NonDeletedEntity1 = DomainContext.EventoMudancaEstadoOperativo[1];
+            Assert.NotNull(NonDeletedEntity1._Metadata);
+            Assert.AreEqual("master", NonDeletedEntity1._Metadata.Branch);
+            Assert.Null(NonDeletedEntity1._Metadata.ChangeTrack);
+            Assert.AreEqual("EventoMudancaEstadoOperativo", NonDeletedEntity1._Metadata.Type);
+        }
 
-            new List<BaseEntity>().Find(dbEntity => dbEntity.Id.Equals("1"));
+        [Test]
+        public void DeleteWithPredicate()
+        {
+
         }
 
         [Test]
@@ -54,9 +60,10 @@ namespace ONS.PlataformaSDK.ProcessApp
         [Test]
         public void DeleteWithInvalidId()
         {
-            var Evento3 = CreateEventoWithId("3");
-            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(Evento3));
+            var Evento4 = CreateEventoWithId("4");
+            Assert.Throws<PlataformaException>(() => DomainContext.EventoMudancaEstadoOperativo.Delete(Evento4));
         }
+
         private static EventoMudancaEstadoOperativo CreateEventoWithId(string id)
         {
             var Evento = new EventoMudancaEstadoOperativo();

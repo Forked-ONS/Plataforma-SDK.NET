@@ -30,17 +30,17 @@ namespace ONS.PlataformaSDK.ProcessApp
 
             DomainContext.EventoMudancaEstadoOperativo.Update(Evento1);
 
-            var DeletedEntity = DomainContext.EventoMudancaEstadoOperativo[0];
-            Assert.NotNull(DeletedEntity._Metadata);
-            Assert.AreEqual("master", DeletedEntity._Metadata.Branch);
-            Assert.AreEqual("update", DeletedEntity._Metadata.ChangeTrack);
-            Assert.AreEqual("EventoMudancaEstadoOperativo", DeletedEntity._Metadata.Type);
+            var UpdatedEntity = DomainContext.EventoMudancaEstadoOperativo[0];
+            Assert.NotNull(UpdatedEntity._Metadata);
+            Assert.AreEqual("master", UpdatedEntity._Metadata.Branch);
+            Assert.AreEqual("update", UpdatedEntity._Metadata.ChangeTrack);
+            Assert.AreEqual("EventoMudancaEstadoOperativo", UpdatedEntity._Metadata.Type);
 
-            var NonDeletedEntity = DomainContext.EventoMudancaEstadoOperativo[1];
-            Assert.NotNull(DeletedEntity._Metadata);
-            Assert.AreEqual("master", NonDeletedEntity._Metadata.Branch);
-            Assert.Null(NonDeletedEntity._Metadata.ChangeTrack);
-            Assert.AreEqual("EventoMudancaEstadoOperativo", NonDeletedEntity._Metadata.Type);
+            var NonUpdatedEntity = DomainContext.EventoMudancaEstadoOperativo[1];
+            Assert.NotNull(NonUpdatedEntity._Metadata);
+            Assert.AreEqual("master", NonUpdatedEntity._Metadata.Branch);
+            Assert.Null(NonUpdatedEntity._Metadata.ChangeTrack);
+            Assert.AreEqual("EventoMudancaEstadoOperativo", NonUpdatedEntity._Metadata.Type);
 
             new List<BaseEntity>().Find(dbEntity => dbEntity.Id.Equals("1"));
         }

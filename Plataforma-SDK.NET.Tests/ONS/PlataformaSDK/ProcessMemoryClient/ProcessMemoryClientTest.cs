@@ -16,7 +16,6 @@ namespace ONS.PlataformaSDK.ProcessMemory
         private const string CONTEXT_JSON = "{\"InstanceId\":\"11de37cb-2a69-45d9-9a46-3b24f57eb25b\",\"Commit\":false}";
         private const string HEAD_JSON = "{\"event\":{\"name\":\"presentation.insere.tarefa.request\",\"instance_id\":null,\"reference_date\":null,\"scope\":\"execution\",\"reproduction\":{},\"reprocess\":{},\"payload\":{\"nomeTarefa\":\"teste\"}}}";
 
-
         private ProcessMemoryHttpClient ProcessMemoryClient;
         private Mock<HttpClient> HttpClientMock;
         private EnvironmentProperties EnvironmentProperties;

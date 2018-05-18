@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ONS.PlataformaSDK.Core;
 using ONS.PlataformaSDK.Domain;
 using ONS.PlataformaSDK.Entities;
+using ONS.PlataformaSDK.EventManager;
 using ONS.PlataformaSDK.Exception;
 using ONS.PlataformaSDK.ProcessApp;
 using ONS.PlataformaSDK.ProcessMemoryClient;
@@ -33,6 +34,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             return CoreClientMock;
         }
 
+        internal static Mock<EventManagerClient> CreateEventManagerMock()
+        {
+            var EventManagerMock = new Mock<EventManagerClient>();
+            EventManagerMock.Setup(mock => mock.SendEvent(CreateEvent()));
+            return EventManagerMock;
+        }
+
         internal static Mock<DomainClient> CreateDomainClientMock()
         {
             return new Mock<DomainClient>();
@@ -41,7 +49,6 @@ namespace ONS.PlataformaSDK.ProcessApp
         internal static Mock<IExecutable> CreateAppMock()
         {
             Mock<IExecutable> ExecutableMock = new Mock<IExecutable>();
-            // ExecutableMock.Setup(mock => mock.Execute());
             return ExecutableMock;
         }
 
@@ -68,6 +75,15 @@ namespace ONS.PlataformaSDK.ProcessApp
             return OperationsList;
         }
 
+        internal static Event CreateEvent()
+        {
+            var Event = new Event();
+            Event.Instance_Id = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
+            Event.Name = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0persist.request";
+            Event.Payload = new { instanceId = "abaf4fbe-5359-41e7-a07c-8bd60191de56" };
+            return Event;
+        }
+
         public static Operation createOperation(string eventInName)
         {
             var Operation = new Operation();
@@ -87,7 +103,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
 
         private static List<PlatformMap> GetMapList()
-        {   
+        {
             var PlatformMap = new PlatformMap();
             var Maps = new List<PlatformMap>();
             Maps.Add(PlatformMap);

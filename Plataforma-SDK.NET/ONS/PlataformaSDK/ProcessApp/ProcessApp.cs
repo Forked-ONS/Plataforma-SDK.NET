@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using ONS.PlataformaSDK.Domain;
+using ONS.PlataformaSDK.EventManager;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
@@ -22,15 +23,18 @@ namespace ONS.PlataformaSDK.ProcessApp
         private string ProcessId;
         private ProcessMemoryHttpClient ProcessMemoryClient;
         private CoreClient CoreClient;
+        private EventManagerClient EventManagerClient;
+        private bool SyncDomain;
 
-        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn,
-            IDomainContext domainContext, ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient, DomainClient domainClient)
+        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn, IDomainContext domainContext,
+            ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient, DomainClient domainClient, EventManagerClient eventManagerClient)
         {
             this.ProcessInstanceId = processInstanceId;
             this.ProcessId = processId;
             this.EventIn = eventIn;
             this.ProcessMemoryClient = processMemoryClient;
             this.CoreClient = coreClient;
+            this.EventManagerClient = eventManagerClient;
 
             this.Context = new Context();
             Context.InstanceId = this.ProcessInstanceId;
@@ -38,6 +42,14 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.SystemId = systemId;
             this.DataSetBuilder = new DataSetBuilder(domainContext, domainClient);
         }
+
+        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn, bool syncDomain, IDomainContext domainContext,
+            ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient, DomainClient domainClient, EventManagerClient eventManagerClient)
+                : this(systemId, processInstanceId, processId, eventIn, domainContext, processMemoryClient, coreClient, domainClient, eventManagerClient)
+        {
+            this.SyncDomain = syncDomain;
+        }
+
 
         public async Task Start()
         {
@@ -53,10 +65,10 @@ namespace ONS.PlataformaSDK.ProcessApp
             Context.EventOut = Operation.Event_Out;
             Context.Commit = Operation.Commit;
 
-            await this.StartProcess();
+            this.StartProcess();
         }
 
-        public async Task StartProcess()
+        public async void StartProcess()
         {
             var PlatformMapTask = CoreClient.MapByProcessId(this.ProcessId);
             var PlatformsMaps = await PlatformMapTask;
@@ -67,6 +79,32 @@ namespace ONS.PlataformaSDK.ProcessApp
             }
             App.Execute(DataSetBuilder.DomainContext);
             ProcessMemoryClient.Commit(Context);
+            PersistDomain();
+        }
+
+        public void PersistDomain()
+        {
+            if (Context.Commit && !IsReproduction() && !this.SyncDomain)
+            {
+                var Event = new Event();
+                Event.Name = Context.SystemId + "persist.request";
+                Event.Instance_Id = Context.SystemId;
+                Event.Payload = new { instanceId = Context.InstanceId };
+                EventManagerClient.SendEvent(Event);
+            }
+            else if (Context.Commit && this.SyncDomain)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private bool IsReproduction()
+        {
+            return false;
         }
 
         public void VerifyOperationList(List<Operation> operations)

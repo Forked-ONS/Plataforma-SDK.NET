@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ONS.PlataformaSDK.Core;
 using ONS.PlataformaSDK.Domain;
 using ONS.PlataformaSDK.Entities;
+using ONS.PlataformaSDK.EventManager;
 using ONS.PlataformaSDK.Exception;
 using ONS.PlataformaSDK.ProcessApp;
 using ONS.PlataformaSDK.ProcessMemoryClient;
@@ -22,6 +23,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         private Mock<ProcessMemoryHttpClient> ProcessMemoryClientMock;
         private Mock<CoreClient> CoreClientMock;
         private Mock<DomainClient> DomainClientMock;
+        private Mock<EventManagerClient> EventManagerClientMock;
 
         [SetUp]
         public void Setup()
@@ -29,8 +31,10 @@ namespace ONS.PlataformaSDK.ProcessApp
             ProcessMemoryClientMock = ProcessAppTestHelper.CreateProcessMemoryClientMock();
             CoreClientMock = ProcessAppTestHelper.CreateCoreClientMock();
             DomainClientMock = ProcessAppTestHelper.CreateDomainClientMock();
+            EventManagerClientMock = ProcessAppTestHelper.CreateEventManagerMock();
             ProcessApp = new ProcessApp(SYSTEM_ID, ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
-                EVENT_IN, new DomainTestContext(), ProcessMemoryClientMock.Object, CoreClientMock.Object, DomainClientMock.Object);
+                EVENT_IN, new DomainTestContext(), ProcessMemoryClientMock.Object, CoreClientMock.Object,
+                    DomainClientMock.Object, EventManagerClientMock.Object);
             AppMock = ProcessAppTestHelper.CreateAppMock();
             ProcessApp.App = AppMock.Object;
         }
@@ -45,6 +49,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessIdAsync(ProcessAppTestHelper.PROCESS_ID), Times.Once);
             CoreClientMock.Verify(coreClientMock => coreClientMock.MapByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
             AppMock.Verify(appMock => appMock.Execute(It.IsAny<IDomainContext>()));
+            EventManagerClientMock.Verify(eventManagerMock => eventManagerMock.SendEvent(It.IsAny<Event>()), Times.Once);
 
             //FIXME Equals            
             Assert.AreEqual(EVENT_IN, ProcessApp.Context.Event.Name);
@@ -58,9 +63,9 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
 
         [Test]
-        public async Task StartProcess()
+        public void StartProcess()
         {
-            await ProcessApp.StartProcess();
+            ProcessApp.StartProcess();
             CoreClientMock.Verify(coreClientMock => coreClientMock.MapByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
         }
 

@@ -41,6 +41,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             await ProcessApp.Start();
 
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(ProcessAppTestHelper.PROCESS_INSTANCE_ID), Times.Once);
+            ProcessMemoryClientMock.Verify(processMemoryClientMock => processMemoryClientMock.Commit(ProcessApp.Context), Times.Once);
             CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessIdAsync(ProcessAppTestHelper.PROCESS_ID), Times.Once);
             CoreClientMock.Verify(coreClientMock => coreClientMock.MapByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
             AppMock.Verify(appMock => appMock.Execute(It.IsAny<IDomainContext>()));

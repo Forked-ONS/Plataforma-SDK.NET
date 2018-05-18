@@ -66,6 +66,7 @@ namespace ONS.PlataformaSDK.ProcessApp
                 await DataSetBuilder.BuildAsync(PlatformsMaps[0], new object());
             }
             App.Execute(DataSetBuilder.DomainContext);
+            ProcessMemoryClient.Commit(Context);
         }
 
         public void VerifyOperationList(List<Operation> operations)

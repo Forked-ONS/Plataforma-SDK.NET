@@ -30,12 +30,14 @@ namespace ONS.PlataformaSDK.ProcessMemoryClient
             return ProcessMemory;
         }
 
-        public virtual void Commit(Context context) {
+        public virtual void Commit(Context context)
+        {
             System.Console.WriteLine("Commit context to process memory.");
-            var JsonContent = JsonConvert.SerializeObject(context);
+            var JsonContent = JsonConvert.SerializeObject(context, Newtonsoft.Json.Formatting.None, 
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var url = $"{ProcessMemoryEnvironmentProperties.Scheme}://{ProcessMemoryEnvironmentProperties.Host}:{ProcessMemoryEnvironmentProperties.Port}" +
                             $"/{context.InstanceId}/commit?app_origin=dotnet_sdk";
-            HttpClient.Post(url, JsonContent);                            
+            HttpClient.Post(url, JsonContent);
         }
     }
 }

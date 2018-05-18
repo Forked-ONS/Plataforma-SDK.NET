@@ -4,6 +4,7 @@ using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Environment;
 using System.Threading.Tasks;
 using ONS.PlataformaSDK.ProcessMemoryClient;
+using ONS.PlataformaSDK.Entities;
 
 namespace ONS.PlataformaSDK.ProcessMemory
 {
@@ -11,6 +12,11 @@ namespace ONS.PlataformaSDK.ProcessMemory
     {
         private const string PROCESS_INSTANCE_ID = "11de37cb-2a69-45d9-9a46-3b24f57eb25b";
         private const string URL_HEAD = "http://localhost:9091/11de37cb-2a69-45d9-9a46-3b24f57eb25b/head?app_origin=dotnet_sdk";
+        private const string URL_COMMIT = "http://localhost:9091/11de37cb-2a69-45d9-9a46-3b24f57eb25b/commit?app_origin=dotnet_sdk";
+        private const string CONTEXT_JSON = "{\"Event\":null,\"ProcessId\":null,\"SystemId\":null,\"InstanceId\":\"11de37cb-2a69-45d9-9a46-3b24f57eb25b\",\"EventOut\":null,\"Commit\":false,\"Map\":null}";
+        private const string HEAD_JSON = "{\"event\":{\"name\":\"presentation.insere.tarefa.request\",\"instance_id\":null,\"reference_date\":null,\"scope\":\"execution\",\"reproduction\":{},\"reprocess\":{},\"payload\":{\"nomeTarefa\":\"teste\"}}}";
+
+
         private ProcessMemoryHttpClient ProcessMemoryClient;
         private Mock<HttpClient> HttpClientMock;
         private EnvironmentProperties EnvironmentProperties;
@@ -19,8 +25,9 @@ namespace ONS.PlataformaSDK.ProcessMemory
         public void Setup()
         {
             HttpClientMock = new Mock<HttpClient>();
-            var task = Task.FromResult(GetHead());
+            var task = Task.FromResult(HEAD_JSON);
             HttpClientMock.Setup(mock => mock.Get(URL_HEAD)).Returns(task);
+            HttpClientMock.Setup(mock => mock.Post(URL_COMMIT, CONTEXT_JSON));
             EnvironmentProperties = new EnvironmentProperties("http", "localhost", "9091");
             ProcessMemoryClient = new ProcessMemoryHttpClient(HttpClientMock.Object, EnvironmentProperties);
         }
@@ -39,8 +46,13 @@ namespace ONS.PlataformaSDK.ProcessMemory
             Assert.NotNull(ProcessMemory.Event.Payload);
         }
 
-        private string GetHead() {
-            return "{\"event\":{\"name\":\"presentation.insere.tarefa.request\",\"instance_id\":null,\"reference_date\":null,\"scope\":\"execution\",\"reproduction\":{},\"reprocess\":{},\"payload\":{\"nomeTarefa\":\"teste\"}}}";
+        [Test]
+        public void Commit()
+        {   
+            var Context = new Context();
+            Context.InstanceId = PROCESS_INSTANCE_ID;
+            ProcessMemoryClient.Commit(Context);
+            HttpClientMock.Verify(httpClient => httpClient.Post(URL_COMMIT, CONTEXT_JSON), Times.Once);
         }
 
     }

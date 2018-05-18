@@ -1,7 +1,7 @@
 namespace ONS.PlataformaSDK.ProcessApp
 {
     
-    interface IProcessApp
+    interface IExecutable
     {
         void execute();
     }

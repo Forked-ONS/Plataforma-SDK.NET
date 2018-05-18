@@ -50,8 +50,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.AreEqual(EVENT_IN, ProcessApp.EventIn);
             Assert.True(ProcessApp.Context.Commit);
 
-            //FIXME
-            // Assert.NotNull(ProcessApp.Context.PlatformMap);
+            Assert.NotNull(ProcessApp.Context.Map);
         }
 
         [Test]

@@ -33,24 +33,27 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void BuildFilters(PlatformMap platformMap)
         {
-            var StringReader = new StringReader(platformMap.Content);
-            var deserializer = new DeserializerBuilder().Build();
-            var YamlObject = deserializer.Deserialize<Dictionary<string, Dictionary<object, object>>>(StringReader);
-
-            foreach (var key in YamlObject.Keys)
+            if (platformMap.Content != null)
             {
-                var EntityFilter = new EntityFilter();
-                EntityFilter.EntityName = key;
-                EntityFilter.MapName = platformMap.Name;
-                EntitiesFilters.Add(EntityFilter);
+                var StringReader = new StringReader(platformMap.Content);
+                var deserializer = new DeserializerBuilder().Build();
+                var YamlObject = deserializer.Deserialize<Dictionary<string, Dictionary<object, object>>>(StringReader);
 
-                var YamlFilter = YamlObject[key]["filters"];
-                if (YamlFilter != null)
+                foreach (var key in YamlObject.Keys)
                 {
-                    var Filters = ((Dictionary<object, object>)YamlFilter);
-                    foreach (var filterKey in Filters.Keys)
+                    var EntityFilter = new EntityFilter();
+                    EntityFilter.EntityName = key;
+                    EntityFilter.MapName = platformMap.Name;
+                    EntitiesFilters.Add(EntityFilter);
+
+                    var YamlFilter = YamlObject[key]["filters"];
+                    if (YamlFilter != null)
                     {
-                        EntityFilter.addFilter(new Filter((string)filterKey, (string)Filters[filterKey]));
+                        var Filters = ((Dictionary<object, object>)YamlFilter);
+                        foreach (var filterKey in Filters.Keys)
+                        {
+                            EntityFilter.addFilter(new Filter((string)filterKey, (string)Filters[filterKey]));
+                        }
                     }
                 }
             }
@@ -94,7 +97,7 @@ namespace ONS.PlataformaSDK.ProcessApp
                                 var GenericType = Property.PropertyType.GenericTypeArguments[0];
                                 var FindByFilterMethod = DomainClient.GetType().GetMethod("FindByFilterAsync");
                                 var GenericMethod = FindByFilterMethod.MakeGenericMethod(GenericType);
-                                var ResultTask = (Task) GenericMethod.Invoke(DomainClient, new object[] { EntityFilter, Filter});
+                                var ResultTask = (Task)GenericMethod.Invoke(DomainClient, new object[] { EntityFilter, Filter });
                                 await ResultTask;
                                 var ResultProperty = ResultTask.GetType().GetProperty("Result");
                                 AddToDomainContext(ResultProperty.GetValue(ResultTask), Property);
@@ -110,7 +113,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var PropertyType = property.PropertyType;
             var ConcatMethod = PropertyType.GetMethod("AddRange");
             var DataSetList = property.GetValue(DomainContext, null);
-            ConcatMethod.Invoke(DataSetList, new object[]{result});
+            ConcatMethod.Invoke(DataSetList, new object[] { result });
         }
 
         private bool DomainContextContainsCollection(EntityFilter entityFilter)

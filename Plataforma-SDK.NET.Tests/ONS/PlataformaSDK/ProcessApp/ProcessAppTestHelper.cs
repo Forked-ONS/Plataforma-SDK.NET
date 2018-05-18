@@ -38,21 +38,21 @@ namespace ONS.PlataformaSDK.ProcessApp
             return new Mock<DomainClient>();
         }
 
-        public static Mock<CoreClient> CreateCoreClientWithEmptyOperationsListMock()
+        internal static Mock<CoreClient> CreateCoreClientWithEmptyOperationsListMock()
         {
             var CoreClientMock = new Mock<CoreClient>();
             CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(Task.FromResult(new List<Operation>()));
             return CoreClientMock;
         }
 
-        public static ProcessMemoryEntity GetProcessMemoryHead()
+        internal static ProcessMemoryEntity GetProcessMemoryHead()
         {
             var ProcessMemoryEntity = new ProcessMemoryEntity();
             ProcessMemoryEntity.Event = GetEvent();
             return ProcessMemoryEntity;
         }
 
-        public static List<Operation> GetOperationList()
+        internal static List<Operation> GetOperationList()
         {
             var Operation = new Operation();
             var OperationsList = new List<Operation>();
@@ -60,7 +60,6 @@ namespace ONS.PlataformaSDK.ProcessApp
             OperationsList.Add(createOperation("presentation.insere.tarefa.request"));
             return OperationsList;
         }
-
 
         public static Operation createOperation(string eventInName)
         {
@@ -82,7 +81,10 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private static List<PlatformMap> GetMapList()
         {   
-            return new List<PlatformMap>();
+            var PlatformMap = new PlatformMap();
+            var Maps = new List<PlatformMap>();
+            Maps.Add(PlatformMap);
+            return Maps;
         }
     }
 }

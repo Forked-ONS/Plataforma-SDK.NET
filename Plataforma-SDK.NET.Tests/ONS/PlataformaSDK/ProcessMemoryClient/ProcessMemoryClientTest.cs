@@ -10,7 +10,7 @@ namespace ONS.PlataformaSDK.ProcessMemory
     public class ProcessMemoryClientTest
     {
         private const string PROCESS_INSTANCE_ID = "11de37cb-2a69-45d9-9a46-3b24f57eb25b";
-        private const string URL_HEAD = "http://localhost:9091/11de37cb-2a69-45d9-9a46-3b24f57eb25b/head";
+        private const string URL_HEAD = "http://localhost:9091/11de37cb-2a69-45d9-9a46-3b24f57eb25b/head?app_origin=dotnet_sdk";
         private ProcessMemoryHttpClient ProcessMemoryClient;
         private Mock<HttpClient> HttpClientMock;
         private EnvironmentProperties EnvironmentProperties;

@@ -13,9 +13,7 @@ namespace ONS.PlataformaSDK.Domain
         private HttpClient HttpClient;
         private EnvironmentProperties DomainEnvironmentProperties;
 
-        public DomainClient()
-        {
-        }
+        public DomainClient() {}
 
         public DomainClient(HttpClient httpClient, EnvironmentProperties domainEnvironmentProperties)
         {

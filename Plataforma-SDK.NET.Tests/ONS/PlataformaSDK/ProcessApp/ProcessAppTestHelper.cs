@@ -38,6 +38,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             return new Mock<DomainClient>();
         }
 
+        internal static Mock<IExecutable> CreateAppMock()
+        {
+            Mock<IExecutable> ExecutableMock = new Mock<IExecutable>();
+            // ExecutableMock.Setup(mock => mock.Execute());
+            return ExecutableMock;
+        }
+
         internal static Mock<CoreClient> CreateCoreClientWithEmptyOperationsListMock()
         {
             var CoreClientMock = new Mock<CoreClient>();

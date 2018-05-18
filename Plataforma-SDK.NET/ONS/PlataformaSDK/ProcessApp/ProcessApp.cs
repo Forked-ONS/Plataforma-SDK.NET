@@ -17,12 +17,13 @@ namespace ONS.PlataformaSDK.ProcessApp
         public Context Context { get; set; }
         public string EventIn { get; set; }
         public DataSetBuilder DataSetBuilder { get; set; }
+        public IExecutable App { get; set; }
         private string ProcessInstanceId;
         private string ProcessId;
         private ProcessMemoryHttpClient ProcessMemoryClient;
         private CoreClient CoreClient;
 
-        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn, 
+        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn,
             IDomainContext domainContext, ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient, DomainClient domainClient)
         {
             this.ProcessInstanceId = processInstanceId;
@@ -32,7 +33,6 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.CoreClient = coreClient;
 
             this.Context = new Context();
-            //FIXME Construtor
             Context.InstanceId = this.ProcessInstanceId;
             Context.ProcessId = this.ProcessId;
             Context.SystemId = systemId;
@@ -60,11 +60,12 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             var PlatformMapTask = CoreClient.MapByProcessId(this.ProcessId);
             var PlatformsMaps = await PlatformMapTask;
-            if(!PlatformsMaps.isEmpty()) 
+            if (!PlatformsMaps.isEmpty())
             {
                 Context.Map = PlatformsMaps[0];
                 await DataSetBuilder.BuildAsync(PlatformsMaps[0], new object());
             }
+            App.Execute(DataSetBuilder.DomainContext);
         }
 
         public void VerifyOperationList(List<Operation> operations)

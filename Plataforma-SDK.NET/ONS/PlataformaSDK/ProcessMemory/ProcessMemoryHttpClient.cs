@@ -14,7 +14,6 @@ namespace ONS.PlataformaSDK.ProcessMemoryClient
 
         public ProcessMemoryHttpClient()
         {
-            //FIXME Interface
         }
         public ProcessMemoryHttpClient(HttpClient httpClient, EnvironmentProperties processMemoryEnvironmentProperties)
         {
@@ -25,10 +24,14 @@ namespace ONS.PlataformaSDK.ProcessMemoryClient
         {
             System.Console.WriteLine($"get head of process memory {processInstanceId}");
             var ProcessMemoryTask = HttpClient.Get($"{ProcessMemoryEnvironmentProperties.Scheme}://{ProcessMemoryEnvironmentProperties.Host}:{ProcessMemoryEnvironmentProperties.Port}" +
-                            $"/{processInstanceId}/head");
+                            $"/{processInstanceId}/head?app_origin=dotnet_sdk");
             var ProcessMemoryJson = await ProcessMemoryTask;
             var ProcessMemory = JsonConvert.DeserializeObject<ProcessMemoryEntity>(ProcessMemoryJson);
             return ProcessMemory;
+        }
+
+        public virtual void Commit(Context context) { 
+            System.Console.WriteLine("Commit context to process memory.");
         }
     }
 }

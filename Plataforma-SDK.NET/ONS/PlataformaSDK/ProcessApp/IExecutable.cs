@@ -1,8 +1,10 @@
+using ONS.PlataformaSDK.Domain;
+
 namespace ONS.PlataformaSDK.ProcessApp
 {
     
-    interface IExecutable
+    public interface IExecutable
     {
-        void execute();
+        void Execute(IDomainContext domainContext);
     }
 }

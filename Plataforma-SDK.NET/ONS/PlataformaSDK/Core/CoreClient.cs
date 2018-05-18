@@ -14,8 +14,8 @@ namespace ONS.PlataformaSDK.Core
 
         public CoreClient()
         {
-            //FIXME Interface
         }
+        
         public CoreClient(HttpClient httpClient, EnvironmentProperties coreEnvironmentProperties)
         {
             this.HttpClient = httpClient;

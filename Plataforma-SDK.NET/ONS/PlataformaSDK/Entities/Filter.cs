@@ -16,30 +16,24 @@ namespace ONS.PlataformaSDK.Entities
             Parameters = new Dictionary<string, object>();
         }
 
-        // override object.Equals
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            var Other = (Filter)obj;
-
-            return this.Name.Equals(Other.Name) && this.Query.Equals(Other.Query) && this.ShouldBeExecuted == Other.ShouldBeExecuted &&
-                this.Parameters.Equals(Other.Parameters);
+            var filter = obj as Filter;
+            return filter != null &&
+                   Name == filter.Name &&
+                   Query == filter.Query &&
+                   ShouldBeExecuted == filter.ShouldBeExecuted &&
+                   EqualityComparer<Dictionary<string, object>>.Default.Equals(Parameters, filter.Parameters);
         }
 
         public override int GetHashCode()
         {
-            var hashCode = 181846194;
+            var hashCode = -573331380;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Query);
-            hashCode = hashCode * -1521134295 + EqualityComparer<bool>.Default.GetHashCode(ShouldBeExecuted);
+            hashCode = hashCode * -1521134295 + ShouldBeExecuted.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<Dictionary<string, object>>.Default.GetHashCode(Parameters);
             return hashCode;
         }
-
-
     }
 }

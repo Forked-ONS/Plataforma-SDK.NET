@@ -18,22 +18,18 @@ namespace ONS.PlataformaSDK.Entities
             Filters.Add(filter);
         }
 
-        // override object.Equals
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            var Other = (EntityFilter)obj;
-
-            return this.MapName.Equals(Other.MapName) && this.EntityName.Equals(Other.EntityName) && this.Filters.Equals(Other.Filters);
+            var filter = obj as EntityFilter;
+            return filter != null &&
+                   MapName == filter.MapName &&
+                   EntityName == filter.EntityName &&
+                   EqualityComparer<List<Filter>>.Default.Equals(Filters, filter.Filters);
         }
 
         public override int GetHashCode()
         {
-            var hashCode = 181846194;
+            var hashCode = -1673476289;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(MapName);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(EntityName);
             hashCode = hashCode * -1521134295 + EqualityComparer<List<Filter>>.Default.GetHashCode(Filters);

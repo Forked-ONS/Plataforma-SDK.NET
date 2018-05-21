@@ -86,6 +86,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             if (Context.Commit && !IsReproduction() && !this.SyncDomain)
             {
+                System.Console.WriteLine("Send event to persist");
                 var Event = new Event();
                 Event.Name = Context.SystemId + "persist.request";
                 Event.Instance_Id = Context.SystemId;
@@ -94,11 +95,11 @@ namespace ONS.PlataformaSDK.ProcessApp
             }
             else if (Context.Commit && this.SyncDomain)
             {
-
+                System.Console.WriteLine("commiting data to domain synchronously");
             }
             else
             {
-
+                System.Console.WriteLine("Event's origin is a reproduction skip to save domain");
             }
         }
 

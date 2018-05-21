@@ -26,7 +26,15 @@ namespace ONS.PlataformaSDK.Http
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(url, content);
             response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
+            await response.Content.ReadAsStringAsync();
+        }
+
+        async public virtual void Put(string url, string json)
+        {
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync(url, content);
+            response.EnsureSuccessStatusCode();
+            await response.Content.ReadAsStringAsync();
         }
 
     }

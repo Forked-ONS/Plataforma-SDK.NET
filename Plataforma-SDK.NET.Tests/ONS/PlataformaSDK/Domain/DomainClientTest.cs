@@ -69,6 +69,11 @@ namespace ONS.PlataformaSDK.Domain
             Assert.NotNull(Eventos);
         }
 
+        [Test]
+        public void Persist()
+        {
+            new List<Base>
+        }
 
         private string GetJsonEventoOperativo()
         {

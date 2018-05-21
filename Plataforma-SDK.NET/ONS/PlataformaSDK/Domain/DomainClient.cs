@@ -13,7 +13,7 @@ namespace ONS.PlataformaSDK.Domain
         private HttpClient HttpClient;
         private EnvironmentProperties DomainEnvironmentProperties;
 
-        public DomainClient() {}
+        public DomainClient() { }
 
         public DomainClient(HttpClient httpClient, EnvironmentProperties domainEnvironmentProperties)
         {
@@ -42,6 +42,14 @@ namespace ONS.PlataformaSDK.Domain
             var EntityStrTask = HttpClient.Get(UrlBuilder.ToString());
             var EntityTask = await EntityStrTask;
             return JsonConvert.DeserializeObject<List<T>>(EntityTask);
+        }
+
+        public void Persist(List<BaseEntity> persistList, string mapName)
+        {
+            var JsonContent = JsonConvert.SerializeObject(persistList, Newtonsoft.Json.Formatting.None,
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            var url = $"{DomainEnvironmentProperties.Scheme}://{DomainEnvironmentProperties.Host}:{DomainEnvironmentProperties.Port}/{mapName}/persist";
+            HttpClient.Post(url, JsonContent);
         }
     }
 }

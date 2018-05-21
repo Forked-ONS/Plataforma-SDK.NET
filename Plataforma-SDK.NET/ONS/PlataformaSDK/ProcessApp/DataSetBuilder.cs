@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using ONS.PlataformaSDK.Domain;
 using System.Threading.Tasks;
 using System.Reflection;
+using ONS.PlataformaSDK.Constants;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
@@ -16,6 +17,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         public IDomainContext DomainContext { get; set; }
         private Object Payload;
         private DomainClient DomainClient;
+        private string MapName;
 
         public DataSetBuilder(IDomainContext domainContext, DomainClient domainClient)
         {
@@ -26,9 +28,19 @@ namespace ONS.PlataformaSDK.ProcessApp
         public virtual async Task BuildAsync(PlatformMap platformMap, Object payload)
         {
             this.Payload = payload;
+            this.MapName = platformMap.Name;
             BuildFilters(platformMap);
             ShouldBeExecuted();
             await LoadDataSetAsync();
+        }
+
+        public void Persist()
+        {
+            var ChangeTrackList = DomainContext.GetPersistList().FindAll(baseEntity => baseEntity._Metadata != null && baseEntity._Metadata.ChangeTrack != null
+                && (DomainConstants.CHANGE_TRACK_CREATE.Equals(baseEntity._Metadata.ChangeTrack) || 
+                    DomainConstants.CHANGE_TRACK_UPDATE.Equals(baseEntity._Metadata.ChangeTrack) || 
+                    DomainConstants.CHANGE_TRACK_DELETE.Equals(baseEntity._Metadata.ChangeTrack)));
+            DomainClient.Persist(ChangeTrackList, MapName);
         }
 
         private void BuildFilters(PlatformMap platformMap)

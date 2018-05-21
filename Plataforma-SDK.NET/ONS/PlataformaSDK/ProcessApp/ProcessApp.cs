@@ -96,6 +96,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             else if (Context.Commit && this.SyncDomain)
             {
                 System.Console.WriteLine("commiting data to domain synchronously");
+                DataSetBuilder.Persist();
             }
             else
             {

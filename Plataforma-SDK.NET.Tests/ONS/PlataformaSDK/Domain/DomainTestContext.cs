@@ -12,5 +12,11 @@ namespace ONS.PlataformaSDK.Entities
             EventoMudancaEstadoOperativo = new List<EventoMudancaEstadoOperativo>();
         }
 
+        public List<BaseEntity> GetPersistList()
+        {
+            var DomainList = new List<BaseEntity>();
+            DomainList.AddRange(EventoMudancaEstadoOperativo);
+            return DomainList;
+        }
     }
 }

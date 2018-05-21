@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using ONS.PlataformaSDK.Constants;
 using ONS.PlataformaSDK.Domain;
 using ONS.PlataformaSDK.Entities;
 
@@ -24,6 +25,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             DomainContext = new DomainTestContext();
             DomainClientMock = new Mock<DomainClient>();
             DataSetBuilder = new DataSetBuilder(DomainContext, DomainClientMock.Object);
+            DataSetBuilder.MapName = MANTER_TAREFAS_MAP_NAME;
             SetupDomainClientMock();
         }
 
@@ -32,17 +34,9 @@ namespace ONS.PlataformaSDK.ProcessApp
             var EventosTask = Task.FromResult(GetEventosList());
             DomainClientMock.Setup(mock =>
                 mock.FindByFilterAsync<EventoMudancaEstadoOperativo>(It.IsAny<EntityFilter>(), It.IsAny<Filter>())).Returns(EventosTask);
+            DomainClientMock.Setup(mock => mock.Persist(It.IsAny<List<EventoMudancaEstadoOperativo>>(), It.IsAny<String>()));      
         }
 
-        private List<EventoMudancaEstadoOperativo> GetEventosList()
-        {
-            var Eventos = new List<EventoMudancaEstadoOperativo>();
-            for (int i = 0; i < 3; i++)
-            {
-                Eventos.Add(new EventoMudancaEstadoOperativo());
-            }
-            return Eventos;
-        }
 
         [Test]
         public async Task BuildAsync()
@@ -54,6 +48,35 @@ namespace ONS.PlataformaSDK.ProcessApp
             AssertFiltroMudancaEstadoOperativo();
             AssertDomainClient();
             AssertDomainContext();
+        }
+
+        [Test]
+        public void Persist()
+        {
+            DomainContext.EventoMudancaEstadoOperativo.AddRange(this.GetEventosList());
+            DomainContext.EventoMudancaEstadoOperativo.Add(new EventoMudancaEstadoOperativo());
+            DomainContext.EventoMudancaEstadoOperativo.Add(new EventoMudancaEstadoOperativo());
+            DataSetBuilder.Persist();
+            DomainClientMock.Verify(mock => mock.Persist(GetEventosList(), MANTER_TAREFAS_MAP_NAME));
+        }
+
+        private List<EventoMudancaEstadoOperativo> GetEventosList()
+        {
+            var EventoList = new List<EventoMudancaEstadoOperativo>();
+            EventoList.Add(CreateEvento(DomainConstants.CHANGE_TRACK_CREATE));
+            EventoList.Add(CreateEvento(DomainConstants.CHANGE_TRACK_DELETE));
+            EventoList.Add(CreateEvento(DomainConstants.CHANGE_TRACK_CREATE));
+            EventoList.Add(CreateEvento(DomainConstants.CHANGE_TRACK_CREATE));
+            EventoList.Add(CreateEvento(DomainConstants.CHANGE_TRACK_UPDATE));
+            return EventoList;
+        }        
+        private EventoMudancaEstadoOperativo CreateEvento(string changeTrack)
+        {
+            var Evento = new EventoMudancaEstadoOperativo();
+            var Metadata = new Metadata("master", "EventoMudancaEstadoOperativo", changeTrack);
+            Evento._Metadata = Metadata;
+            Evento.IdClassificacaoOrigem = "TEST";
+            return Evento;
         }
 
         private void AssertFiltroUnidadeGeradora()
@@ -113,7 +136,7 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void AssertDomainContext()
         {
-            Assert.AreEqual(9, Enumerable.Count<EventoMudancaEstadoOperativo>(DomainContext.EventoMudancaEstadoOperativo));
+            Assert.AreEqual(15, Enumerable.Count<EventoMudancaEstadoOperativo>(DomainContext.EventoMudancaEstadoOperativo));
         }
 
         private PlatformMap CreatePlatformMap()

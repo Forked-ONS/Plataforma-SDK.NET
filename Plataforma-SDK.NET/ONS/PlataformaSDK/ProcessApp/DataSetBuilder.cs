@@ -17,7 +17,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         public IDomainContext DomainContext { get; set; }
         private Object Payload;
         private DomainClient DomainClient;
-        private string MapName;
+        public string MapName{ get; set; }
 
         public DataSetBuilder(IDomainContext domainContext, DomainClient domainClient)
         {

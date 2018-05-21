@@ -75,13 +75,13 @@ namespace ONS.PlataformaSDK.Domain
         public void Persist()
         {
             var Eventos = new List<EventoMudancaEstadoOperativo>();
-            Eventos.Add(CriarEvento("1"));
-            Eventos.Add(CriarEvento("2"));
+            Eventos.Add(CriarEvento());
+            Eventos.Add(CriarEvento());
             DomainClient.Persist(Eventos, "ManterEvento");
             HttpClientMock.Verify(client => client.Post("http://localhost:8087/ManterEvento/persist", GetJsonEventoList()));
         }
 
-        private EventoMudancaEstadoOperativo CriarEvento(string Id)
+        private EventoMudancaEstadoOperativo CriarEvento()
         {
             var Evento = new EventoMudancaEstadoOperativo();
             var Metadata = new Metadata("master", "EventoMudancaEstadoOperativo", DomainConstants.CHANGE_TRACK_CREATE);

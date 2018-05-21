@@ -44,7 +44,7 @@ namespace ONS.PlataformaSDK.Domain
             return JsonConvert.DeserializeObject<List<T>>(EntityTask);
         }
 
-        public void Persist(List<BaseEntity> persistList, string mapName)
+        public void Persist<T>(List<T> persistList, string mapName) where T : BaseEntity
         {
             var JsonContent = JsonConvert.SerializeObject(persistList, Newtonsoft.Json.Formatting.None,
                     new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });

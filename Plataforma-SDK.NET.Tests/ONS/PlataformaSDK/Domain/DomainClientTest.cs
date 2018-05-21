@@ -7,6 +7,7 @@ using ONS.PlataformaSDK.Environment;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using ONS.PlataformaSDK.Constants;
 
 namespace ONS.PlataformaSDK.Domain
 {
@@ -26,6 +27,7 @@ namespace ONS.PlataformaSDK.Domain
             HttpClientMock.Setup(mock => mock.Get("http://localhost:8087/mantertarefas/eventomudancaestadooperativo?filter=byIntervaloDatas" +
                 "&dataInicial=2015-01-01&dataFinal=2015-01-10")).Returns(EntityTask);
             HttpClientMock.Setup(mock => mock.Get("http://localhost:8087/mantertarefas/eventomudancaestadooperativo")).Returns(EntityTask);
+            HttpClientMock.Setup(mock => mock.Post(It.IsAny<string>(), It.IsAny<string>()));
             EnvironmentProperties = new EnvironmentProperties("http", "localhost", "8087");
             DomainClient = new DomainClient(HttpClientMock.Object, EnvironmentProperties);
         }
@@ -72,7 +74,20 @@ namespace ONS.PlataformaSDK.Domain
         [Test]
         public void Persist()
         {
-            new List<Base>
+            var Eventos = new List<EventoMudancaEstadoOperativo>();
+            Eventos.Add(CriarEvento("1"));
+            Eventos.Add(CriarEvento("2"));
+            DomainClient.Persist(Eventos, "ManterEvento");
+            HttpClientMock.Verify(client => client.Post("http://localhost:8087/ManterEvento/persist", GetJsonEventoList()));
+        }
+
+        private EventoMudancaEstadoOperativo CriarEvento(string Id)
+        {
+            var Evento = new EventoMudancaEstadoOperativo();
+            var Metadata = new Metadata("master", "EventoMudancaEstadoOperativo", DomainConstants.CHANGE_TRACK_CREATE);
+            Evento._Metadata = Metadata;
+            Evento.IdClassificacaoOrigem = "TEST";
+            return Evento;
         }
 
         private string GetJsonEventoOperativo()
@@ -90,5 +105,10 @@ namespace ONS.PlataformaSDK.Domain
                     "\"potenciaDisponivel\": 0}]";
         }
 
+        private string GetJsonEventoList()
+        {
+            return "[{\"IdClassificacaoOrigem\":\"TEST\",\"_Metadata\":{\"Branch\":\"master\",\"Type\":\"EventoMudancaEstadoOperativo\",\"ChangeTrack\":\"create\"}}," + 
+                     "{\"IdClassificacaoOrigem\":\"TEST\",\"_Metadata\":{\"Branch\":\"master\",\"Type\":\"EventoMudancaEstadoOperativo\",\"ChangeTrack\":\"create\"}}]";
+        }
     }
 }

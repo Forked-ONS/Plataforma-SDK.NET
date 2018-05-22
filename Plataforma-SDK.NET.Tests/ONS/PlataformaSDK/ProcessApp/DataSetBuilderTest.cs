@@ -34,7 +34,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var EventosTask = Task.FromResult(GetEventosList());
             DomainClientMock.Setup(mock =>
                 mock.FindByFilterAsync<EventoMudancaEstadoOperativo>(It.IsAny<EntityFilter>(), It.IsAny<Filter>())).Returns(EventosTask);
-            DomainClientMock.Setup(mock => mock.Persist(It.IsAny<List<EventoMudancaEstadoOperativo>>(), It.IsAny<String>()));      
+            DomainClientMock.Setup(mock => mock.Persist(It.IsAny<List<BaseEntity>>(), It.IsAny<String>()));      
         }
 
 
@@ -57,7 +57,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             DomainContext.EventoMudancaEstadoOperativo.Add(new EventoMudancaEstadoOperativo());
             DomainContext.EventoMudancaEstadoOperativo.Add(new EventoMudancaEstadoOperativo());
             DataSetBuilder.Persist();
-            DomainClientMock.Verify(mock => mock.Persist(GetEventosList(), MANTER_TAREFAS_MAP_NAME));
+            DomainClientMock.Verify(mock => mock.Persist(It.IsAny<List<BaseEntity>>(), It.IsAny<String>()));
         }
 
         private List<EventoMudancaEstadoOperativo> GetEventosList()
@@ -70,6 +70,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             EventoList.Add(CreateEvento(DomainConstants.CHANGE_TRACK_UPDATE));
             return EventoList;
         }        
+
         private EventoMudancaEstadoOperativo CreateEvento(string changeTrack)
         {
             var Evento = new EventoMudancaEstadoOperativo();

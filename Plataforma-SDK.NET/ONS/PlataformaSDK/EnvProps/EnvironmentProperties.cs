@@ -1,4 +1,4 @@
-namespace ONS.PlataformaSDK.Environment
+namespace ONS.PlataformaSDK.EnvProps
 {
     public class EnvironmentProperties
     {

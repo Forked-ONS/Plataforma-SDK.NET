@@ -1,7 +1,7 @@
 using Moq;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Http;
-using ONS.PlataformaSDK.Environment;
+using ONS.PlataformaSDK.EnvProps;
 using System.Threading.Tasks;
 using ONS.PlataformaSDK.ProcessMemoryClient;
 using ONS.PlataformaSDK.Entities;

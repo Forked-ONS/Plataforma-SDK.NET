@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Entities;
-using ONS.PlataformaSDK.Environment;
+using ONS.PlataformaSDK.EnvProps;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;

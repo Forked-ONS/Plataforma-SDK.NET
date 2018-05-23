@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 using ONS.PlataformaSDK.Http;
-using ONS.PlataformaSDK.Environment;
+using ONS.PlataformaSDK.EnvProps;
 using ONS.PlataformaSDK.ProcessApp;
 using ONS.PlataformaSDK.Entities;
 using System.Threading.Tasks;

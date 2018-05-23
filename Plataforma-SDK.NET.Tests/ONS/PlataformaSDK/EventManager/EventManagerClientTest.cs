@@ -1,6 +1,6 @@
 using Moq;
 using NUnit.Framework;
-using ONS.PlataformaSDK.Environment;
+using ONS.PlataformaSDK.EnvProps;
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Entities;
 

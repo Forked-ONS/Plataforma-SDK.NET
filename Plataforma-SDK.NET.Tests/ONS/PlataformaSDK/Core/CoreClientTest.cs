@@ -3,7 +3,7 @@ using NUnit.Framework;
 using ONS.PlataformaSDK.Core;
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Entities;
-using ONS.PlataformaSDK.Environment;
+using ONS.PlataformaSDK.EnvProps;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;

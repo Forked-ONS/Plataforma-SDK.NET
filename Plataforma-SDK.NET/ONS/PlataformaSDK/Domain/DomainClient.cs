@@ -3,7 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ONS.PlataformaSDK.Entities;
-using ONS.PlataformaSDK.Environment;
+using ONS.PlataformaSDK.EnvProps;
 using ONS.PlataformaSDK.Http;
 
 namespace ONS.PlataformaSDK.Domain

@@ -50,7 +50,6 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.SyncDomain = syncDomain;
         }
 
-
         public async Task Start()
         {
             var HeadTask = ProcessMemoryClient.Head(this.ProcessInstanceId);

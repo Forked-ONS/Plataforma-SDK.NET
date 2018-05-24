@@ -18,7 +18,7 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         private const string EVENT_IN = "presentation.insere.tarefa.request";
         private const string SYSTEM_ID = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
-        private ProcessApp ProcessApp;
+        private ProcessAppImpl ProcessApp;
         private Mock<IExecutable> AppMock;
         private Mock<ProcessMemoryHttpClient> ProcessMemoryClientMock;
         private Mock<CoreClient> CoreClientMock;
@@ -32,7 +32,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             CoreClientMock = ProcessAppTestHelper.CreateCoreClientMock();
             DomainClientMock = ProcessAppTestHelper.CreateDomainClientMock();
             EventManagerClientMock = ProcessAppTestHelper.CreateEventManagerMock();
-            ProcessApp = new ProcessApp(SYSTEM_ID, ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
+            ProcessApp = new ProcessAppImpl(SYSTEM_ID, ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
                 EVENT_IN, new DomainTestContext(), ProcessMemoryClientMock.Object, CoreClientMock.Object,
                     DomainClientMock.Object, EventManagerClientMock.Object);
             AppMock = ProcessAppTestHelper.CreateAppMock();

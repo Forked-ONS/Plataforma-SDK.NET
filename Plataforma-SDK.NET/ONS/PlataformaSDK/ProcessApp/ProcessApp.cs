@@ -13,7 +13,7 @@ using ONS.PlataformaSDK.EventManager;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
-    public class ProcessApp
+    public class ProcessAppImpl
     {
         public Context Context { get; set; }
         public string EventIn { get; set; }
@@ -26,7 +26,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         private EventManagerClient EventManagerClient;
         private bool SyncDomain;
 
-        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn, IDomainContext domainContext,
+        public ProcessAppImpl(string systemId, string processInstanceId, string processId, string eventIn, IDomainContext domainContext,
             ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient, DomainClient domainClient, EventManagerClient eventManagerClient)
         {
             this.ProcessInstanceId = processInstanceId;
@@ -35,7 +35,6 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.ProcessMemoryClient = processMemoryClient;
             this.CoreClient = coreClient;
             this.EventManagerClient = eventManagerClient;
-
             this.Context = new Context();
             Context.InstanceId = this.ProcessInstanceId;
             Context.ProcessId = this.ProcessId;
@@ -43,7 +42,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.DataSetBuilder = new DataSetBuilder(domainContext, domainClient);
         }
 
-        public ProcessApp(string systemId, string processInstanceId, string processId, string eventIn, bool syncDomain, IDomainContext domainContext,
+        public ProcessAppImpl(string systemId, string processInstanceId, string processId, string eventIn, bool syncDomain, IDomainContext domainContext,
             ProcessMemoryHttpClient processMemoryClient, CoreClient coreClient, DomainClient domainClient, EventManagerClient eventManagerClient)
                 : this(systemId, processInstanceId, processId, eventIn, domainContext, processMemoryClient, coreClient, domainClient, eventManagerClient)
         {

@@ -43,7 +43,7 @@ namespace ONS.PlataformaSDK.Core
         [Test]
         public void OperationByProcessId()
         {
-            var Operations = CoreClient.OperationByProcessIdAsync(PROCESS_ID);
+            var Operations = CoreClient.OperationByProcessId(PROCESS_ID);
             HttpClientMock.Verify(httpClient => httpClient.Get(URL_FIND_OPERATION_BY_PROCESS_ID), Times.Once);
 
             Assert.IsTrue(Operations[0].Commit);
@@ -68,9 +68,8 @@ namespace ONS.PlataformaSDK.Core
         [Test]
         public void MapByProcessId()
         {
-            var MapTask = CoreClient.MapByProcessId(PROCESS_ID);
+            var Maps = CoreClient.MapByProcessId(PROCESS_ID);
             HttpClientMock.Verify(httpClient => httpClient.Get(URL_FIND_MAP_BY_PROCESS_ID), Times.Once);
-            var Maps = MapTask.Result;
 
             Assert.AreEqual("c81957b6-4fd7-47b5-aaa0-27d9f93a8277", Maps[0].Id);
             Assert.AreEqual("mantertarefas", Maps[0].Name);

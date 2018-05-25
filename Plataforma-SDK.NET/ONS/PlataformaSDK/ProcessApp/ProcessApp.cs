@@ -54,7 +54,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var ProcessMemory = ProcessMemoryClient.Head(this.ProcessInstanceId);
             Context.Event = ProcessMemory.Event;
 
-            var Operations = CoreClient.OperationByProcessIdAsync(ProcessId);
+            var Operations = CoreClient.OperationByProcessId(ProcessId);
             VerifyOperationList(Operations);
             var Operation = Operations.Find(operation => operation.Event_In.Equals(this.EventIn));
             VerifyOperation(Operation);
@@ -66,8 +66,7 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         public async void StartProcess()
         {
-            var PlatformMapTask = CoreClient.MapByProcessId(this.ProcessId);
-            var PlatformsMaps = await PlatformMapTask;
+            var PlatformsMaps = CoreClient.MapByProcessId(this.ProcessId);
             if (!PlatformsMaps.isEmpty())
             {
                 Context.Map = PlatformsMaps[0];
@@ -114,7 +113,7 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         }
         private void VerifyOperation(Operation operation)
-        {
+        {   
             if (operation == null)
             {
                 throw new PlataformaException($"Operation not found for process {this.ProcessId}");

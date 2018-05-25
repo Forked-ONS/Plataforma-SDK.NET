@@ -29,8 +29,8 @@ namespace ONS.PlataformaSDK.ProcessApp
         public static Mock<CoreClient> CreateCoreClientMock()
         {
             var CoreClientMock = new Mock<CoreClient>();
-            CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(GetOperationList());
-            CoreClientMock.Setup(mock => mock.MapByProcessId(PROCESS_ID)).Returns(Task.FromResult(GetMapList()));
+            CoreClientMock.Setup(mock => mock.OperationByProcessId(PROCESS_ID)).Returns(GetOperationList());
+            CoreClientMock.Setup(mock => mock.MapByProcessId(PROCESS_ID)).Returns(GetMapList());
             return CoreClientMock;
         }
 
@@ -55,7 +55,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         internal static Mock<CoreClient> CreateCoreClientWithEmptyOperationsListMock()
         {
             var CoreClientMock = new Mock<CoreClient>();
-            CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(new List<Operation>());
+            CoreClientMock.Setup(mock => mock.OperationByProcessId(PROCESS_ID)).Returns(new List<Operation>());
             return CoreClientMock;
         }
 

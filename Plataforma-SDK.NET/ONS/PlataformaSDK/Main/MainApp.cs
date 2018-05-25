@@ -12,7 +12,7 @@ namespace ONS.PlataformaSDK.Main
 {
     public class MainApp
     {
-        public async void ExecuteAsync(IExecutable executable, IDomainContext domainContext)
+        public void Execute(IExecutable executable, IDomainContext domainContext)
         {
             var SystemId = GetEnvironmentVariable("SYSTEM_ID", null);
             var ProcessInstanceId = GetEnvironmentVariable("INSTANCE_ID", null);

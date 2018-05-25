@@ -70,9 +70,9 @@ namespace ONS.PlataformaSDK.ProcessApp
             if (!PlatformsMaps.isEmpty())
             {
                 Context.Map = PlatformsMaps[0];
-                DataSetBuilder.BuildAsync(PlatformsMaps[0], new Object());
+                DataSetBuilder.Build(PlatformsMaps[0], Context.Event.Payload);
             }
-            App.Execute(DataSetBuilder.DomainContext);
+            App.Execute(DataSetBuilder.DomainContext, Context.Event.Payload);
             ProcessMemoryClient.Commit(Context);
             PersistDomain();
         }

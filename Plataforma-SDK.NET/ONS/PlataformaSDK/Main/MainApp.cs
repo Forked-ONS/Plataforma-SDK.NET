@@ -20,10 +20,10 @@ namespace ONS.PlataformaSDK.Main
             var EventIn = this.GetEnvironmentVariable("EVENT", null);
             var HttpClient = new HttpClient();
 
-
             var CoreClient = GetCoreClient(HttpClient);
             var ProcessApp = new ProcessAppImpl(SystemId, ProcessInstanceId, ProcessId, EventIn, domainContext, GetProcessMemoryClient(HttpClient), 
                 GetCoreClient(HttpClient), GetDomainClient(HttpClient, CoreClient, SystemId), GetEventManagerClient(HttpClient));
+            ProcessApp.App = executable;
             ProcessApp.Start();
         }
 

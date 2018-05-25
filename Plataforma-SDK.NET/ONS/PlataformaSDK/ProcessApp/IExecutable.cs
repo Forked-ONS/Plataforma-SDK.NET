@@ -5,6 +5,6 @@ namespace ONS.PlataformaSDK.ProcessApp
     
     public interface IExecutable
     {
-        void Execute(IDomainContext domainContext);
+        void Execute(IDomainContext domainContext, dynamic payload);
     }
 }

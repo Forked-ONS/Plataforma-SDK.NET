@@ -15,9 +15,9 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         public List<EntityFilter> EntitiesFilters;
         public IDomainContext DomainContext { get; set; }
-        private Object Payload;
+        private dynamic Payload;
         private DomainClient DomainClient;
-        public string MapName{ get; set; }
+        public string MapName { get; set; }
 
         public DataSetBuilder(IDomainContext domainContext, DomainClient domainClient)
         {
@@ -25,20 +25,20 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.DomainClient = domainClient;
             EntitiesFilters = new List<EntityFilter>();
         }
-        public virtual void BuildAsync(PlatformMap platformMap, Object payload)
+        public virtual void Build(PlatformMap platformMap, dynamic payload)
         {
             this.Payload = payload;
             this.MapName = platformMap.Name;
             BuildFilters(platformMap);
             ShouldBeExecuted();
-            LoadDataSetAsync();
+            LoadDataSet();
         }
 
         public void Persist()
         {
             var ChangeTrackList = DomainContext.GetPersistList().FindAll(baseEntity => baseEntity._Metadata != null && baseEntity._Metadata.ChangeTrack != null
-                && (DomainConstants.CHANGE_TRACK_CREATE.Equals(baseEntity._Metadata.ChangeTrack) || 
-                    DomainConstants.CHANGE_TRACK_UPDATE.Equals(baseEntity._Metadata.ChangeTrack) || 
+                && (DomainConstants.CHANGE_TRACK_CREATE.Equals(baseEntity._Metadata.ChangeTrack) ||
+                    DomainConstants.CHANGE_TRACK_UPDATE.Equals(baseEntity._Metadata.ChangeTrack) ||
                     DomainConstants.CHANGE_TRACK_DELETE.Equals(baseEntity._Metadata.ChangeTrack)));
             DomainClient.Persist(ChangeTrackList, MapName);
         }
@@ -53,18 +53,22 @@ namespace ONS.PlataformaSDK.ProcessApp
 
                 foreach (var key in YamlObject.Keys)
                 {
-                    var EntityFilter = new EntityFilter();
-                    EntityFilter.EntityName = key;
-                    EntityFilter.MapName = platformMap.Name;
-                    EntitiesFilters.Add(EntityFilter);
-
-                    var YamlFilter = YamlObject[key]["filters"];
-                    if (YamlFilter != null)
+                    if (YamlObject[key].ContainsKey("filters"))
                     {
-                        var Filters = ((Dictionary<object, object>)YamlFilter);
-                        foreach (var filterKey in Filters.Keys)
+                        var EntityFilter = new EntityFilter();
+                        EntityFilter.EntityName = key;
+                        EntityFilter.MapName = platformMap.Name;
+                        EntitiesFilters.Add(EntityFilter);
+
+                        var YamlFilter = YamlObject[key]["filters"];
+                        System.Console.WriteLine(YamlFilter);
+                        if (YamlFilter != null)
                         {
-                            EntityFilter.addFilter(new Filter((string)filterKey, (string)Filters[filterKey]));
+                            var Filters = ((Dictionary<object, object>)YamlFilter);
+                            foreach (var filterKey in Filters.Keys)
+                            {
+                                EntityFilter.addFilter(new Filter((string)filterKey, (string)Filters[filterKey]));
+                            }
                         }
                     }
                 }
@@ -93,7 +97,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             }
         }
 
-        private void LoadDataSetAsync()
+        private void LoadDataSet()
         {
             foreach (var EntityFilter in EntitiesFilters)
             {

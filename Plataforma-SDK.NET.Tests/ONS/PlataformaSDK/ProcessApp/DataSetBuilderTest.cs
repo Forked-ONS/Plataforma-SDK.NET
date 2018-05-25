@@ -42,7 +42,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             var Payload = new TesteEntity();
             Payload.data = DATA;
-            DataSetBuilder.BuildAsync(CreatePlatformMap(), Payload);
+            DataSetBuilder.Build(CreatePlatformMap(), Payload);
             AssertFiltroUnidadeGeradora();
             AssertFiltroMudancaEstadoOperativo();
             AssertDomainClient();

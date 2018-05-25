@@ -40,8 +40,7 @@ namespace ONS.PlataformaSDK.Domain
             EntityFilter.EntityName = "eventomudancaestadooperativo";
             var Filter = new Filter("menorQueData", "data_verificada < :data order by data_verificada");
             Filter.Parameters.Add("data", "2015-01-01");
-            var DomainTask = DomainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, Filter);
-            var Eventos = DomainTask.Result;
+            var Eventos = DomainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, Filter);
             Assert.NotNull(Eventos);
         }
 
@@ -54,8 +53,7 @@ namespace ONS.PlataformaSDK.Domain
             var Filter = new Filter("byIntervaloDatas", "data_verificada >= :dataInicial and data_verificada <= :dataFinal");
             Filter.Parameters.Add("dataInicial", "2015-01-01");
             Filter.Parameters.Add("dataFinal", "2015-01-10");
-            var DomainTask = DomainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, Filter);
-            var Eventos = DomainTask.Result;
+            var Eventos = DomainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, Filter);
             Assert.NotNull(Eventos);
         }
         
@@ -66,8 +64,7 @@ namespace ONS.PlataformaSDK.Domain
             EntityFilter.MapName = "mantertarefas";
             EntityFilter.EntityName = "eventomudancaestadooperativo";
             var Filter = new Filter("all", "");
-            var DomainTask = DomainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, Filter);
-            var Eventos = DomainTask.Result;
+            var Eventos = DomainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, Filter);
             Assert.NotNull(Eventos);
         }
 

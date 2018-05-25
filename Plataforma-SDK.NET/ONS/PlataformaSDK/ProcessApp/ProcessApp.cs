@@ -64,13 +64,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.StartProcess();
         }
 
-        public async void StartProcess()
+        public void StartProcess()
         {
             var PlatformsMaps = CoreClient.MapByProcessId(this.ProcessId);
             if (!PlatformsMaps.isEmpty())
             {
                 Context.Map = PlatformsMaps[0];
-                await DataSetBuilder.BuildAsync(PlatformsMaps[0], new object());
+                DataSetBuilder.BuildAsync(PlatformsMaps[0], new Object());
             }
             App.Execute(DataSetBuilder.DomainContext);
             ProcessMemoryClient.Commit(Context);

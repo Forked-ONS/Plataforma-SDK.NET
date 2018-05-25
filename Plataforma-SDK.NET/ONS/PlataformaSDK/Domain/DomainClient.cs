@@ -21,7 +21,7 @@ namespace ONS.PlataformaSDK.Domain
             this.DomainEnvironmentProperties = domainEnvironmentProperties;
         }
 
-        public virtual async Task<List<T>> FindByFilterAsync<T>(EntityFilter entityFilter, Filter filter)
+        public virtual List<T> FindByFilterAsync<T>(EntityFilter entityFilter, Filter filter)
         {
             StringBuilder UrlBuilder;
             if ("all".Equals(filter.Name))
@@ -40,8 +40,8 @@ namespace ONS.PlataformaSDK.Domain
                 UrlBuilder.Append($"&{item.Key}={item.Value}");
             }
             var EntityStrTask = HttpClient.Get(UrlBuilder.ToString());
-            var EntityTask = await EntityStrTask;
-            return JsonConvert.DeserializeObject<List<T>>(EntityTask);
+            var Entity = EntityStrTask.Result;
+            return JsonConvert.DeserializeObject<List<T>>(Entity);
         }
 
         public virtual void Persist<T>(List<T> persistList, string mapName) where T : BaseEntity

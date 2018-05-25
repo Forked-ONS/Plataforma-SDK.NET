@@ -31,19 +31,18 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void SetupDomainClientMock()
         {
-            var EventosTask = Task.FromResult(GetEventosList());
             DomainClientMock.Setup(mock =>
-                mock.FindByFilterAsync<EventoMudancaEstadoOperativo>(It.IsAny<EntityFilter>(), It.IsAny<Filter>())).Returns(EventosTask);
+                mock.FindByFilterAsync<EventoMudancaEstadoOperativo>(It.IsAny<EntityFilter>(), It.IsAny<Filter>())).Returns(GetEventosList());
             DomainClientMock.Setup(mock => mock.Persist(It.IsAny<List<BaseEntity>>(), It.IsAny<String>()));      
         }
 
 
         [Test]
-        public async Task BuildAsync()
+        public void BuildAsync()
         {
             var Payload = new TesteEntity();
             Payload.data = DATA;
-            await DataSetBuilder.BuildAsync(CreatePlatformMap(), Payload);
+            DataSetBuilder.BuildAsync(CreatePlatformMap(), Payload);
             AssertFiltroUnidadeGeradora();
             AssertFiltroMudancaEstadoOperativo();
             AssertDomainClient();

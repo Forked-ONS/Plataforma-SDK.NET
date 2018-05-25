@@ -25,13 +25,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.DomainClient = domainClient;
             EntitiesFilters = new List<EntityFilter>();
         }
-        public virtual async Task BuildAsync(PlatformMap platformMap, Object payload)
+        public virtual void BuildAsync(PlatformMap platformMap, Object payload)
         {
             this.Payload = payload;
             this.MapName = platformMap.Name;
             BuildFilters(platformMap);
             ShouldBeExecuted();
-            await LoadDataSetAsync();
+            LoadDataSetAsync();
         }
 
         public void Persist()
@@ -93,7 +93,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             }
         }
 
-        private async Task LoadDataSetAsync()
+        private void LoadDataSetAsync()
         {
             foreach (var EntityFilter in EntitiesFilters)
             {
@@ -109,10 +109,9 @@ namespace ONS.PlataformaSDK.ProcessApp
                                 var GenericType = Property.PropertyType.GenericTypeArguments[0];
                                 var FindByFilterMethod = DomainClient.GetType().GetMethod("FindByFilterAsync");
                                 var GenericMethod = FindByFilterMethod.MakeGenericMethod(GenericType);
-                                var ResultTask = (Task)GenericMethod.Invoke(DomainClient, new object[] { EntityFilter, Filter });
-                                await ResultTask;
-                                var ResultProperty = ResultTask.GetType().GetProperty("Result");
-                                AddToDomainContext(ResultProperty.GetValue(ResultTask), Property);
+                                var Result = GenericMethod.Invoke(DomainClient, new object[] { EntityFilter, Filter });
+                                // var ResultProperty = ResultTask.GetType().GetProperty("Result");
+                                AddToDomainContext(Result, Property);
                             }
                         }
                     }

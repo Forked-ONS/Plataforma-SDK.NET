@@ -18,6 +18,7 @@ namespace ONS.PlataformaSDK.Http
             var response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
+            System.Console.WriteLine("Get " + url);
             return responseBody;
         }
 

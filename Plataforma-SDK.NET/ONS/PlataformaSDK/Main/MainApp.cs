@@ -23,13 +23,13 @@ namespace ONS.PlataformaSDK.Main
 
             var CoreClient = GetCoreClient(HttpClient);
             var ProcessApp = new ProcessAppImpl(SystemId, ProcessInstanceId, ProcessId, EventIn, domainContext, GetProcessMemoryClient(HttpClient), 
-             GetCoreClient(HttpClient), GetDomainClient(HttpClient, CoreClient, SystemId), GetEventManagerClient(HttpClient));
-            await ProcessApp.Start();
+                GetCoreClient(HttpClient), GetDomainClient(HttpClient, CoreClient, SystemId), GetEventManagerClient(HttpClient));
+            ProcessApp.Start();
         }
 
         private ProcessMemoryHttpClient GetProcessMemoryClient(HttpClient httpClient)
         {
-            String Host = GetEnvironmentVariable("PROCESS_MEMORY_HOST", "process_memory");
+            String Host = GetEnvironmentVariable("PROCESS_MEMORY_HOST", "localhost");
             String Scheme = GetEnvironmentVariable("PROCESS_MEMORY_SCHEME", "http");
             String Port = GetEnvironmentVariable("PROCESS_MEMORY_PORT", "9091");
             return new ProcessMemoryHttpClient(httpClient, new EnvironmentProperties(Scheme, Host, Port));
@@ -37,7 +37,7 @@ namespace ONS.PlataformaSDK.Main
 
         private CoreClient GetCoreClient(HttpClient httpClient)
         {
-            String Host = GetEnvironmentVariable("COREAPI_HOST", "apicore");
+            String Host = GetEnvironmentVariable("COREAPI_HOST", "localhost");
             String Scheme = GetEnvironmentVariable("COREAPI_SCHEME", "http");
             String Port = GetEnvironmentVariable("COREAPI_PORT", "9110");
             return new CoreClient(httpClient, new EnvironmentProperties(Scheme, Host, Port));

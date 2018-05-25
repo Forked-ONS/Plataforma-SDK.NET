@@ -22,14 +22,14 @@ namespace ONS.PlataformaSDK.ProcessApp
         public static Mock<ProcessMemoryHttpClient> CreateProcessMemoryClientMock()
         {
             var ProcessMemoryClientMock = new Mock<ProcessMemoryHttpClient>();
-            ProcessMemoryClientMock.Setup(mock => mock.Head(PROCESS_INSTANCE_ID)).Returns(Task.FromResult(GetProcessMemoryHead()));
+            ProcessMemoryClientMock.Setup(mock => mock.Head(PROCESS_INSTANCE_ID)).Returns(GetProcessMemoryHead());
             return ProcessMemoryClientMock;
         }
 
         public static Mock<CoreClient> CreateCoreClientMock()
         {
             var CoreClientMock = new Mock<CoreClient>();
-            CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(Task.FromResult(GetOperationList()));
+            CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(GetOperationList());
             CoreClientMock.Setup(mock => mock.MapByProcessId(PROCESS_ID)).Returns(Task.FromResult(GetMapList()));
             return CoreClientMock;
         }
@@ -55,7 +55,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         internal static Mock<CoreClient> CreateCoreClientWithEmptyOperationsListMock()
         {
             var CoreClientMock = new Mock<CoreClient>();
-            CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(Task.FromResult(new List<Operation>()));
+            CoreClientMock.Setup(mock => mock.OperationByProcessIdAsync(PROCESS_ID)).Returns(new List<Operation>());
             return CoreClientMock;
         }
 

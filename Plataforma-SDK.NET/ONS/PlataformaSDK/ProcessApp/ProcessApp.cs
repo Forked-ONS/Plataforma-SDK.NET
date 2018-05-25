@@ -49,14 +49,12 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.SyncDomain = syncDomain;
         }
 
-        public async Task Start()
+        public void Start()
         {
-            var HeadTask = ProcessMemoryClient.Head(this.ProcessInstanceId);
-            var ProcessMemory = await HeadTask;
+            var ProcessMemory = ProcessMemoryClient.Head(this.ProcessInstanceId);
             Context.Event = ProcessMemory.Event;
 
-            var OperationTask = CoreClient.OperationByProcessIdAsync(ProcessId);
-            var Operations = await OperationTask;
+            var Operations = CoreClient.OperationByProcessIdAsync(ProcessId);
             VerifyOperationList(Operations);
             var Operation = Operations.Find(operation => operation.Event_In.Equals(this.EventIn));
             VerifyOperation(Operation);

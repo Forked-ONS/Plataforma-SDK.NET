@@ -20,12 +20,12 @@ namespace ONS.PlataformaSDK.ProcessMemoryClient
             this.HttpClient = httpClient;
             this.ProcessMemoryEnvironmentProperties = processMemoryEnvironmentProperties;
         }
-        public virtual async Task<ProcessMemoryEntity> Head(string processInstanceId)
+        public virtual ProcessMemoryEntity Head(string processInstanceId)
         {
-            System.Console.WriteLine($"get head of process memory {processInstanceId}");
+            System.Console.WriteLine($"get head of process memory: {processInstanceId}");
             var ProcessMemoryTask = HttpClient.Get($"{ProcessMemoryEnvironmentProperties.Scheme}://{ProcessMemoryEnvironmentProperties.Host}:{ProcessMemoryEnvironmentProperties.Port}" +
                             $"/{processInstanceId}/head?app_origin=dotnet_sdk");
-            var ProcessMemoryJson = await ProcessMemoryTask;
+            var ProcessMemoryJson = ProcessMemoryTask.Result;
             var ProcessMemory = JsonConvert.DeserializeObject<ProcessMemoryEntity>(ProcessMemoryJson);
             return ProcessMemory;
         }
@@ -33,7 +33,7 @@ namespace ONS.PlataformaSDK.ProcessMemoryClient
         public virtual void Commit(Context context)
         {
             System.Console.WriteLine("Commit context to process memory.");
-            var JsonContent = JsonConvert.SerializeObject(context, Newtonsoft.Json.Formatting.None, 
+            var JsonContent = JsonConvert.SerializeObject(context, Newtonsoft.Json.Formatting.None,
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var url = $"{ProcessMemoryEnvironmentProperties.Scheme}://{ProcessMemoryEnvironmentProperties.Host}:{ProcessMemoryEnvironmentProperties.Port}" +
                             $"/{context.InstanceId}/commit?app_origin=dotnet_sdk";

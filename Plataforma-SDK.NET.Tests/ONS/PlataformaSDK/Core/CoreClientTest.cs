@@ -43,9 +43,8 @@ namespace ONS.PlataformaSDK.Core
         [Test]
         public void OperationByProcessId()
         {
-            var OperationsTask = CoreClient.OperationByProcessIdAsync(PROCESS_ID);
+            var Operations = CoreClient.OperationByProcessIdAsync(PROCESS_ID);
             HttpClientMock.Verify(httpClient => httpClient.Get(URL_FIND_OPERATION_BY_PROCESS_ID), Times.Once);
-            var Operations = OperationsTask.Result;
 
             Assert.IsTrue(Operations[0].Commit);
             Assert.AreEqual("presentation.insere.tarefa.request", Operations[0].Event_In);

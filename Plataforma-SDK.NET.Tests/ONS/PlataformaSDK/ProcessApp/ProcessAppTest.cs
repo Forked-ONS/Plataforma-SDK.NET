@@ -40,9 +40,9 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
 
         [Test]
-        public async Task Start()
+        public void Start()
         {
-            await ProcessApp.Start();
+            ProcessApp.Start();
 
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(ProcessAppTestHelper.PROCESS_INSTANCE_ID), Times.Once);
             ProcessMemoryClientMock.Verify(processMemoryClientMock => processMemoryClientMock.Commit(ProcessApp.Context), Times.Once);

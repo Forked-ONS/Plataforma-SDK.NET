@@ -12,7 +12,7 @@ namespace ONS.PlataformaSDK.Main
 {
     public class MainApp
     {
-        public void Execute(IExecutable executable, IDomainContext domainContext)
+        public async void ExecuteAsync(IExecutable executable, IDomainContext domainContext)
         {
             var SystemId = GetEnvironmentVariable("SYSTEM_ID", null);
             var ProcessInstanceId = GetEnvironmentVariable("INSTANCE_ID", null);
@@ -24,7 +24,7 @@ namespace ONS.PlataformaSDK.Main
             var CoreClient = GetCoreClient(HttpClient);
             var ProcessApp = new ProcessAppImpl(SystemId, ProcessInstanceId, ProcessId, EventIn, domainContext, GetProcessMemoryClient(HttpClient), 
              GetCoreClient(HttpClient), GetDomainClient(HttpClient, CoreClient, SystemId), GetEventManagerClient(HttpClient));
-            // ProcessApp.Start();
+            await ProcessApp.Start();
         }
 
         private ProcessMemoryHttpClient GetProcessMemoryClient(HttpClient httpClient)

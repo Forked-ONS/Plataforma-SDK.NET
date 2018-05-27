@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ONS.PlataformaSDK.Domain;
 
 namespace ONS.PlataformaSDK.Entities
 {
@@ -11,6 +12,7 @@ namespace ONS.PlataformaSDK.Entities
         public string EventOut{get; set;}
         public bool Commit{get; set;}
         public PlatformMap Map{get; set;}
+        public IDomainContext Entities{get; set;}
 
         public override bool Equals(object obj)
         {

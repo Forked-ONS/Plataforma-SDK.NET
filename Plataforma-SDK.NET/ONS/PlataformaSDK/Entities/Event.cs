@@ -34,7 +34,6 @@ namespace ONS.PlataformaSDK.Entities
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Reference_Date);
             hashCode = hashCode * -1521134295 + EqualityComparer<JObject>.Default.GetHashCode(Reproduction);
             hashCode = hashCode * -1521134295 + EqualityComparer<JObject>.Default.GetHashCode(Reprocess);
-            hashCode = hashCode * -1521134295 + EqualityComparer<dynamic>.Default.GetHashCode(Payload);
             return hashCode;
         }
     }

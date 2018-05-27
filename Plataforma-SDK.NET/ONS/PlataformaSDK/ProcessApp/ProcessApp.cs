@@ -73,6 +73,7 @@ namespace ONS.PlataformaSDK.ProcessApp
                 DataSetBuilder.Build(PlatformsMaps[0], Context.Event.Payload);
             }
             App.Execute(DataSetBuilder.DomainContext, Context.Event.Payload);
+            Context.Entities = DataSetBuilder.DomainContext;
             ProcessMemoryClient.Commit(Context);
             PersistDomain();
         }
@@ -83,8 +84,8 @@ namespace ONS.PlataformaSDK.ProcessApp
             {
                 System.Console.WriteLine("Send event to persist");
                 var Event = new Event();
-                Event.Name = Context.SystemId + "persist.request";
-                Event.Instance_Id = Context.SystemId;
+                Event.Name = Context.SystemId + ".persist.request";
+                Event.Instance_Id = Context.InstanceId;
                 Event.Payload = new { instanceId = Context.InstanceId };
                 EventManagerClient.SendEvent(Event);
             }

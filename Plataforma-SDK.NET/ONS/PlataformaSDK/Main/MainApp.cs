@@ -45,7 +45,7 @@ namespace ONS.PlataformaSDK.Main
 
         private EventManagerClient GetEventManagerClient(HttpClient httpClient)
         {
-            String Host = GetEnvironmentVariable("EVENT_MANAGER_HOST", "event_manager");
+            String Host = GetEnvironmentVariable("EVENT_MANAGER_HOST", "localhost");
             String Scheme = GetEnvironmentVariable("EVENT_MANAGER_SCHEME", "http");
             String Port = GetEnvironmentVariable("EVENT_MANAGER_PORT", "8081");
             return new EventManagerClient(httpClient, new EnvironmentProperties(Scheme, Host, Port));

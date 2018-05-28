@@ -3,6 +3,7 @@ using NUnit.Framework;
 using ONS.PlataformaSDK.EnvProps;
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Entities;
+using System.Threading.Tasks;
 
 namespace ONS.PlataformaSDK.EventManager
 {
@@ -17,8 +18,9 @@ namespace ONS.PlataformaSDK.EventManager
         public void Setup()
         {
             HttpClientMock = new Mock<HttpClient>();
+            var ResultTask = Task.FromResult("{OK}");
             EnvironmentProperties = new EnvironmentProperties("http", "localhost", "8888");
-            HttpClientMock.Setup(mock => mock.Put("http://localhost:8888/sendevent", It.IsAny<string>()));
+            HttpClientMock.Setup(mock => mock.Put("http://localhost:8888/sendevent", It.IsAny<string>())).Returns(ResultTask);
             EventManagerClient = new EventManagerClient(HttpClientMock.Object, EnvironmentProperties);
         }
 

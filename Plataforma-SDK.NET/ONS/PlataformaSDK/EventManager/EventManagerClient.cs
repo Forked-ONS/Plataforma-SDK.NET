@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ONS.PlataformaSDK.Entities;
 using ONS.PlataformaSDK.EnvProps;
@@ -26,7 +27,7 @@ namespace ONS.PlataformaSDK.EventManager
             var JsonContent = JsonConvert.SerializeObject(pEvent, Newtonsoft.Json.Formatting.None,
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var Url = $"{EventManagerEnvironmentProperties.Scheme}://{EventManagerEnvironmentProperties.Host}:{EventManagerEnvironmentProperties.Port}/sendevent";    
-            HttpClient.Put(Url, JsonContent);
+            HttpClient.Put(Url, JsonContent).Wait();
         }
     }
 }

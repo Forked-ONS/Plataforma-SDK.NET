@@ -37,7 +37,7 @@ namespace ONS.PlataformaSDK.ProcessMemoryClient
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var url = $"{ProcessMemoryEnvironmentProperties.Scheme}://{ProcessMemoryEnvironmentProperties.Host}:{ProcessMemoryEnvironmentProperties.Port}" +
                             $"/{context.InstanceId}/commit?app_origin=dotnet_sdk";
-            HttpClient.Post(url, JsonContent);
+            HttpClient.Post(url, JsonContent).Wait();
         }
     }
 }

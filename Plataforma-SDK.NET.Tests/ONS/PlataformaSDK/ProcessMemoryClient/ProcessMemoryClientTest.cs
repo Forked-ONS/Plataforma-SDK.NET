@@ -24,9 +24,9 @@ namespace ONS.PlataformaSDK.ProcessMemory
         public void Setup()
         {
             HttpClientMock = new Mock<HttpClient>();
-            var task = Task.FromResult(HEAD_JSON);
-            HttpClientMock.Setup(mock => mock.Get(URL_HEAD)).Returns(task);
-            HttpClientMock.Setup(mock => mock.Post(URL_COMMIT, CONTEXT_JSON));
+            var ResultTask = Task.FromResult(HEAD_JSON);
+            HttpClientMock.Setup(mock => mock.Get(URL_HEAD)).Returns(ResultTask);
+            HttpClientMock.Setup(mock => mock.Post(URL_COMMIT, CONTEXT_JSON)).Returns(ResultTask);
             EnvironmentProperties = new EnvironmentProperties("http", "localhost", "9091");
             ProcessMemoryClient = new ProcessMemoryHttpClient(HttpClientMock.Object, EnvironmentProperties);
         }

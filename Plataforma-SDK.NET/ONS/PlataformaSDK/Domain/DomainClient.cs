@@ -49,7 +49,7 @@ namespace ONS.PlataformaSDK.Domain
             var JsonContent = JsonConvert.SerializeObject(persistList, Newtonsoft.Json.Formatting.None,
                     new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var url = $"{DomainEnvironmentProperties.Scheme}://{DomainEnvironmentProperties.Host}:{DomainEnvironmentProperties.Port}/{mapName}/persist";
-            HttpClient.Post(url, JsonContent);
+            HttpClient.Post(url, JsonContent).Wait();
         }
     }
 }

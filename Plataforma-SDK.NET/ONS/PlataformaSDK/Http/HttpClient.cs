@@ -22,7 +22,7 @@ namespace ONS.PlataformaSDK.Http
             return responseBody;
         }
 
-        async public virtual void Post(string url, string json)
+        async public virtual Task Post(string url, string json)
         {
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await Client.PostAsync(url, content);

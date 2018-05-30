@@ -29,11 +29,11 @@ namespace ONS.PlataformaSDK.EventManager
         {
             var Event = new Event();
             Event.Name = "persist.request";
-            Event.Instance_Id = "7777-7777";
+            Event.instanceId = "7777-7777";
             Event.Payload = new { instanceId = "999999" };
             EventManagerClient.SendEvent(Event);
             HttpClientMock.Verify(httpClient => httpClient.Put("http://localhost:8888/sendevent", 
-                "{\"Name\":\"persist.request\",\"Instance_Id\":\"7777-7777\",\"Payload\":{\"instanceId\":\"999999\"}}"), Times.Once);
+                "{\"Name\":\"persist.request\",\"instanceId\":\"7777-7777\",\"Payload\":{\"instanceId\":\"999999\"}}"), Times.Once);
         }
     }
 }

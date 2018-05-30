@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using ONS.PlataformaSDK.Domain;
 
 namespace ONS.PlataformaSDK.Entities
 {
-    public class PlatformMap
+    public class PlatformMap : BaseEntity
     {
-        public string Id{get; set;}
         public string Name{get; set;}
         public string ProcessId{get; set;}
         public string SystemId{get; set;}

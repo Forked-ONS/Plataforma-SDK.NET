@@ -37,7 +37,7 @@ namespace ONS.PlataformaSDK.ProcessMemory
             var ProcessMemory = ProcessMemoryClient.Head(PROCESS_INSTANCE_ID);
             HttpClientMock.Verify(httpClient => httpClient.Get(URL_HEAD), Times.Once);
             Assert.AreEqual("presentation.insere.tarefa.request", ProcessMemory.Event.Name);
-            Assert.Null(ProcessMemory.Event.Instance_Id);
+            Assert.Null(ProcessMemory.Event.instanceId);
             Assert.Null(ProcessMemory.Event.Reference_Date);
             Assert.AreEqual("execution", ProcessMemory.Event.Scope);
             Assert.NotNull(ProcessMemory.Event.Reproduction);

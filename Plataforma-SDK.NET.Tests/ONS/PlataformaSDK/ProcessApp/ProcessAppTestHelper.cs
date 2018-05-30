@@ -78,7 +78,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         internal static Event CreateEvent()
         {
             var Event = new Event();
-            Event.Instance_Id = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
+            Event.instanceId = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
             Event.Name = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0persist.request";
             Event.Payload = new { instanceId = "abaf4fbe-5359-41e7-a07c-8bd60191de56" };
             return Event;

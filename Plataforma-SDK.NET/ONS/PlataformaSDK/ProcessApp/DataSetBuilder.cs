@@ -145,18 +145,6 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void VerifyEntityAttributes(Filter filter, List<string> filterParameters)
         {
-            // var EntityProperties = Payload.GetType().GetProperties();
-            // foreach (var property in EntityProperties)
-            // {
-            //     var PropertyValue = property.GetValue(Payload);
-            //     if (PropertyValue != null &&
-            //             filterParameters.FindIndex(filterParameter => filterParameter.Substring(1).Equals(property.Name)) >= 0)
-            //     {
-            //         filter.ShouldBeExecuted = true;
-            //         filter.Parameters.Add(property.Name, PropertyValue);
-            //     }
-            // }
-
             foreach (var property in Payload.Properties())
             {
                 var PropertyValue = property.Value;

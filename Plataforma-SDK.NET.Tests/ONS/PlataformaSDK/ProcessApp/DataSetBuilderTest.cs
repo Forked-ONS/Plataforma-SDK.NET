@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Constants;
 using ONS.PlataformaSDK.Domain;
@@ -40,8 +41,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         [Test]
         public void BuildAsync()
         {
-            var Payload = new TesteEntity();
-            Payload.data = DATA;
+            JObject Payload = JObject.Parse($"{{data : \"{DATA}\"}}");
             DataSetBuilder.Build(CreatePlatformMap(), Payload);
             AssertFiltroUnidadeGeradora();
             AssertFiltroMudancaEstadoOperativo();

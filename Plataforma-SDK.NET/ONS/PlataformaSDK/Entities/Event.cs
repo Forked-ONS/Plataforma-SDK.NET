@@ -12,7 +12,7 @@ namespace ONS.PlataformaSDK.Entities
         public string Tag { get; set; }
         public JObject Reproduction { get; set; }
         public JObject Reprocess { get; set; }
-        public dynamic Payload { get; set; }
+        public JObject Payload { get; set; }
 
         public override bool Equals(object obj)
         {

@@ -4,6 +4,7 @@ using ONS.PlataformaSDK.EnvProps;
 using ONS.PlataformaSDK.Http;
 using ONS.PlataformaSDK.Entities;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace ONS.PlataformaSDK.EventManager
 {
@@ -30,7 +31,7 @@ namespace ONS.PlataformaSDK.EventManager
             var Event = new Event();
             Event.Name = "persist.request";
             Event.instanceId = "7777-7777";
-            Event.Payload = new { instanceId = "999999" };
+            Event.Payload = JObject.Parse("{instanceId:\"999999\"}");
             EventManagerClient.SendEvent(Event);
             HttpClientMock.Verify(httpClient => httpClient.Put("http://localhost:8888/sendevent", 
                 "{\"Name\":\"persist.request\",\"instanceId\":\"7777-7777\",\"Payload\":{\"instanceId\":\"999999\"}}"), Times.Once);

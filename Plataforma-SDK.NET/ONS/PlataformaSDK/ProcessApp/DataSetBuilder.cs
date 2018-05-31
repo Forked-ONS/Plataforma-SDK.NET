@@ -8,6 +8,7 @@ using ONS.PlataformaSDK.Domain;
 using System.Threading.Tasks;
 using System.Reflection;
 using ONS.PlataformaSDK.Constants;
+using Newtonsoft.Json.Linq;
 
 namespace ONS.PlataformaSDK.ProcessApp
 {
@@ -15,7 +16,7 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         public List<EntityFilter> EntitiesFilters;
         public IDomainContext DomainContext { get; set; }
-        private dynamic Payload;
+        private JObject Payload;
         private DomainClient DomainClient;
         public string MapName { get; set; }
 
@@ -50,7 +51,6 @@ namespace ONS.PlataformaSDK.ProcessApp
                 var StringReader = new StringReader(platformMap.Content);
                 var deserializer = new DeserializerBuilder().Build();
                 var YamlObject = deserializer.Deserialize<Dictionary<string, Dictionary<object, object>>>(StringReader);
-
                 foreach (var key in YamlObject.Keys)
                 {
                     if (YamlObject[key].ContainsKey("filters"))
@@ -61,7 +61,6 @@ namespace ONS.PlataformaSDK.ProcessApp
                         EntitiesFilters.Add(EntityFilter);
 
                         var YamlFilter = YamlObject[key]["filters"];
-                        System.Console.WriteLine(YamlFilter);
                         if (YamlFilter != null)
                         {
                             var Filters = ((Dictionary<object, object>)YamlFilter);
@@ -146,15 +145,25 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void VerifyEntityAttributes(Filter filter, List<string> filterParameters)
         {
-            var EntityProperties = Payload.GetType().GetProperties();
-            foreach (var property in EntityProperties)
+            // var EntityProperties = Payload.GetType().GetProperties();
+            // foreach (var property in EntityProperties)
+            // {
+            //     var PropertyValue = property.GetValue(Payload);
+            //     if (PropertyValue != null &&
+            //             filterParameters.FindIndex(filterParameter => filterParameter.Substring(1).Equals(property.Name)) >= 0)
+            //     {
+            //         filter.ShouldBeExecuted = true;
+            //         filter.Parameters.Add(property.Name, PropertyValue);
+            //     }
+            // }
+
+            foreach (var property in Payload.Properties())
             {
-                var PropertyValue = property.GetValue(Payload);
-                if (PropertyValue != null &&
-                        filterParameters.FindIndex(filterParameter => filterParameter.Substring(1).Equals(property.Name)) >= 0)
+                var PropertyValue = property.Value;
+                if(filterParameters.FindIndex(filterParameter => filterParameter.Substring(1).Equals(property.Name)) >= 0)
                 {
                     filter.ShouldBeExecuted = true;
-                    filter.Parameters.Add(property.Name, PropertyValue);
+                    filter.Parameters.Add(property.Name, PropertyValue.ToString());
                 }
             }
         }

@@ -86,7 +86,7 @@ namespace ONS.PlataformaSDK.ProcessApp
                 var Event = new Event();
                 Event.Name = Context.SystemId + ".persist.request";
                 Event.instanceId = Context.InstanceId;
-                Event.Payload = new { instanceId = Context.InstanceId };
+                Event.Payload = JObject.Parse($"{{instanceId:\"{Context.InstanceId}\"}}");
                 EventManagerClient.SendEvent(Event);
             }
             else if (Context.Commit && this.SyncDomain)

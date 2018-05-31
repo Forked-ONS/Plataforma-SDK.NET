@@ -1,5 +1,6 @@
 using Moq;
 using Moq.Protected;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using ONS.PlataformaSDK.Core;
 using ONS.PlataformaSDK.Domain;
@@ -80,7 +81,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var Event = new Event();
             Event.instanceId = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
             Event.Name = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0persist.request";
-            Event.Payload = new { instanceId = "abaf4fbe-5359-41e7-a07c-8bd60191de56" };
+            Event.Payload = JObject.Parse("{instanceId:\"abaf4fbe-5359-41e7-a07c-8bd60191de56\"}");
             return Event;
         }
 

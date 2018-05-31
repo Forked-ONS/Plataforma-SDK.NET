@@ -39,6 +39,7 @@ namespace ONS.PlataformaSDK.Domain
             {
                 UrlBuilder.Append($"&{item.Key}={item.Value}");
             }
+            System.Console.WriteLine(UrlBuilder.ToString());
             var EntityStrTask = HttpClient.Get(UrlBuilder.ToString());
             var Entity = EntityStrTask.Result;
             return JsonConvert.DeserializeObject<List<T>>(Entity);

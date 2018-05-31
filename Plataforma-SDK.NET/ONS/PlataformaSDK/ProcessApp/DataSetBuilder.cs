@@ -113,7 +113,6 @@ namespace ONS.PlataformaSDK.ProcessApp
                                 var FindByFilterMethod = DomainClient.GetType().GetMethod("FindByFilterAsync");
                                 var GenericMethod = FindByFilterMethod.MakeGenericMethod(GenericType);
                                 var Result = GenericMethod.Invoke(DomainClient, new object[] { EntityFilter, Filter });
-                                // var ResultProperty = ResultTask.GetType().GetProperty("Result");
                                 AddToDomainContext(Result, Property);
                             }
                         }
@@ -147,11 +146,15 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             foreach (var property in Payload.Properties())
             {
-                var PropertyValue = property.Value;
-                if(filterParameters.FindIndex(filterParameter => filterParameter.Substring(1).Equals(property.Name)) >= 0)
+                var FilterParameter = filterParameters.Find(filterParameter => filterParameter.Substring(1).Equals(property.Name));
+                if(FilterParameter != null)
                 {
                     filter.ShouldBeExecuted = true;
-                    filter.Parameters.Add(property.Name, PropertyValue.ToString());
+                    var PropertyValue = property.Value.ToString().Replace("\n", string.Empty).Replace(" ", string.Empty);
+                    if(FilterParameter.StartsWith("$")) {
+                        PropertyValue = PropertyValue.TrimStart('[').TrimEnd(']');
+                    } 
+                    filter.Parameters.Add(property.Name, PropertyValue);
                 }
             }
         }

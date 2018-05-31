@@ -41,7 +41,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         [Test]
         public void BuildAsync()
         {
-            JObject Payload = JObject.Parse($"{{data : \"{DATA}\"}}");
+            JObject Payload = JObject.Parse($"{{data : \"{DATA}\", idsUges:[3,4,5,6]}}");
             DataSetBuilder.Build(CreatePlatformMap(), Payload);
             AssertFiltroUnidadeGeradora();
             AssertFiltroMudancaEstadoOperativo();
@@ -108,7 +108,8 @@ namespace ONS.PlataformaSDK.ProcessApp
 
             Assert.AreEqual("byIntervaloDatas", FilterEventoOperativo.Filters[2].Name);
             Assert.AreEqual("data_verificada >= :dataInicial and data_verificada <= :dataFinal and id_uge in ($idsUges) order by data_verificada", FilterEventoOperativo.Filters[2].Query);
-            Assert.False(FilterEventoOperativo.Filters[2].ShouldBeExecuted);
+            Assert.True(FilterEventoOperativo.Filters[2].ShouldBeExecuted);
+            Assert.AreEqual("3,4,5,6", FilterEventoOperativo.Filters[2].Parameters["idsUges"]);
 
             Assert.AreEqual("byIdsEventos", FilterEventoOperativo.Filters[3].Name);
             Assert.AreEqual("id_evento in ($idsEventos!)", FilterEventoOperativo.Filters[3].Query);
@@ -127,7 +128,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             var MaiorQueDataFilter = EntityFilter.Filters[1];
             DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, MaiorQueDataFilter), Times.Once);
             var ByIntervaloDatasFilter = EntityFilter.Filters[2];
-            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, ByIntervaloDatasFilter), Times.Never);
+            DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, ByIntervaloDatasFilter), Times.Once);
             var ByIdsEventosFilter = EntityFilter.Filters[3];
             DomainClientMock.Verify(domainClient => domainClient.FindByFilterAsync<EventoMudancaEstadoOperativo>(EntityFilter, ByIdsEventosFilter), Times.Never);
             var AllFilter = EntityFilter.Filters[4];
@@ -136,7 +137,7 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private void AssertDomainContext()
         {
-            Assert.AreEqual(15, Enumerable.Count<EventoMudancaEstadoOperativo>(DomainContext.EventoMudancaEstadoOperativo));
+            Assert.AreEqual(20, Enumerable.Count<EventoMudancaEstadoOperativo>(DomainContext.EventoMudancaEstadoOperativo));
         }
 
         private PlatformMap CreatePlatformMap()

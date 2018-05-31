@@ -27,6 +27,7 @@ namespace ONS.PlataformaSDK.Domain
             HttpClientMock.Setup(mock => mock.Get("http://localhost:8087/mantertarefas/eventomudancaestadooperativo?filter=byIntervaloDatas" +
                 "&dataInicial=2015-01-01&dataFinal=2015-01-10")).Returns(EntityTask);
             HttpClientMock.Setup(mock => mock.Get("http://localhost:8087/mantertarefas/eventomudancaestadooperativo")).Returns(EntityTask);
+            HttpClientMock.Setup(mock => mock.Get("http://localhost:8087/mantertarefas/eventomudancaestadooperativo?filter=byIdUges&uges=1,2,3")).Returns(EntityTask);
             var ResultTask = Task.FromResult("{OK}");
             HttpClientMock.Setup(mock => mock.Post(It.IsAny<string>(), It.IsAny<string>())).Returns(ResultTask);
             EnvironmentProperties = new EnvironmentProperties("http", "localhost", "8087");

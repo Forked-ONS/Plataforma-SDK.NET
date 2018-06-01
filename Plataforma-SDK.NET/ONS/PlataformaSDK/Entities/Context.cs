@@ -12,7 +12,7 @@ namespace ONS.PlataformaSDK.Entities
         public string EventOut{get; set;}
         public bool Commit{get; set;}
         public PlatformMap Map{get; set;}
-        public IDomainContext Entities{get; set;}
+        public DataSet DataSet{get; set;}
 
         public override bool Equals(object obj)
         {

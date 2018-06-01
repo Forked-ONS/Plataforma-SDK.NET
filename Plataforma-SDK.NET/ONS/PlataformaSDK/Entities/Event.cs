@@ -10,7 +10,7 @@ namespace ONS.PlataformaSDK.Entities
         public string instanceId { get; set; }
         public string Reference_Date { get; set; }
         public string Tag { get; set; }
-        public JObject Reproduction { get; set; }
+        public Reproduction Reproduction { get; set; }
         public JObject Reprocess { get; set; }
         public JObject Payload { get; set; }
 
@@ -23,7 +23,7 @@ namespace ONS.PlataformaSDK.Entities
                    instanceId == @event.instanceId &&
                    Reference_Date == @event.Reference_Date &&
                    Tag == @event.Tag &&
-                   EqualityComparer<JObject>.Default.Equals(Reproduction, @event.Reproduction) &&
+                   Reproduction == @event.Reproduction &&
                    EqualityComparer<JObject>.Default.Equals(Reprocess, @event.Reprocess);
         }
 
@@ -34,7 +34,7 @@ namespace ONS.PlataformaSDK.Entities
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Scope);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(instanceId);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Reference_Date);
-            hashCode = hashCode * -1521134295 + EqualityComparer<JObject>.Default.GetHashCode(Reproduction);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Reproduction>.Default.GetHashCode(Reproduction);
             hashCode = hashCode * -1521134295 + EqualityComparer<JObject>.Default.GetHashCode(Reprocess);
             return hashCode;
         }

@@ -19,6 +19,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         public string EventIn { get; set; }
         public DataSetBuilder DataSetBuilder { get; set; }
         public IExecutable App { get; set; }
+        public bool DataSetBuilt { get; set; }
         private string ProcessInstanceId;
         private string ProcessId;
         private ProcessMemoryHttpClient ProcessMemoryClient;
@@ -52,7 +53,20 @@ namespace ONS.PlataformaSDK.ProcessApp
         public void Start()
         {
             var ProcessMemory = ProcessMemoryClient.Head(this.ProcessInstanceId);
-            Context.Event = ProcessMemory.Event;
+            if (ProcessMemory.DataSet != null)
+            {
+                DataSetBuilt = true;
+                copy(Context, ProcessMemory);
+            } 
+            else
+            {
+                Context.Event = ProcessMemory.Event;
+            }
+
+            if(IsReproduction()) 
+            {
+                System.Console.WriteLine("Processing an execution based on Reproduction");
+            }
 
             var Operations = CoreClient.OperationByProcessId(ProcessId);
             VerifyOperationList(Operations);
@@ -64,6 +78,19 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.StartProcess();
         }
 
+        private void copy(Context context, ProcessMemoryEntity processMemory)
+        {
+            context.Event = processMemory.Event;
+            context.ProcessId = processMemory.ProcessId;
+            context.SystemId = processMemory.SystemId;
+            context.InstanceId = processMemory.InstanceId;
+            context.EventOut = processMemory.EventOut;
+            context.Commit = processMemory.Commit;
+            context.Map = processMemory.Map;
+            context.DataSet = processMemory.DataSet;
+
+        }
+
         public void StartProcess()
         {
             var PlatformsMaps = CoreClient.MapByProcessId(this.ProcessId);
@@ -73,7 +100,8 @@ namespace ONS.PlataformaSDK.ProcessApp
                 DataSetBuilder.Build(PlatformsMaps[0], Context.Event.Payload);
             }
             App.Execute(DataSetBuilder.DomainContext, Context);
-            Context.Entities = DataSetBuilder.DomainContext;
+            Context.DataSet = new DataSet();
+            Context.DataSet.Entities = DataSetBuilder.DomainContext;
             ProcessMemoryClient.Commit(Context);
             PersistDomain();
         }
@@ -86,6 +114,7 @@ namespace ONS.PlataformaSDK.ProcessApp
                 var Event = new Event();
                 Event.Name = Context.SystemId + ".persist.request";
                 Event.instanceId = Context.InstanceId;
+                Event.Reproduction = Context.Event.Reproduction;
                 Event.Payload = JObject.Parse($"{{instanceId:\"{Context.InstanceId}\"}}");
                 EventManagerClient.SendEvent(Event);
             }
@@ -102,7 +131,8 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         private bool IsReproduction()
         {
-            return false;
+            var Reproduction = Context.Event.Reproduction;
+            return Reproduction != null && Reproduction.From != null && Reproduction.To != null;
         }
 
         public void VerifyOperationList(List<Operation> operations)
@@ -114,7 +144,7 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         }
         private void VerifyOperation(Operation operation)
-        {   
+        {
             if (operation == null)
             {
                 throw new PlataformaException($"Operation not found for process {this.ProcessId}");

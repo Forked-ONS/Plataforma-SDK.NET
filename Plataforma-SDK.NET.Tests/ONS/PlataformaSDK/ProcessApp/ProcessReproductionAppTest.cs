@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace ONS.PlataformaSDK.ProcessApp
 {
     [TestFixture]
-    public class ProcessAppTest
+    public class ProcessReproductionAppTest
     {
         private const string EVENT_IN = "presentation.insere.tarefa.request";
         private const string SYSTEM_ID = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
@@ -28,7 +28,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         [SetUp]
         public void Setup()
         {
-            ProcessMemoryClientMock = ProcessAppTestHelper.CreateProcessMemoryClientMock();
+            ProcessMemoryClientMock = ProcessAppTestHelper.CreateReproductionProcessMemoryClientMock();
             CoreClientMock = ProcessAppTestHelper.CreateCoreClientMock();
             DomainClientMock = ProcessAppTestHelper.CreateDomainClientMock();
             EventManagerClientMock = ProcessAppTestHelper.CreateEventManagerMock();
@@ -40,33 +40,24 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
 
         [Test]
-        public void Start()
+        public void StartWithReproduction()
         {
             ProcessApp.Start();
 
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(ProcessAppTestHelper.PROCESS_INSTANCE_ID), Times.Once);
-            ProcessMemoryClientMock.Verify(processMemoryClientMock => processMemoryClientMock.Commit(ProcessApp.Context), Times.Once);
-            CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
-            CoreClientMock.Verify(coreClientMock => coreClientMock.MapByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
-            AppMock.Verify(appMock => appMock.Execute(It.IsAny<IDomainContext>(), It.IsAny<Context>()));
-            EventManagerClientMock.Verify(eventManagerMock => eventManagerMock.SendEvent(It.IsAny<Event>()), Times.Once);
-
-            //FIXME Equals            
-            Assert.AreEqual(EVENT_IN, ProcessApp.Context.Event.Name);
-            Assert.AreEqual("1448a166-a191-40e7-8c05-b1621f34ad73", ProcessApp.Context.ProcessId);
-            Assert.AreEqual(SYSTEM_ID, ProcessApp.Context.SystemId);
-            Assert.AreEqual(ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessApp.Context.InstanceId);
-            Assert.AreEqual("presentation.insere.tarefa.request.done", ProcessApp.Context.EventOut);
-            Assert.AreEqual(EVENT_IN, ProcessApp.EventIn);
-            Assert.True(ProcessApp.Context.Commit);
-            Assert.False(ProcessApp.DataSetBuilt);
-            Assert.NotNull(ProcessApp.Context.Map);
+            Assert.True(ProcessApp.DataSetBuilt);
         }
 
-        [Test]
-        public void verifyOperationList()
+        private void AssertCopy(Context context, ProcessMemoryEntity processMemoryEntity)
         {
-            ProcessApp.VerifyOperationList(ProcessAppTestHelper.GetOperationList());
+            Assert.AreEqual(context.Event, processMemoryEntity.Event);
+            Assert.AreEqual(context.ProcessId, processMemoryEntity.ProcessId);
+            Assert.AreEqual(context.SystemId, processMemoryEntity.SystemId);
+            Assert.AreEqual(context.InstanceId, processMemoryEntity.InstanceId);
+            Assert.AreEqual(context.EventOut, processMemoryEntity.EventOut);
+            Assert.AreEqual(context.Commit, processMemoryEntity.Commit);
+            Assert.AreEqual(context.Map, processMemoryEntity.Map);
+            Assert.AreEqual(context.DataSet, processMemoryEntity.DataSet);
         }
 
     }

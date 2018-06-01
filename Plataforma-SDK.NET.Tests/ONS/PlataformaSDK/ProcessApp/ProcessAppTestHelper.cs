@@ -27,6 +27,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             return ProcessMemoryClientMock;
         }
 
+        public static Mock<ProcessMemoryHttpClient> CreateReproductionProcessMemoryClientMock()
+        {
+            var ProcessMemoryClientMock = new Mock<ProcessMemoryHttpClient>();
+            ProcessMemoryClientMock.Setup(mock => mock.Head(PROCESS_INSTANCE_ID)).Returns(GetReproductionProcessMemoryHead());
+            return ProcessMemoryClientMock;
+        }
+
         public static Mock<CoreClient> CreateCoreClientMock()
         {
             var CoreClientMock = new Mock<CoreClient>();
@@ -64,6 +71,15 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             var ProcessMemoryEntity = new ProcessMemoryEntity();
             ProcessMemoryEntity.Event = GetEvent();
+            return ProcessMemoryEntity;
+        }
+
+        internal static ProcessMemoryEntity GetReproductionProcessMemoryHead()
+        {
+            var ProcessMemoryEntity = new ProcessMemoryEntity();
+            ProcessMemoryEntity.Event = GetEvent();
+            ProcessMemoryEntity.DataSet = new DataSet();
+            ProcessMemoryEntity.DataSet.Entities = new DomainTestContext();
             return ProcessMemoryEntity;
         }
 

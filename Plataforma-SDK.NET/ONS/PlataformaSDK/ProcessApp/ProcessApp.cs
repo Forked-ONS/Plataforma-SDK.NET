@@ -72,7 +72,7 @@ namespace ONS.PlataformaSDK.ProcessApp
                 Context.Map = PlatformsMaps[0];
                 DataSetBuilder.Build(PlatformsMaps[0], Context.Event.Payload);
             }
-            App.Execute(DataSetBuilder.DomainContext, Context.Event.Payload);
+            App.Execute(DataSetBuilder.DomainContext, Context);
             Context.Entities = DataSetBuilder.DomainContext;
             ProcessMemoryClient.Commit(Context);
             PersistDomain();

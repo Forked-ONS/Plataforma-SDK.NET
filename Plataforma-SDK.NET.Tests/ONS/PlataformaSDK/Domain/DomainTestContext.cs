@@ -18,5 +18,19 @@ namespace ONS.PlataformaSDK.Entities
             DomainList.AddRange(EventoMudancaEstadoOperativo);
             return DomainList;
         }
+
+        public override bool Equals(object obj)
+        {
+            var @DomainTestContext = obj as DomainTestContext;
+            return @DomainTestContext != null &&
+                   EventoMudancaEstadoOperativo.Equals(@DomainTestContext.EventoMudancaEstadoOperativo);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -629850613;
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<EventoMudancaEstadoOperativo>>.Default.GetHashCode(EventoMudancaEstadoOperativo);
+            return hashCode;
+        }
     }
 }

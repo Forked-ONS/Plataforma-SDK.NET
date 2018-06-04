@@ -43,10 +43,26 @@ namespace ONS.PlataformaSDK.ProcessApp
         public void StartWithReproduction()
         {
             ProcessApp.Start();
-
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(ProcessAppTestHelper.PROCESS_INSTANCE_ID), Times.Once);
-            Assert.True(ProcessApp.DataSetBuilt);
+            ProcessMemoryClientMock.Verify(processMemoryClientMock => processMemoryClientMock.Commit(ProcessApp.Context), Times.Once);
+            CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
+            CoreClientMock.Verify(coreClientMock => coreClientMock.MapByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
+            AppMock.Verify(appMock => appMock.Execute(It.IsAny<IDomainContext>(), It.IsAny<Context>()));
+            EventManagerClientMock.Verify(eventManagerMock => eventManagerMock.SendEvent(It.IsAny<Event>()), Times.Never());
+
             this.AssertCopy(ProcessApp.Context, ProcessAppTestHelper.GetReproductionProcessMemoryHead());
+            Assert.True(ProcessApp.DataSetBuilt);
+            Assert.AreEqual(EVENT_IN, ProcessApp.Context.Event.Name);
+            Assert.AreEqual(ProcessAppTestHelper.PROCESS_ID, ProcessApp.Context.ProcessId);
+            Assert.AreEqual(ProcessAppTestHelper.SYSTEM_ID, ProcessApp.Context.SystemId);
+            Assert.AreEqual(ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessApp.Context.InstanceId);
+            Assert.AreEqual(ProcessAppTestHelper.EVENT_OUT, ProcessApp.Context.EventOut);
+            Assert.AreEqual(EVENT_IN, ProcessApp.EventIn);
+            Assert.True(ProcessApp.Context.Commit);
+            Assert.NotNull(ProcessApp.Context.Map);
+            Assert.NotNull(ProcessApp.Context.Event.Reproduction);
+            Assert.AreEqual(ProcessAppTestHelper.ORIGINAL_PROCESS_INSTANCE_ID, ProcessApp.Context.Event.Reproduction.From);
+            Assert.AreEqual(ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessApp.Context.Event.Reproduction.To);
         }
 
         private void AssertCopy(Context context, ProcessMemoryEntity processMemoryEntity)
@@ -58,8 +74,8 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.AreEqual(context.EventOut, processMemoryEntity.EventOut);
             Assert.AreEqual(context.Commit, processMemoryEntity.Commit);
             Assert.AreEqual(context.Map, processMemoryEntity.Map);
-            //FIXME 
-            //Assert.AreEqual(context.DataSet, processMemoryEntity.DataSet);
+            //FIXME Equals
+            // Assert.AreEqual(context.DataSet, processMemoryEntity.DataSet);
         }
 
     }

@@ -74,7 +74,10 @@ namespace ONS.PlataformaSDK.ProcessApp
             VerifyOperation(Operation);
             Context.EventOut = Operation.Event_Out;
             Context.Commit = Operation.Commit;
-
+            if(!this.IsReproduction() && !this.DataSetBuilt)
+            {
+                ProcessMemoryClient.Commit(Context);    
+            }
             this.StartProcess();
         }
 
@@ -102,10 +105,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             App.Execute(DataSetBuilder.DomainContext, Context);
             Context.DataSet = new DataSet();
             Context.DataSet.Entities = DataSetBuilder.DomainContext;
-            if(!this.IsReproduction() && !this.DataSetBuilt)
-            {
-                ProcessMemoryClient.Commit(Context);
-            }
+            ProcessMemoryClient.Commit(Context);
             PersistDomain();
         }
 

@@ -17,8 +17,12 @@ namespace ONS.PlataformaSDK.ProcessApp
 {
     public class ProcessAppTestHelper
     {
+        public const string ORIGINAL_PROCESS_INSTANCE_ID = "f8067884-c955-46fa-bb8f-33a40aab95c5";
         public const string PROCESS_INSTANCE_ID = "abaf4fbe-5359-41e7-a07c-8bd60191de56";
         public const string PROCESS_ID = "1448a166-a191-40e7-8c05-b1621f34ad73";
+        public const string EVENT_IN = "presentation.insere.tarefa.request";
+        public const string EVENT_OUT = "presentation.insere.tarefa.request.done";
+        public const string SYSTEM_ID = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
 
         public static Mock<ProcessMemoryHttpClient> CreateProcessMemoryClientMock()
         {
@@ -78,14 +82,17 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             var ProcessMemoryEntity = new ProcessMemoryEntity();
             ProcessMemoryEntity.Event = GetEvent();
+            ProcessMemoryEntity.ProcessId = PROCESS_ID;
+            ProcessMemoryEntity.SystemId = SYSTEM_ID;
+            ProcessMemoryEntity.InstanceId = PROCESS_INSTANCE_ID;
             ProcessMemoryEntity.DataSet = new DataSet();
             ProcessMemoryEntity.DataSet.Entities = new DomainTestContext();
-            ProcessMemoryEntity.EventOut = "presentation.insere.tarefa.request.done";
+            ProcessMemoryEntity.EventOut = EVENT_OUT;
             ProcessMemoryEntity.Commit = true;
             ProcessMemoryEntity.Map = new PlatformMap();
             var Reproduction = new Reproduction();
-            Reproduction.From = "{}";
-            Reproduction.To = "{}";
+            Reproduction.From = ORIGINAL_PROCESS_INSTANCE_ID;
+            Reproduction.To = PROCESS_INSTANCE_ID;
             ProcessMemoryEntity.Event.Reproduction = Reproduction;
             return ProcessMemoryEntity;
         }
@@ -111,7 +118,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         public static Operation createOperation(string eventInName)
         {
             var Operation = new Operation();
-            Operation.ProcessId = "1448a166-a191-40e7-8c05-b1621f34ad73";
+            Operation.ProcessId = PROCESS_ID;
             Operation.SystemId = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
             Operation.Event_In = eventInName;
             Operation.Event_Out = eventInName + ".done";

@@ -16,8 +16,6 @@ namespace ONS.PlataformaSDK.ProcessApp
     [TestFixture]
     public class ProcessAppTest
     {
-        private const string EVENT_IN = "presentation.insere.tarefa.request";
-        private const string SYSTEM_ID = "eb60a12f-130d-4b8b-8b0d-a5f94d39cb0";
         private ProcessAppImpl ProcessApp;
         private Mock<IExecutable> AppMock;
         private Mock<ProcessMemoryHttpClient> ProcessMemoryClientMock;
@@ -32,8 +30,8 @@ namespace ONS.PlataformaSDK.ProcessApp
             CoreClientMock = ProcessAppTestHelper.CreateCoreClientMock();
             DomainClientMock = ProcessAppTestHelper.CreateDomainClientMock();
             EventManagerClientMock = ProcessAppTestHelper.CreateEventManagerMock();
-            ProcessApp = new ProcessAppImpl(SYSTEM_ID, ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
-                EVENT_IN, new DomainTestContext(), ProcessMemoryClientMock.Object, CoreClientMock.Object,
+            ProcessApp = new ProcessAppImpl(ProcessAppTestHelper.SYSTEM_ID, ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
+                ProcessAppTestHelper.EVENT_IN, new DomainTestContext(), ProcessMemoryClientMock.Object, CoreClientMock.Object,
                     DomainClientMock.Object, EventManagerClientMock.Object);
             AppMock = ProcessAppTestHelper.CreateAppMock();
             ProcessApp.App = AppMock.Object;
@@ -45,19 +43,18 @@ namespace ONS.PlataformaSDK.ProcessApp
             ProcessApp.Start();
 
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(ProcessAppTestHelper.PROCESS_INSTANCE_ID), Times.Once);
-            ProcessMemoryClientMock.Verify(processMemoryClientMock => processMemoryClientMock.Commit(ProcessApp.Context), Times.Once);
+            ProcessMemoryClientMock.Verify(processMemoryClientMock => processMemoryClientMock.Commit(ProcessApp.Context), Times.Exactly(2));
             CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
             CoreClientMock.Verify(coreClientMock => coreClientMock.MapByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
             AppMock.Verify(appMock => appMock.Execute(It.IsAny<IDomainContext>(), It.IsAny<Context>()));
             EventManagerClientMock.Verify(eventManagerMock => eventManagerMock.SendEvent(It.IsAny<Event>()), Times.Once);
 
-            //FIXME Equals            
-            Assert.AreEqual(EVENT_IN, ProcessApp.Context.Event.Name);
-            Assert.AreEqual("1448a166-a191-40e7-8c05-b1621f34ad73", ProcessApp.Context.ProcessId);
-            Assert.AreEqual(SYSTEM_ID, ProcessApp.Context.SystemId);
+            Assert.AreEqual(ProcessAppTestHelper.EVENT_IN, ProcessApp.Context.Event.Name);
+            Assert.AreEqual(ProcessAppTestHelper.PROCESS_ID, ProcessApp.Context.ProcessId);
+            Assert.AreEqual(ProcessAppTestHelper.SYSTEM_ID, ProcessApp.Context.SystemId);
             Assert.AreEqual(ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessApp.Context.InstanceId);
-            Assert.AreEqual("presentation.insere.tarefa.request.done", ProcessApp.Context.EventOut);
-            Assert.AreEqual(EVENT_IN, ProcessApp.EventIn);
+            Assert.AreEqual(ProcessAppTestHelper.EVENT_OUT, ProcessApp.Context.EventOut);
+            Assert.AreEqual(ProcessAppTestHelper.EVENT_IN, ProcessApp.EventIn);
             Assert.True(ProcessApp.Context.Commit);
             Assert.False(ProcessApp.DataSetBuilt);
             Assert.NotNull(ProcessApp.Context.Map);

@@ -65,6 +65,25 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.AreEqual(ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessApp.Context.Event.Reproduction.To);
         }
 
+        [Test]
+        public void ReproductionWithError()
+        {
+            ProcessApp = new ProcessAppImpl(ProcessAppTestHelper.SYSTEM_ID, ProcessAppTestHelper.PROCESS_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
+                ProcessAppTestHelper.EVENT_IN, new DomainTestContext(), ProcessMemoryClientMock.Object, CoreClientMock.Object, DomainClientMock.Object,
+                    EventManagerClientMock.Object);
+            AppMock = ProcessAppTestHelper.CreateAppWithErrorMock();
+            ProcessApp.App = AppMock.Object;
+
+            ProcessApp.Start();
+
+            ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(ProcessAppTestHelper.PROCESS_INSTANCE_ID), Times.Once);
+            ProcessMemoryClientMock.Verify(processMemoryClientMock => processMemoryClientMock.Commit(ProcessApp.Context), Times.Never);
+            CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
+            CoreClientMock.Verify(coreClientMock => coreClientMock.MapByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Once);
+            AppMock.Verify(appMock => appMock.Execute(It.IsAny<IDomainContext>(), It.IsAny<Context>()));
+            EventManagerClientMock.Verify(eventManagerMock => eventManagerMock.SendEvent(It.IsAny<Event>()), Times.Once);
+        }
+
         private void AssertCopy(Context context, ProcessMemoryEntity processMemoryEntity)
         {
             Assert.AreEqual(context.Event, processMemoryEntity.Event);

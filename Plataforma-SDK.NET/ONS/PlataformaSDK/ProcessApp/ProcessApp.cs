@@ -52,18 +52,39 @@ namespace ONS.PlataformaSDK.ProcessApp
 
         public void Start()
         {
+            try
+            {
+                this.Run();
+            }
+            catch (System.Exception e)
+            {
+                System.Console.WriteLine(e.StackTrace);
+                var ErrorEvent = new Event();
+                ErrorEvent.Name = EventIn + ".error";
+                ErrorEvent.instanceId = ProcessInstanceId;
+                ErrorEvent.Payload = JObject.Parse($"{{message:\"{e.StackTrace}\"}}");
+                if(IsReproduction()) 
+                {
+                    ErrorEvent.Scope = "reproduction";
+                }
+                EventManagerClient.SendEvent(ErrorEvent);
+            }
+        }
+
+        private void Run()
+        {
             var ProcessMemory = ProcessMemoryClient.Head(this.ProcessInstanceId);
             if (ProcessMemory.DataSet != null)
             {
                 DataSetBuilt = true;
                 copy(Context, ProcessMemory);
-            } 
+            }
             else
             {
                 Context.Event = ProcessMemory.Event;
             }
 
-            if(IsReproduction()) 
+            if (IsReproduction())
             {
                 System.Console.WriteLine("Processing an execution based on Reproduction");
             }
@@ -74,9 +95,9 @@ namespace ONS.PlataformaSDK.ProcessApp
             VerifyOperation(Operation);
             Context.EventOut = Operation.Event_Out;
             Context.Commit = Operation.Commit;
-            if(!this.IsReproduction() && !this.DataSetBuilt)
+            if (!this.IsReproduction() && !this.DataSetBuilt)
             {
-                ProcessMemoryClient.Commit(Context);    
+                ProcessMemoryClient.Commit(Context);
             }
             this.StartProcess();
         }
@@ -131,11 +152,9 @@ namespace ONS.PlataformaSDK.ProcessApp
                 System.Console.WriteLine("Event's origin is a reproduction skip to save domain");
             }
         }
-
         private bool IsReproduction()
         {
-            var Reproduction = Context.Event.Reproduction;
-            return Reproduction != null && Reproduction.From != null && Reproduction.To != null;
+            return Context.Event != null && Context.Event.Reproduction != null && Context.Event.Reproduction.From != null && Context.Event.Reproduction.To != null;
         }
 
         public void VerifyOperationList(List<Operation> operations)

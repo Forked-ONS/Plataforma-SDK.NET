@@ -61,9 +61,25 @@ namespace ONS.PlataformaSDK.ProcessApp
         }
 
         [Test]
-        public void verifyOperationList()
+        public void VerifyOperationList()
         {
             ProcessApp.VerifyOperationList(ProcessAppTestHelper.GetOperationList());
+        }
+
+        [Test]
+        public void StartWithError()
+        {
+            ProcessApp = new ProcessAppImpl(ProcessAppTestHelper.SYSTEM_ID, ProcessAppTestHelper.PROCESS_ERROR_INSTANCE_ID, ProcessAppTestHelper.PROCESS_ID,
+                ProcessAppTestHelper.EVENT_IN, new DomainTestContext(), ProcessMemoryClientMock.Object, CoreClientMock.Object, DomainClientMock.Object, 
+                    EventManagerClientMock.Object);
+            ProcessApp.Start();
+
+            ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(ProcessAppTestHelper.PROCESS_ERROR_INSTANCE_ID), Times.Once);
+            ProcessMemoryClientMock.Verify(processMemoryClientMock => processMemoryClientMock.Commit(ProcessApp.Context), Times.Never);
+            CoreClientMock.Verify(coreClientMock => coreClientMock.OperationByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Never);
+            CoreClientMock.Verify(coreClientMock => coreClientMock.MapByProcessId(ProcessAppTestHelper.PROCESS_ID), Times.Never);
+            AppMock.Verify(appMock => appMock.Execute(It.IsAny<IDomainContext>(), It.IsAny<Context>()), Times.Never);
+            EventManagerClientMock.Verify(eventManagerMock => eventManagerMock.SendEvent(It.IsAny<Event>()), Times.Once);
         }
 
     }

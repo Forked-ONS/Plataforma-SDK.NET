@@ -19,6 +19,7 @@ namespace ONS.PlataformaSDK.ProcessApp
     {
         public const string ORIGINAL_PROCESS_INSTANCE_ID = "f8067884-c955-46fa-bb8f-33a40aab95c5";
         public const string PROCESS_INSTANCE_ID = "abaf4fbe-5359-41e7-a07c-8bd60191de56";
+        public const string PROCESS_ERROR_INSTANCE_ID = "errorerror-5359-41e7-a07c-8bd60191de56";
         public const string PROCESS_ID = "1448a166-a191-40e7-8c05-b1621f34ad73";
         public const string EVENT_IN = "presentation.insere.tarefa.request";
         public const string EVENT_OUT = "presentation.insere.tarefa.request.done";
@@ -28,6 +29,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             var ProcessMemoryClientMock = new Mock<ProcessMemoryHttpClient>();
             ProcessMemoryClientMock.Setup(mock => mock.Head(PROCESS_INSTANCE_ID)).Returns(GetProcessMemoryHead());
+            ProcessMemoryClientMock.Setup(mock => mock.Head(PROCESS_ERROR_INSTANCE_ID)).Throws(new PlataformaException("test error"));
             return ProcessMemoryClientMock;
         }
 
@@ -61,6 +63,12 @@ namespace ONS.PlataformaSDK.ProcessApp
         internal static Mock<IExecutable> CreateAppMock()
         {
             Mock<IExecutable> ExecutableMock = new Mock<IExecutable>();
+            return ExecutableMock;
+        }
+        internal static Mock<IExecutable> CreateAppWithErrorMock()
+        {
+            Mock<IExecutable> ExecutableMock = new Mock<IExecutable>();
+            ExecutableMock.Setup(mock => mock.Execute(It.IsAny<IDomainContext>(), It.IsAny<Context>())).Throws(new PlataformaException("test error"));
             return ExecutableMock;
         }
 

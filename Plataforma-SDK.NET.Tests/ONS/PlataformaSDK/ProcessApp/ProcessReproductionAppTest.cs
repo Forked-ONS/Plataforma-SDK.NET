@@ -46,6 +46,7 @@ namespace ONS.PlataformaSDK.ProcessApp
 
             ProcessMemoryClientMock.Verify(processMemoryClient => processMemoryClient.Head(ProcessAppTestHelper.PROCESS_INSTANCE_ID), Times.Once);
             Assert.True(ProcessApp.DataSetBuilt);
+            this.AssertCopy(ProcessApp.Context, ProcessAppTestHelper.GetReproductionProcessMemoryHead());
         }
 
         private void AssertCopy(Context context, ProcessMemoryEntity processMemoryEntity)
@@ -57,6 +58,8 @@ namespace ONS.PlataformaSDK.ProcessApp
             Assert.AreEqual(context.EventOut, processMemoryEntity.EventOut);
             Assert.AreEqual(context.Commit, processMemoryEntity.Commit);
             Assert.AreEqual(context.Map, processMemoryEntity.Map);
+            System.Console.WriteLine(context.DataSet);
+            System.Console.WriteLine(processMemoryEntity.DataSet);
             Assert.AreEqual(context.DataSet, processMemoryEntity.DataSet);
         }
 

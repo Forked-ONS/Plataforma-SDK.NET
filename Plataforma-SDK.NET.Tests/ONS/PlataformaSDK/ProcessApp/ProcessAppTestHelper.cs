@@ -80,6 +80,13 @@ namespace ONS.PlataformaSDK.ProcessApp
             ProcessMemoryEntity.Event = GetEvent();
             ProcessMemoryEntity.DataSet = new DataSet();
             ProcessMemoryEntity.DataSet.Entities = new DomainTestContext();
+            ProcessMemoryEntity.EventOut = "presentation.insere.tarefa.request.done";
+            ProcessMemoryEntity.Commit = true;
+            ProcessMemoryEntity.Map = new PlatformMap();
+            var Reproduction = new Reproduction();
+            Reproduction.From = "{}";
+            Reproduction.To = "{}";
+            ProcessMemoryEntity.Event.Reproduction = Reproduction;
             return ProcessMemoryEntity;
         }
 

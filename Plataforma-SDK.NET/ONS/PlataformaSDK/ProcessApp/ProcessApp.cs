@@ -102,7 +102,10 @@ namespace ONS.PlataformaSDK.ProcessApp
             App.Execute(DataSetBuilder.DomainContext, Context);
             Context.DataSet = new DataSet();
             Context.DataSet.Entities = DataSetBuilder.DomainContext;
-            ProcessMemoryClient.Commit(Context);
+            if(!this.IsReproduction() && !this.DataSetBuilt)
+            {
+                ProcessMemoryClient.Commit(Context);
+            }
             PersistDomain();
         }
 

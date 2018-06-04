@@ -23,7 +23,7 @@ namespace ONS.PlataformaSDK.Entities
                    instanceId == @event.instanceId &&
                    Reference_Date == @event.Reference_Date &&
                    Tag == @event.Tag &&
-                   Reproduction == @event.Reproduction &&
+                   this.Reproduction.Equals(@event.Reproduction) &&
                    EqualityComparer<JObject>.Default.Equals(Reprocess, @event.Reprocess);
         }
 
@@ -38,5 +38,6 @@ namespace ONS.PlataformaSDK.Entities
             hashCode = hashCode * -1521134295 + EqualityComparer<JObject>.Default.GetHashCode(Reprocess);
             return hashCode;
         }
+
     }
 }

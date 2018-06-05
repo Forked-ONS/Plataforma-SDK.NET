@@ -14,7 +14,7 @@ namespace ONS.PlataformaSDK.ProcessMemory
         private const string URL_HEAD = "http://localhost:9091/11de37cb-2a69-45d9-9a46-3b24f57eb25b/head?app_origin=dotnet_sdk";
         private const string URL_COMMIT = "http://localhost:9091/11de37cb-2a69-45d9-9a46-3b24f57eb25b/commit?app_origin=dotnet_sdk";
         private const string CONTEXT_JSON = "{\"instanceId\":\"11de37cb-2a69-45d9-9a46-3b24f57eb25b\",\"commit\":false}";
-        private const string HEAD_JSON = "{\"event\":{\"name\":\"presentation.insere.tarefa.request\",\"instance_id\":null,\"reference_date\":null,\"scope\":\"execution\",\"reproduction\":{},\"reprocess\":{},\"payload\":{\"nomeTarefa\":\"teste\"}}}";
+        private const string HEAD_JSON = "{\"event\":{\"name\":\"presentation.insere.tarefa.request\",\"instance_id\":null,\"reference_date\":null,\"scope\":\"execution\",\"reproduction\":{},\"reprocessing\":{},\"payload\":{\"nomeTarefa\":\"teste\"}}}";
 
         private ProcessMemoryHttpClient ProcessMemoryClient;
         private Mock<HttpClient> HttpClientMock;
@@ -41,7 +41,7 @@ namespace ONS.PlataformaSDK.ProcessMemory
             Assert.Null(ProcessMemory.Event.Reference_Date);
             Assert.AreEqual("execution", ProcessMemory.Event.Scope);
             Assert.NotNull(ProcessMemory.Event.Reproduction);
-            Assert.NotNull(ProcessMemory.Event.Reprocess);
+            Assert.NotNull(ProcessMemory.Event.Reprocessing);
             Assert.NotNull(ProcessMemory.Event.Payload);
         }
 

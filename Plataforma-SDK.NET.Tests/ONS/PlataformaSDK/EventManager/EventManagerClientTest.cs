@@ -34,7 +34,7 @@ namespace ONS.PlataformaSDK.EventManager
             Event.Payload = JObject.Parse("{instanceId:\"999999\"}");
             EventManagerClient.SendEvent(Event);
             HttpClientMock.Verify(httpClient => httpClient.Put("http://localhost:8888/sendevent", 
-                "{\"Name\":\"persist.request\",\"instanceId\":\"7777-7777\",\"Payload\":{\"instanceId\":\"999999\"}}"), Times.Once);
+                "{\"name\":\"persist.request\",\"instanceId\":\"7777-7777\",\"Payload\":{\"instanceId\":\"999999\"}}"), Times.Once);
         }
     }
 }

@@ -1,4 +1,3 @@
-
 /**
 Context builder é a classe responsável por montar um objeto de contexto de execução
 */
@@ -11,15 +10,13 @@ namespace ONS.SDK.Context {
 
         private IProcessMemoryService<T> _processMemory;
 
-        public ContextBuilder()
-        {
-        }
+        public ContextBuilder () { }
 
-        public ContextBuilder(IProcessMemoryService<T> processMemory){
+        public ContextBuilder (IProcessMemoryService<T> processMemory) {
             this._processMemory = processMemory;
         }
-        public Context<T> Build(string instanceId) {
-            return new Context<T>() {Event=new Event<T>(), DataSet= new DataSet()};
+        public Context<T> Build (string instanceId) {
+            return new Context<T> () { Event = new Event<T> (), DataSet = new DataSet () };
         }
     }
 }

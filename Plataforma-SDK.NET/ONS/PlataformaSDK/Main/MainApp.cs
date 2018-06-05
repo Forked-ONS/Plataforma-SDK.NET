@@ -29,7 +29,7 @@ namespace ONS.PlataformaSDK.Main
 
         private ProcessMemoryHttpClient GetProcessMemoryClient(HttpClient httpClient)
         {
-            String Host = GetEnvironmentVariable("PROCESS_MEMORY_HOST", "localhost");
+            String Host = GetEnvironmentVariable("PROCESS_MEMORY_HOST", "process_memory");
             String Scheme = GetEnvironmentVariable("PROCESS_MEMORY_SCHEME", "http");
             String Port = GetEnvironmentVariable("PROCESS_MEMORY_PORT", "9091");
             return new ProcessMemoryHttpClient(httpClient, new EnvironmentProperties(Scheme, Host, Port));
@@ -37,7 +37,7 @@ namespace ONS.PlataformaSDK.Main
 
         private CoreClient GetCoreClient(HttpClient httpClient)
         {
-            String Host = GetEnvironmentVariable("COREAPI_HOST", "localhost");
+            String Host = GetEnvironmentVariable("COREAPI_HOST", "apicore");
             String Scheme = GetEnvironmentVariable("COREAPI_SCHEME", "http");
             String Port = GetEnvironmentVariable("COREAPI_PORT", "9110");
             return new CoreClient(httpClient, new EnvironmentProperties(Scheme, Host, Port));
@@ -45,7 +45,7 @@ namespace ONS.PlataformaSDK.Main
 
         private EventManagerClient GetEventManagerClient(HttpClient httpClient)
         {
-            String Host = GetEnvironmentVariable("EVENT_MANAGER_HOST", "localhost");
+            String Host = GetEnvironmentVariable("EVENT_MANAGER_HOST", "event_manager");
             String Scheme = GetEnvironmentVariable("EVENT_MANAGER_SCHEME", "http");
             String Port = GetEnvironmentVariable("EVENT_MANAGER_PORT", "8081");
             return new EventManagerClient(httpClient, new EnvironmentProperties(Scheme, Host, Port));

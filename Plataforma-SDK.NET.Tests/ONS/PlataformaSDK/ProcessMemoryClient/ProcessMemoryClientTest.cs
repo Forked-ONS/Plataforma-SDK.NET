@@ -13,7 +13,7 @@ namespace ONS.PlataformaSDK.ProcessMemory
         private const string PROCESS_INSTANCE_ID = "11de37cb-2a69-45d9-9a46-3b24f57eb25b";
         private const string URL_HEAD = "http://localhost:9091/11de37cb-2a69-45d9-9a46-3b24f57eb25b/head?app_origin=dotnet_sdk";
         private const string URL_COMMIT = "http://localhost:9091/11de37cb-2a69-45d9-9a46-3b24f57eb25b/commit?app_origin=dotnet_sdk";
-        private const string CONTEXT_JSON = "{\"InstanceId\":\"11de37cb-2a69-45d9-9a46-3b24f57eb25b\",\"Commit\":false}";
+        private const string CONTEXT_JSON = "{\"instanceId\":\"11de37cb-2a69-45d9-9a46-3b24f57eb25b\",\"commit\":false}";
         private const string HEAD_JSON = "{\"event\":{\"name\":\"presentation.insere.tarefa.request\",\"instance_id\":null,\"reference_date\":null,\"scope\":\"execution\",\"reproduction\":{},\"reprocess\":{},\"payload\":{\"nomeTarefa\":\"teste\"}}}";
 
         private ProcessMemoryHttpClient ProcessMemoryClient;

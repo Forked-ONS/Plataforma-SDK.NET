@@ -1,17 +1,27 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using ONS.PlataformaSDK.Domain;
 
 namespace ONS.PlataformaSDK.Entities
 {
     public class Context
     {
+        [JsonProperty("event")]
         public Event Event{get; set;}
+        [JsonProperty("processId")]
         public string ProcessId{get; set;}
+        [JsonProperty("systemId")]
         public string SystemId{get; set;}
+        [JsonProperty("instanceId")]
         public string InstanceId{get; set;}
+        [JsonProperty("eventOut")]
         public string EventOut{get; set;}
+        [JsonProperty("commit")]
         public bool Commit{get; set;}
+        [JsonProperty("map")]
         public PlatformMap Map{get; set;}
+
+        [JsonProperty("dataset")]
         public DataSet DataSet{get; set;}
 
         public override bool Equals(object obj)

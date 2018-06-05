@@ -1,11 +1,16 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ONS.PlataformaSDK.Domain
 {
     public class Metadata
     {
+        
+        [JsonProperty("branch")]
         public string Branch { get; set; }
+        [JsonProperty("type")]
         public string Type { get; set; }
+        [JsonProperty("changeTrack")]
         public string ChangeTrack { get; set; }
 
         public Metadata(string branch, string type, string changeTrack)

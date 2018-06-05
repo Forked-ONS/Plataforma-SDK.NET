@@ -48,7 +48,7 @@ namespace ONS.PlataformaSDK.ProcessApp
         {
             if (platformMap.Content != null)
             {
-                var StringReader = new StringReader(platformMap.Content);
+                var StringReader = new StringReader(platformMap.Content.ToString());
                 var deserializer = new DeserializerBuilder().Build();
                 var YamlObject = deserializer.Deserialize<Dictionary<string, Dictionary<object, object>>>(StringReader);
                 foreach (var key in YamlObject.Keys)

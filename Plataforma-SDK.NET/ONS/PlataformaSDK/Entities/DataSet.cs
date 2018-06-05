@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using ONS.PlataformaSDK.Domain;
 
 namespace ONS.PlataformaSDK.Entities
 {
     public class DataSet 
     {
+        [JsonProperty("entities")]
         public IDomainContext Entities{get; set;}
 
 

@@ -106,8 +106,8 @@ namespace ONS.PlataformaSDK.Domain
 
         private string GetJsonEventoList()
         {
-            return "[{\"IdClassificacaoOrigem\":\"TEST\",\"_Metadata\":{\"Branch\":\"master\",\"Type\":\"EventoMudancaEstadoOperativo\",\"ChangeTrack\":\"create\"}}," + 
-                     "{\"IdClassificacaoOrigem\":\"TEST\",\"_Metadata\":{\"Branch\":\"master\",\"Type\":\"EventoMudancaEstadoOperativo\",\"ChangeTrack\":\"create\"}}]";
+            return "[{\"IdClassificacaoOrigem\":\"TEST\",\"_metadata\":{\"branch\":\"master\",\"type\":\"EventoMudancaEstadoOperativo\",\"changeTrack\":\"create\"}}," + 
+                     "{\"IdClassificacaoOrigem\":\"TEST\",\"_metadata\":{\"branch\":\"master\",\"type\":\"EventoMudancaEstadoOperativo\",\"changeTrack\":\"create\"}}]";
         }
     }
 }

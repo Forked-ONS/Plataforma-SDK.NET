@@ -7,6 +7,6 @@ namespace ONS.SDK.Domain.Core {
         public string EventOut { get; set; }
         public bool Commit { get; set; }
         public ProcessMap Map { get; set; }
-        public DataSet DataSet { get; set; }
+        public DataSetMap DataSet { get; set; }
     }
 }

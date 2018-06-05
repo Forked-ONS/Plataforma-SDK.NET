@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using ONS.SDK.Domain.Core;
 using ONS.SDK.Infra;
 using ONS.SDK.Platform.ProcessMemoryClient;
 using ONS.SDK.Utils.Http;
@@ -10,36 +11,48 @@ namespace ONS.SDK.Platform.ProcessMemoryTest {
     [TestFixture]
     public class ProcessMemoryServiceTest {
 
-
         [Test]
         public void ShouldGetHeadOfProcessMemory () {
             Mock<HttpClient> mock = new Mock<HttpClient> ();
             mock.Setup (http => http.Get (It.IsAny<string> ())).Returns (Task.FromResult (_response));
             var config = new ProcessMemoryConfig ();
-            var service = new ProcessMemoryService<Payload> (config, new JsonHttpClient(mock.Object));
-            var memory = service.Head("");
+            var service = new ProcessMemoryService<Payload> (config, new JsonHttpClient (mock.Object));
+            var memory = service.Head ("");
             var map = memory.Map;
+            Assert.AreEqual (memory.Event.Payload.PersonId, "30696c2d-2ffc-4a2e-97d7-d5140534d3ec");
+            Assert.AreEqual (memory.Event.Tag, "b1d77ca4-6819-11e8-8231-0242ac12000c");
+            Assert.AreEqual (memory.ProcessId, "7828c3c7-0352-42a5-9342-2673293bc93d");
+            Assert.AreEqual (memory.SystemId, "ec498841-59e5-47fd-8075-136d79155705");
+            Assert.IsNotNull (map);
 
-            Assert.AreEqual(memory.Event.Payload.PersonId, "30696c2d-2ffc-4a2e-97d7-d5140534d3ec");
-            Assert.AreEqual(memory.Event.Tag, "b1d77ca4-6819-11e8-8231-0242ac12000c");
-            Assert.AreEqual(memory.ProcessId,"7828c3c7-0352-42a5-9342-2673293bc93d");
-            Assert.AreEqual(memory.SystemId,"ec498841-59e5-47fd-8075-136d79155705");
-            Assert.IsNotNull(map);
-
-            Assert.IsTrue(map.Content.ContainsKey("Operacao"));
-            Assert.IsTrue(map.Content.ContainsKey("Conta"));
-            Assert.AreEqual(map.Id,"863fa1ef-71e9-4d96-a9b8-5dd0594370a2");
-            Assert.AreEqual(map.Name, "ConsolidaSaldo");
+            Assert.IsTrue (map.Content.ContainsKey ("Operacao"));
+            Assert.IsTrue (map.Content.ContainsKey ("Conta"));
+            Assert.AreEqual (map.Id, "863fa1ef-71e9-4d96-a9b8-5dd0594370a2");
+            Assert.AreEqual (map.Name, "ConsolidaSaldo");
 
             var op = map.Content["Operacao"];
 
-            Assert.AreEqual(op.Model,"operacao");
-            Assert.IsTrue(op.Fields.ContainsKey("value"));
-            Assert.AreEqual(op.Fields["value"].Column, "valor");
-            Assert.AreEqual(op.Filters["byTitular"],"titular_id = :personId");
-
+            Assert.AreEqual (op.Model, "operacao");
+            Assert.IsTrue (op.Fields.ContainsKey ("value"));
+            Assert.AreEqual (op.Fields["value"].Column, "valor");
+            Assert.AreEqual (op.Filters["byTitular"], "titular_id = :personId");
+            Assert.AreEqual (memory.DataSet.Entities["Operacao"].Count, 1);
+            Assert.AreEqual (memory.DataSet.Entities["Conta"].Count, 1);
         }
 
+        [Test]
+        public void ShouldCommitOnProcessMemory () {
+            Mock<HttpClient> mock = new Mock<HttpClient> ();
+            mock.Setup (http => http.Post (It.IsAny<string> (), It.IsAny<string>())).Returns (Task.FromResult (""));
+
+            var config = new ProcessMemoryConfig ();
+            var service = new ProcessMemoryService<Payload> (config, new JsonHttpClient (mock.Object));
+            var memory = new Memory<Payload> ();
+            memory.Event = new Event<Payload> () { Payload = new Payload () { PersonId = "1" } };
+
+            service.Commit (memory);
+            mock.Verify(http => http.Post(It.IsAny<string> (), @"{""event"":{""payload"":{""personId"":""1""}},""commit"":false}"));
+        }
         class Payload {
             public string PersonId { get; set; }
         }
@@ -69,9 +82,6 @@ namespace ONS.SDK.Platform.ProcessMemoryTest {
     ""map"": {
         ""_metadata"": {
             ""branch"": ""master"",
-            ""instance_id"": null,
-            ""modified_at"": ""2018-06-04T17:00:42.000Z"",
-            ""origin"": null,
             ""type"": ""map""
         },
         ""content"": {
@@ -131,9 +141,6 @@ namespace ONS.SDK.Platform.ProcessMemoryTest {
                 {
                     ""_metadata"": {
                         ""branch"": ""master"",
-                        ""instance_id"": ""5bfc9c08-30c7-4e77-a23d-77416e9927e5"",
-                        ""modified_at"": ""2018-06-04T17:06:26.000Z"",
-                        ""origin"": null,
                         ""type"": ""Operacao""
                     },
                     ""date"": ""2018-01-01T12:00:00.000Z"",
@@ -147,9 +154,6 @@ namespace ONS.SDK.Platform.ProcessMemoryTest {
                 {
                     ""_metadata"": {
                         ""branch"": ""master"",
-                        ""instance_id"": ""0fe19387-cd07-4197-aab1-1023a73d3f92"",
-                        ""modified_at"": ""2018-06-04T17:05:55.000Z"",
-                        ""origin"": null,
                         ""type"": ""Conta"",
                         ""changeTrack"": ""update""
                     },

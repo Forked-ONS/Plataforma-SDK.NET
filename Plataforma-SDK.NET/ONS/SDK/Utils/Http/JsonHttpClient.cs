@@ -12,33 +12,39 @@ namespace ONS.SDK.Utils.Http {
         }
         private string serialize (object obj) {
             string json = JsonConvert.SerializeObject (obj, new JsonSerializerSettings {
-                ContractResolver = new CamelCasePropertyNamesContractResolver ()
+                ContractResolver = new CamelCasePropertyNamesContractResolver (),
+                    NullValueHandling = NullValueHandling.Ignore
+
             });
             return json;
         }
 
-        private T deserialize<T>(string json) {
+        private T deserialize<T> (string json) {
+            if (json == null) {
+                return default (T);
+            }
             return JsonConvert.DeserializeObject<T> (json, new JsonSerializerSettings {
-                ContractResolver = new CamelCasePropertyNamesContractResolver ()
+                ContractResolver = new CamelCasePropertyNamesContractResolver (),
+                    NullValueHandling = NullValueHandling.Ignore
             });
         }
 
         public T Post<T> (string url, object body) {
-            var resp = _client.Post (url, serialize(body));
+            var resp = _client.Post (url, serialize (body));
             var obj = resp.Result;
-            return  deserialize<T>(obj);
+            return deserialize<T> (obj);
         }
 
         public T Put<T> (string url, object body) {
-            var resp = _client.Put (url, serialize(body));
+            var resp = _client.Put (url, serialize (body));
             var obj = resp.Result;
-            return deserialize<T>(obj);
+            return deserialize<T> (obj);
         }
 
         public T Get<T> (string url) {
             var resp = _client.Get (url);
             var json = resp.Result;
-            return  deserialize<T>(json);
+            return deserialize<T> (json);
         }
     }
 }

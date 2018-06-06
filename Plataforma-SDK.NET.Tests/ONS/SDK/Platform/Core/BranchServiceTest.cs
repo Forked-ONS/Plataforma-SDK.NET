@@ -29,12 +29,12 @@ namespace ONS.SDK.Platform.CoreTest
             var service = new BranchService(new CoreConfig(), new JsonHttpClient(mock.Object));
             var branch = new Branch(){
                 Name="cenario",
-                Description="descricao",
-                _Metadata=new Metadata{
-                    ChangeTrack="create"
-                }
+                Description="descricao"
             };
+            branch._Metadata.ChangeTrack = "create";
 
+            service.Save(branch);
+            mock.Verify(http => http.Post (It.IsAny<string>(), branchPersistBody));
         }
 
 
@@ -60,16 +60,6 @@ namespace ONS.SDK.Platform.CoreTest
         ]
         ";
 
-        private readonly string branchPersistBody = @"
-        [
-            {
-                ""_metadata"": {
-                    ""changeTrack"": ""create"",
-                    ""type"": ""branch""
-                },
-                ""description"": ""descricao"",
-                ""name"": ""cenario""
-            }
-        ]";
+        private readonly string branchPersistBody = "[{\"name\":\"cenario\",\"description\":\"descricao\",\"_Metadata\":{\"type\":\"branch\",\"changeTrack\":\"create\"}}]";
     }
 }

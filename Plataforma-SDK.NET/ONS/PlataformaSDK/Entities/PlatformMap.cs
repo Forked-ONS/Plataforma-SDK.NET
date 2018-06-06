@@ -1,13 +1,18 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using ONS.PlataformaSDK.Domain;
 
 namespace ONS.PlataformaSDK.Entities
 {
     public class PlatformMap : BaseEntity
     {
+        [JsonProperty("name")]
         public string Name{get; set;}
+        [JsonProperty("processId")]
         public string ProcessId{get; set;}
+        [JsonProperty("systemId")]
         public string SystemId{get; set;}
+        [JsonProperty("content")]
         public string Content{get; set;}
 
         public override bool Equals(object obj)

@@ -110,7 +110,7 @@ namespace ONS.PlataformaSDK.ProcessApp
             context.InstanceId = processMemory.InstanceId;
             context.EventOut = processMemory.EventOut;
             context.Commit = processMemory.Commit;
-            context.Map = processMemory.Map;
+            context.Map = new ContextMap(processMemory.Map);
             context.DataSet = processMemory.DataSet;
 
         }
@@ -120,8 +120,8 @@ namespace ONS.PlataformaSDK.ProcessApp
             var PlatformsMaps = CoreClient.MapByProcessId(this.ProcessId);
             if (!PlatformsMaps.isEmpty())
             {
-                Context.Map = PlatformsMaps[0];
-                DataSetBuilder.Build(PlatformsMaps[0], Context.Event.Payload);
+                Context.Map = new ContextMap(PlatformsMaps[0]);
+                DataSetBuilder.Build(PlatformsMaps[0], Context.Map,Context.Event.Payload);
             }
             App.Execute(DataSetBuilder.DomainContext, Context);
             Context.DataSet = new DataSet();

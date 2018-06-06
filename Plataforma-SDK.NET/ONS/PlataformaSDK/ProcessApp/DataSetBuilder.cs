@@ -26,11 +26,11 @@ namespace ONS.PlataformaSDK.ProcessApp
             this.DomainClient = domainClient;
             EntitiesFilters = new List<EntityFilter>();
         }
-        public virtual void Build(PlatformMap platformMap, dynamic payload)
+        public virtual void Build(PlatformMap platformMap, ContextMap contextMap, dynamic payload)
         {
             this.Payload = payload;
             this.MapName = platformMap.Name;
-            BuildFilters(platformMap);
+            BuildFilters(platformMap, contextMap);
             ShouldBeExecuted();
             LoadDataSet();
         }
@@ -44,13 +44,14 @@ namespace ONS.PlataformaSDK.ProcessApp
             DomainClient.Persist(ChangeTrackList, MapName);
         }
 
-        private void BuildFilters(PlatformMap platformMap)
+        private void BuildFilters(PlatformMap platformMap, ContextMap contextMap)
         {
             if (platformMap.Content != null)
             {
                 var StringReader = new StringReader(platformMap.Content);
                 var deserializer = new DeserializerBuilder().Build();
                 var YamlObject = deserializer.Deserialize<Dictionary<string, Dictionary<object, object>>>(StringReader);
+                this.loadContent(contextMap, platformMap.Content);
                 foreach (var key in YamlObject.Keys)
                 {
                     if (YamlObject[key].ContainsKey("filters"))
@@ -72,6 +73,14 @@ namespace ONS.PlataformaSDK.ProcessApp
                     }
                 }
             }
+        }
+
+        private void loadContent(ContextMap contextMap, string content)
+        {
+            var r = new StringReader(content); 
+            var deserializer = new Deserializer();
+            var yamlObject = deserializer.Deserialize(r);
+            contextMap.Content = yamlObject;
         }
 
         private void ShouldBeExecuted()
@@ -147,13 +156,14 @@ namespace ONS.PlataformaSDK.ProcessApp
             foreach (var property in Payload.Properties())
             {
                 var FilterParameter = filterParameters.Find(filterParameter => filterParameter.Substring(1).Equals(property.Name));
-                if(FilterParameter != null)
+                if (FilterParameter != null)
                 {
                     filter.ShouldBeExecuted = true;
                     var PropertyValue = property.Value.ToString().Replace("\n", string.Empty).Replace(" ", string.Empty);
-                    if(FilterParameter.StartsWith("$")) {
+                    if (FilterParameter.StartsWith("$"))
+                    {
                         PropertyValue = PropertyValue.TrimStart('[').TrimEnd(']');
-                    } 
+                    }
                     filter.Parameters.Add(property.Name, PropertyValue);
                 }
             }

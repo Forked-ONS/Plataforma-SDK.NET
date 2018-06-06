@@ -19,7 +19,7 @@ namespace ONS.PlataformaSDK.Entities
         [JsonProperty("commit")]
         public bool Commit{get; set;}
         [JsonProperty("map")]
-        public PlatformMap Map{get; set;}
+        public ContextMap Map{get; set;}
 
         [JsonProperty("dataset")]
         public DataSet DataSet{get; set;}
@@ -34,7 +34,7 @@ namespace ONS.PlataformaSDK.Entities
                    InstanceId == context.InstanceId &&
                    EventOut == context.EventOut &&
                    Commit == context.Commit &&
-                   EqualityComparer<PlatformMap>.Default.Equals(Map, context.Map);
+                   EqualityComparer<ContextMap>.Default.Equals(Map, context.Map);
         }
 
 
@@ -47,7 +47,7 @@ namespace ONS.PlataformaSDK.Entities
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(InstanceId);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(EventOut);
             hashCode = hashCode * -1521134295 + Commit.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<PlatformMap>.Default.GetHashCode(Map);
+            hashCode = hashCode * -1521134295 + EqualityComparer<ContextMap>.Default.GetHashCode(Map);
             return hashCode;
         }
     }

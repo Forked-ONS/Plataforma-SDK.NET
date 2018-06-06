@@ -43,11 +43,14 @@ namespace ONS.PlataformaSDK.ProcessApp
         public void BuildAsync()
         {
             JObject Payload = JObject.Parse($"{{data : \"{DATA}\", idsUges:[3,4,5,6]}}");
-            DataSetBuilder.Build(CreatePlatformMap(), Payload);
+            var PlatformMap = CreatePlatformMap();
+            var ContextMap = new ContextMap(PlatformMap);
+            DataSetBuilder.Build(PlatformMap, ContextMap, Payload);
             AssertFiltroUnidadeGeradora();
             AssertFiltroMudancaEstadoOperativo();
             AssertDomainClient();
             AssertDomainContext();
+            Assert.NotNull(ContextMap.Content);
         }
 
         [Test]

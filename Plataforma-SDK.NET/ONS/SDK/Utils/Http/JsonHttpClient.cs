@@ -29,20 +29,20 @@ namespace ONS.SDK.Utils.Http {
             });
         }
 
-        public T Post<T> (string url, object body) {
-            var resp = _client.Post (url, serialize (body));
+        public T Post<T> (string url, object body, params Header[] headers) {
+            var resp = _client.Post (url, serialize (body), headers);
             var obj = resp.Result;
             return deserialize<T> (obj);
         }
 
-        public T Put<T> (string url, object body) {
-            var resp = _client.Put (url, serialize (body));
+        public T Put<T> (string url, object body, params Header[] headers) {
+            var resp = _client.Put (url, serialize (body), headers);
             var obj = resp.Result;
             return deserialize<T> (obj);
         }
 
-        public T Get<T> (string url) {
-            var resp = _client.Get (url);
+        public T Get<T> (string url, params Header[] headers) {
+            var resp = _client.Get (url, headers);
             var json = resp.Result;
             return deserialize<T> (json);
         }

@@ -6,7 +6,10 @@ using ONS.SDK.App.Interfaces;
 using ONS.SDK.Context;
 using ONS.SDK.Domain.Interfaces;
 using ONS.SDK.Infra;
+using ONS.SDK.Platform.Core;
 using ONS.SDK.Utils.Http;
+using Plataforma_SDK.NET.ONS.SDK.Domain.Core;
+using Plataforma_SDK.NET.ONS.SDK.Domain.Services;
 
 namespace ONS.SDK.App {
     public class AppBuilder : IAppBuilder {
@@ -18,6 +21,7 @@ namespace ONS.SDK.App {
 
         private IServiceCollection _services;
 
+        private ApplicationContext _appContext;
         public AppBuilder () {
             this._services = new ServiceCollection ();
             var builder = new ConfigurationBuilder ();
@@ -27,7 +31,8 @@ namespace ONS.SDK.App {
             this._services.AddSingleton(typeof(ExecutorConfig), new ExecutorConfig(this._configuration));
             this._services.AddSingleton(typeof(CoreConfig), new CoreConfig(this._configuration));
             this._services.AddSingleton(typeof(JsonHttpClient), new JsonHttpClient());
-
+            this._services.AddSingleton(typeof(ApplicationContext), new ApplicationContext(this._configuration));
+            this._services.AddSingleton<IInstalledAppService, InstalledAppService>();
         }
 
         public static IAppBuilder CreateDefaultBuilder (string[] args) {

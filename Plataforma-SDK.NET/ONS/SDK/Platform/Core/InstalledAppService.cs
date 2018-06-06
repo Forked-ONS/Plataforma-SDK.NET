@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using ONS.SDK.Domain.Core;
 using ONS.SDK.Infra;
 using ONS.SDK.Utils.Http;
+using Plataforma_SDK.NET.ONS.SDK.Domain.Services;
 
 namespace ONS.SDK.Platform.Core
 {
-    public class InstalledAppService : CoreService
+    public class InstalledAppService : CoreService, IInstalledAppService
     {
         public InstalledAppService(CoreConfig config, JsonHttpClient client) : base(config, client, "installedApp")
         {

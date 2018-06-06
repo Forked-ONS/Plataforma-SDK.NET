@@ -7,5 +7,7 @@ namespace ONS.SDK.Infra {
             this.Scheme = conf.GetValue ("EVENT_MANAGER_SCHEME", "http");
             this.Port = conf.GetValue ("EVENT_MANAGER_PORT", "8081");
         }
+
+        public EventManagerConfig() {}
     }
 }

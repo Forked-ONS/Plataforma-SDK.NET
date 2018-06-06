@@ -9,5 +9,7 @@ namespace ONS.SDK.Infra
             this.Scheme = conf.GetValue ("COREAPI_SCHEME", "http");
             this.Port = conf.GetValue ("COREAPI_PORT", "9110");
         }
+
+        public CoreConfig(){}
     }
 }

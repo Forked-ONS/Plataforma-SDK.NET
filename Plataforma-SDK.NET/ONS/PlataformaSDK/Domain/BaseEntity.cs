@@ -6,6 +6,7 @@ namespace ONS.PlataformaSDK.Domain
 {
     public class BaseEntity
     {
+        [JsonProperty("id")]
         public string Id{get;set;}
         
         [JsonProperty("_metadata")]

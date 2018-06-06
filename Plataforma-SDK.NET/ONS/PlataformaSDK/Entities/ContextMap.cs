@@ -16,9 +16,11 @@ namespace ONS.PlataformaSDK.Entities
 
         public ContextMap(PlatformMap platformMap)
         {
+            this.Id = platformMap.Id;
             this.Name = platformMap.Name;
             this.ProcessId = platformMap.ProcessId;
             this.SystemId = platformMap.SystemId;
+            this._Metadata = platformMap._Metadata;
         }
 
     } 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ONS.SDK.Domain.Core;
 using ONS.SDK.Infra;
 using ONS.SDK.Utils.Http;
 

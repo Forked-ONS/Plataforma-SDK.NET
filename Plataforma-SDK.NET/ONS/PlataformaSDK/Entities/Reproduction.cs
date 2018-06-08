@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ONS.PlataformaSDK.Entities
 {
     public class Reproduction
     {
-        public string From;
-        public string To;
+        [JsonProperty("from")]
+        public string From{get;set;}
+        [JsonProperty("to")]
+        public string To{get;set;}
 
         public override bool Equals(object obj)
         {

@@ -1,9 +1,18 @@
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace ONS.SDK.Utils.Http {
     public class JsonHttpClient {
-        private readonly HttpClient _client = new HttpClient ();
+
+        private readonly ILogger _logger;
+
+        private readonly HttpClient _client;
+
+        public JsonHttpClient(ILogger<HttpClient> logger, HttpClient httpClient) {
+            _logger = logger;
+            _client = httpClient;
+        }
 
         public JsonHttpClient () { }
 

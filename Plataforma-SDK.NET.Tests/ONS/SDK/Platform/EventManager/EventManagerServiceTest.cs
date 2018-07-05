@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using ONS.SDK.Configuration;
 using ONS.SDK.Domain.Core;
-using ONS.SDK.Infra;
-using ONS.SDK.Platform.EventManager;
 using ONS.SDK.Utils.Http;
 
 namespace Plataforma_SDK.NET.Tests.ONS.SDK.Platform.EventManager {
@@ -18,8 +17,8 @@ namespace Plataforma_SDK.NET.Tests.ONS.SDK.Platform.EventManager {
             evt.Payload = new Payload() {Id = "1"};
 
             var config = new EventManagerConfig ();
-            var service = new EventManagerService(config, new JsonHttpClient (mock.Object));
-            service.Push(evt);
+            //var service = new EventManagerService(config, new JsonHttpClient (mock.Object));
+            //service.Push(evt);
             mock.Verify(h => h.Put(It.IsAny<string> (), @"{""payload"":{""id"":""1""}"));
         }
     }

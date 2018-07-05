@@ -1,22 +1,68 @@
 /**
 Context builder é a classe responsável por montar um objeto de contexto de execução
 */
-using ONS.SDK.Domain.Core;
-using ONS.SDK.Domain.Services;
+using System;
+using ONS.SDK.Configuration;
+using ONS.SDK.Services;
+using ONS.SDK.Worker;
 
 namespace ONS.SDK.Context {
 
-    public class ContextBuilder<T> {
+    public class ContextBuilder {
 
-        private IProcessMemoryService<T> _processMemory;
+        private IProcessMemoryService _processMemory;
 
         public ContextBuilder () { }
 
-        public ContextBuilder (IProcessMemoryService<T> processMemory) {
+        public ContextBuilder(IProcessMemoryService processMemory) => 
             this._processMemory = processMemory;
+
+        public IContext Build(string instanceId) {
+
+            // TODO colocar logs
+            var memory = _processMemory.Head(instanceId);
+
+            var eventName = memory.Event.Value<string>("name");
+
+            var typePayload = SDKConfiguration.GetTypePayload(eventName);
+
+            var typeContext = typeof(SDKContext<>).MakeGenericType(typePayload);
+            
+            var context = (IContext) Activator.CreateInstance(typeContext);
+
+            var typeEvent = typeof(SDKEvent<>).MakeGenericType(typePayload);
+
+            context.SetEvent((IEvent) memory.Event.ToObject(typeEvent));//(IEvent) Activator.CreateInstance(typeEvent);
+
+            return context;
         }
-        public Context<T> Build (string instanceId) {
-            return new Context<T> () { Event = new Event<T> (), DataSet = new DataSet () };
+
+        public IContext Build(IPayload payload, string eventName = SDKEventAttribute.DefaultEvent) {
+
+            // TODO ajustar para construir a api para salvar
+            var memory = _processMemory.Head("User");
+
+            // TODO carregar evento
+            var typePayload = payload.GetType();
+
+            var typeContext = typeof(SDKContext<>).MakeGenericType(typePayload);
+            
+            var context = (IContext) Activator.CreateInstance(typeContext);
+
+            var typeEvent = typeof(SDKEvent<>).MakeGenericType(typePayload);
+
+            context.SetEvent((IEvent) memory.Event.ToObject(typeEvent));//(IEvent) Activator.CreateInstance(typeEvent);
+
+            return context;
+
+            // TODO completar context
+            /*context.Event = new SDKEvent() {
+                Name = eventName,
+                Payload = payload
+            };*/
+
+            return context;
         }
+        
     }
 }

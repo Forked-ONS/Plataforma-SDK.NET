@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using ONS.SDK.Configuration;
 using ONS.SDK.Domain.Core;
-using ONS.SDK.Infra;
 using ONS.SDK.Platform.Core;
 using ONS.SDK.Utils.Http;
 

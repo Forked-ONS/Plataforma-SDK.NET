@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
+
 namespace ONS.SDK.Domain.Core {
-    public class Memory<T> {
-        public Event<T> Event { get; set; }
+    public class Memory {
+        public JObject Event { get; set; }
         public string ProcessId { get; set; }
         public string SystemId { get; set; }
         public string InstanceId { get; set; }

@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using ONS.SDK.App;
-using ONS.SDK.App.Interfaces;
-using ONS.SDK.Domain.Interfaces;
+using ONS.SDK.Builder;
+using ONS.SDK.Builder.Generic;
+using ONS.SDK.Extensions.Builder;
 
 namespace ONS.SDK.AppTest {
 
@@ -12,42 +12,35 @@ namespace ONS.SDK.AppTest {
 
         [Test]
         public void ShouldBuildApp(){
-            var app = AppBuilder.CreateDefaultBuilder(null)
+            /*var app = AppBuilder.CreateDefaultBuilder(null)
             .UseStartup<Startup>()
-            .UseDomain<Domain>()
-            .UseEventPayloadType<Payload>()
-            .UseRunner<Runner>()
-            .Build();
+            .UseSDK();*/
 
             Assert.AreEqual(true, Startup.PassHere);
-            Assert.IsNotNull(app.Provider.GetService(typeof(IDomainContext)));
-            Assert.IsNotNull(app.Provider.GetService(typeof(IRunnable)));
         }
     }
 
-    class Startup : IStartup
+    class Startup : ONS.SDK.Builder.IStartup
     {
         public static bool PassHere {get;set;}
 
         public Startup(IConfiguration conf){}
 
         public void ConfigureServices(IServiceCollection services) => Startup.PassHere = true;
+
+        public void Configure(IAppBuilder app)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
-    class Domain : IDomainContext
+    /*class Domain : IDomainContext
     {
 
-    }
+    }*/
 
     class Payload {
 
     }
 
-    class Runner : IRunnable
-    {
-        public void Run()
-        {
-
-        }
-    }
 }

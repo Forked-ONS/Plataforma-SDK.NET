@@ -53,8 +53,6 @@ namespace ONS.SDK.Context {
 
             context.SetEvent((IEvent) memory.Event.ToObject(typeEvent));//(IEvent) Activator.CreateInstance(typeEvent);
 
-            return context;
-
             // TODO completar context
             /*context.Event = new SDKEvent() {
                 Name = eventName,

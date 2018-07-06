@@ -2,6 +2,7 @@
 Context builder é a classe responsável por montar um objeto de contexto de execução
 */
 using System;
+using Newtonsoft.Json.Linq;
 using ONS.SDK.Configuration;
 using ONS.SDK.Services;
 using ONS.SDK.Worker;
@@ -22,17 +23,18 @@ namespace ONS.SDK.Context {
             // TODO colocar logs
             var memory = _processMemory.Head(instanceId);
 
-            var eventName = memory.Event.Value<string>("name");
+            var eventName = memory.Event.Name;
 
             var typePayload = SDKConfiguration.GetTypePayload(eventName);
 
             var typeContext = typeof(SDKContext<>).MakeGenericType(typePayload);
             
-            var context = (IContext) Activator.CreateInstance(typeContext);
+            var context = (IContext) Activator.CreateInstance(typeContext, memory);
 
-            var typeEvent = typeof(SDKEvent<>).MakeGenericType(typePayload);
-
-            context.SetEvent((IEvent) memory.Event.ToObject(typeEvent));//(IEvent) Activator.CreateInstance(typeEvent);
+            JObject jobjPayload = context.GetEvent().MemoryEvent.Payload as JObject;
+            if (jobjPayload != null) {
+                context.GetEvent().SetPayload((IPayload) jobjPayload.ToObject(typePayload));
+            }
 
             return context;
         }
@@ -47,17 +49,7 @@ namespace ONS.SDK.Context {
 
             var typeContext = typeof(SDKContext<>).MakeGenericType(typePayload);
             
-            var context = (IContext) Activator.CreateInstance(typeContext);
-
-            var typeEvent = typeof(SDKEvent<>).MakeGenericType(typePayload);
-
-            context.SetEvent((IEvent) memory.Event.ToObject(typeEvent));//(IEvent) Activator.CreateInstance(typeEvent);
-
-            // TODO completar context
-            /*context.Event = new SDKEvent() {
-                Name = eventName,
-                Payload = payload
-            };*/
+            var context = (IContext) Activator.CreateInstance(typeContext, memory);
 
             return context;
         }

@@ -1,7 +1,23 @@
+using ONS.SDK.Domain.Core;
+
 namespace ONS.SDK.Context
 {
     public interface IContext
     {
+        string ProcessId {get;}
+        
+        string SystemId {get;}
+        
+        string InstanceId {get;}
+        
+        string EventOut {get;}
+        
+        bool Commit {get;}
+        
+        ProcessMap Map {get;}
+
+        Memory Memory {get;}
+
         IEvent GetEvent();
         void SetEvent(IEvent value);
     }
@@ -11,16 +27,4 @@ namespace ONS.SDK.Context
         IEvent<T> Event {get;set;}
     }
     
-    public interface IEvent
-    {
-        string Name {get;set;}
-
-        IPayload GetPayload();
-        void SetPayload(IPayload value);
-    }
-
-    public interface IEvent<T>: IEvent
-    {
-        T Payload {get;set;}
-    }
 }

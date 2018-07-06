@@ -13,8 +13,8 @@ namespace Plataforma_SDK.NET.Tests.ONS.SDK.Platform.EventManager {
         public void ShouldPushEventToEventManager () {
             Mock<HttpClient> mock = new Mock<HttpClient> ();
             mock.Setup (http => http.Put (It.IsAny<string> (), It.IsAny<string> ())).Returns (Task.FromResult (@"{ ""message"":""OK"" } "));
-            var evt = new Event<Payload> ();
-            evt.Payload = new Payload() {Id = "1"};
+            //var evt = new MemoryEvent<Payload> ();
+            //evt.Payload = new Payload() {Id = "1"};
 
             var config = new EventManagerConfig ();
             //var service = new EventManagerService(config, new JsonHttpClient (mock.Object));

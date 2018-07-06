@@ -61,6 +61,28 @@ namespace ONS.SDK.Worker
             //var args = methodInfo.GetParameters();
         }
 
+        private object[] _resolveArgs(MethodInfo methodInfo, IContext context) 
+        {    
+            var retorno = new List<object>();
+            var parameters = methodInfo.GetParameters();
+
+            foreach(var parameter in parameters) {
+                var type = parameter.ParameterType;
+
+                if (typeof(IEvent).IsAssignableFrom(type)) {
+                    retorno.Add(context.GetEvent());
+                }
+                else if (typeof(IPayload).IsAssignableFrom(type)) {
+                    retorno.Add(context.GetEvent().GetPayload());
+                }
+                else if (typeof(IContext).IsAssignableFrom(type)) {
+                    retorno.Add(context);
+                }
+            }
+
+            return retorno.ToArray();
+        }
+
         public void Run(string instanceId)
         {
             if (string.IsNullOrEmpty(instanceId)) {
@@ -70,33 +92,26 @@ namespace ONS.SDK.Worker
             var context = _contextBuilder.Build(instanceId);
 
             if (context == null) {
-                // TODO mensagem de erro
                 throw new SDKRuntimeException(
                     string.Format("Error building instance context. INSTANCE_ID={0}", instanceId));
             }
 
-            MethodInfo methodInfo = SDKConfiguration.GetMethodByEvent(context.GetEvent().Name);
-            /*if (SDKConfiguration.Binds.ContainsKey(eventName)) {
-                methodInfo = SDKConfiguration.Binds[eventName];
-            }*/
-
+            var methodInfo = SDKConfiguration.GetMethodByEvent(context.GetEvent().Name);
+            
             if (methodInfo == null) {
-                // TODO mensagem de erro
-                throw new Exception("Erro ao tentar obter worker.");
+                
+                throw new SDKRuntimeException(
+                    string.Format("Method not found to event. Event={0}", context.GetEvent().Name));
             }
         
             var runner = GetRunner(methodInfo.DeclaringType);    
 
             if (runner == null) {
-                // TODO mensagem de erro
-                throw new Exception("methodInfo.DeclaringType");
+                throw new SDKRuntimeException(
+                    string.Format("Type not register to dependence injection. Type={0}", methodInfo.DeclaringType));
             }
 
-            var args = methodInfo.GetParameters();
-
-            // TODO apenas context de argumento
-            methodInfo.Invoke(runner, new [] {context});
-            //var args = methodInfo.GetParameters();
+            methodInfo.Invoke(runner, _resolveArgs(methodInfo, context));
             
         }
     }

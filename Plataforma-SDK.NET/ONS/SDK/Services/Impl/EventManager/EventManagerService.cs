@@ -15,7 +15,7 @@ namespace ONS.SDK.Services.Impl.EventManager
             this._client = client;
         }
 
-        public void Push<T> (Event<T> e) {
+        public void Push (MemoryEvent e) {
             this._client.Put<PushResponse>($"{this._config.Url}/sendevent", e);
         }
     }

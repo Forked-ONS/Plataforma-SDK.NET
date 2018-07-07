@@ -8,12 +8,12 @@ using ONS.SDK.Worker;
 
 namespace ONS.SDK.Data.Impl
 {
-    public class SDKDataSet<T> : IDataSet<T> where T: BaseEntity
+    public class SDKDataSet<T> : IDataSet<T> where T: Model
     {
-        private readonly ICollection<EntityState<T>> _entities = new List<EntityState<T>>();
+        private readonly IList<T> _entities = new List<T>();
         private readonly string _typeName;
 
-        public SDKDataSet(string typeName, ICollection<EntityState<T>> entities = null) 
+        public SDKDataSet(string typeName, ICollection<T> entities = null) 
         {
             if (string.IsNullOrEmpty(typeName)) {
                 throw new SDKRuntimeException("Invalid typeName is null.");
@@ -28,20 +28,10 @@ namespace ONS.SDK.Data.Impl
             }            
         }
 
-        public IEnumerable<IEntityState> EntitiesStates {
+        public IEnumerable AllEntities {
             get {
                 return _entities;
             }
-        }
-
-        public IEnumerable<EntityState<T>> AllStates {
-            get {
-                return _entities;
-            }
-        }
-
-        private EntityState<T> _findEntityState(string id) {
-            return _entities.FirstOrDefault(it => string.Equals(it.Entity.Id, id));
         }
 
         public T FindById(string id) {
@@ -50,13 +40,20 @@ namespace ONS.SDK.Data.Impl
                 throw new SDKRuntimeException("Entity id is null.");
             }
             
-            T retorno = null;
+            return _entities.FirstOrDefault(it => string.Equals(it.Id, id));
+        }
 
-            var entityState = _findEntityState(id);
-            if (entityState != null) {
-                retorno = entityState.Entity;
+        private int _findIndexOfById(string id) 
+        {    
+            int retorno = -1;
+            for (int i = 0; i < _entities.Count; i++)
+            {
+                if (string.Equals(_entities[i].Id, id)) {
+                    retorno = i;
+                    break;
+                }
             }
-
+            
             return retorno;
         }
 
@@ -69,25 +66,22 @@ namespace ONS.SDK.Data.Impl
                 throw new SDKRuntimeException("System can't insert entity with null id.");
             }
 
-            var entityState = _findEntityState(entity.Id);
+            var entityPersistent = FindById(entity.Id);
 
-            if (entityState != null) {
+            if (entityPersistent != null) {
                 throw new SDKRuntimeException(
                     string.Format("Entity already exists in context. Entity.Id={0}, Entity.Type={1}", 
                     entity.Id, entity.GetType().Name)
                 );
             }
             
-            entityState = new EntityState<T>() {
-                Entity = entity,
-                Metadata = new Metadata() {
-                    // TODO precisa verificar as demais propriedades.
-                    Type = _typeName,
-                    ChangeTrack = ChangeTrack.CREATE
-                }
+            entity._Metadata = new Metadata() {
+                // TODO precisa verificar as demais propriedades.
+                Type = _typeName,
+                ChangeTrack = ChangeTrack.CREATE
             };
 
-            _entities.Add(entityState);
+            _entities.Add(entity);
         }
 
         public void Update(T entity)
@@ -98,22 +92,49 @@ namespace ONS.SDK.Data.Impl
             if (string.IsNullOrEmpty(entity.Id)) {
                 throw new SDKRuntimeException("System can't update entity with null id.");
             }
-
-            var entityState = _findEntityState(entity.Id);
             
-            if (entityState == null) {
+            var indexEntity = _findIndexOfById(entity.Id);
+
+            if (indexEntity < 0) {
                 throw new SDKRuntimeException(
                     string.Format("Entity not found. Entity.Id={0}, Entity.Type={1}", 
                     entity.Id, entity.GetType().Name));
             }
 
-            if (entityState.Metadata.ChangeTrack == ChangeTrack.CREATE) {
+            var entityPersistent = _entities[indexEntity];
+
+            if (entityPersistent._Metadata.ChangeTrack == ChangeTrack.CREATE) {
                 throw new SDKRuntimeException(
                     string.Format("Entity already been in create state. Entity.Id={0}, Entity.Type={1}", 
                     entity.Id, entity.GetType().Name));
             }
 
-            entityState.Metadata.ChangeTrack = ChangeTrack.UPDATE;
+            entity._Metadata = entityPersistent._Metadata;
+            entity._Metadata.ChangeTrack = ChangeTrack.UPDATE;
+            _entities[indexEntity] = entity;            
+        }
+
+        public void DeleteById(string id)
+        {
+            if (string.IsNullOrEmpty(id)) {
+                throw new SDKRuntimeException("System can't delete entity with null id.");
+            }
+
+            var entityPersistent = FindById(id);
+            
+            if (entityPersistent == null) {
+                throw new SDKRuntimeException(
+                    string.Format("Entity not found. Entity.Id={0}, Entity.Type={1}", 
+                    id, typeof(T).Name));
+            }
+
+            if (entityPersistent._Metadata.ChangeTrack == ChangeTrack.CREATE) {
+                throw new SDKRuntimeException(
+                    string.Format("Entity already been in create state. Entity.Id={0}, Entity.Type={1}", 
+                    id, typeof(T).Name));
+            }
+
+            entityPersistent._Metadata.ChangeTrack = ChangeTrack.DELETE;
         }
 
         public void Delete(T entity)
@@ -125,26 +146,26 @@ namespace ONS.SDK.Data.Impl
                 throw new SDKRuntimeException("System can't delete entity with null id.");
             }
 
-            var entityState = _findEntityState(entity.Id);
+            var entityPersistent = FindById(entity.Id);
             
-            if (entityState == null) {
+            if (entityPersistent == null) {
                 throw new SDKRuntimeException(
                     string.Format("Entity not found. Entity.Id={0}, Entity.Type={1}", 
                     entity.Id, entity.GetType().Name));
             }
 
-            if (entityState.Metadata.ChangeTrack == ChangeTrack.CREATE) {
+            if (entityPersistent._Metadata.ChangeTrack == ChangeTrack.CREATE) {
                 throw new SDKRuntimeException(
                     string.Format("Entity already been in create state. Entity.Id={0}, Entity.Type={1}", 
                     entity.Id, entity.GetType().Name));
             }
 
-            entityState.Metadata.ChangeTrack = ChangeTrack.DELETE;
+            entityPersistent._Metadata.ChangeTrack = ChangeTrack.DELETE;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _entities.Select(it => it.Entity).GetEnumerator();
+            return _entities.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

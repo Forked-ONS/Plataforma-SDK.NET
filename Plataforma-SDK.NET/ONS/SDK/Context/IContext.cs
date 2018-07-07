@@ -17,6 +17,8 @@ namespace ONS.SDK.Context
 
         Memory Memory {get;}
 
+        void UpdateMemory();
+
         IDataContext DataContext {get;}
 
         IEvent GetEvent();

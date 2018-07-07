@@ -31,7 +31,7 @@ namespace ONS.SDK.Platform.CoreTest
                 Name="cenario",
                 Description="descricao"
             };
-            branch._Metadata.ChangeTrack = "create";
+            //branch._Metadata.ChangeTrack = "create";
 
             service.Save(branch);
             mock.Verify(http => http.Post (It.IsAny<string>(), branchPersistBody));

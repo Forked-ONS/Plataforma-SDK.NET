@@ -1,3 +1,5 @@
+using System.Linq;
+using ONS.SDK.Configuration;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.ProcessMemmory;
 
@@ -39,6 +41,18 @@ namespace ONS.SDK.Context
         public void SetEvent(IEvent value)
         {
             Event = (IEvent<T>)value;
+        }
+
+        public void UpdateMemory() 
+        {
+            this.Memory.Event.Payload = this.GetEvent().GetPayload();
+            foreach (var keyPair in this.Memory.DataSet.Entities.ToList()) 
+            {
+                var mapName = keyPair.Key;
+                var typeEntity = SDKDataMap.GetMap(mapName);
+                var setEntities = this.DataContext.Set(typeEntity);
+                this.Memory.DataSet.Entities[mapName] = setEntities.AllEntities;
+            }
         }
     }
 

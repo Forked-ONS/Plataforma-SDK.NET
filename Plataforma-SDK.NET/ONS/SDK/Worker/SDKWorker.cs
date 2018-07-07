@@ -131,23 +131,13 @@ namespace ONS.SDK.Worker
 
             methodInfo.Invoke(runner, _resolveArgs(methodInfo, context));
 
+            context.UpdateMemory();
+            
             // TODO salvando na memória de cálculo
-            context.Memory.Event.Payload = context.GetEvent().GetPayload();
-            foreach (var keyPair in context.Memory.DataSet.Entities.ToList()) {
-                var mapName = keyPair.Key;
-                var typeEntity = SDKDataMap.GetMap(mapName);
-                var setEntitiesState = context.DataContext.Set(typeEntity);
-                var listEntities = new List<object>();
-                foreach(var entityState in setEntitiesState.EntitiesStates) {
-                    var entityObj = entityState.Enclosure;
-                    listEntities.Add(entityObj);
-                }
-                context.Memory.DataSet.Entities[mapName] = listEntities;
-            }
+            
             var settings = new Newtonsoft.Json.JsonSerializerSettings
             {
-                //ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver(),
-                    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+                NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
             };
             Console.WriteLine("##############3 memory: " + Newtonsoft.Json.JsonConvert.SerializeObject(context.Memory, settings));
 

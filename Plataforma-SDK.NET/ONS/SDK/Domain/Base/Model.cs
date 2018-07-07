@@ -7,6 +7,6 @@ namespace ONS.SDK.Domain.Base {
         public string Id { get; set; }
 
         [JsonProperty("_metadata")]
-        public Metadata _Metadata { get; set; }
+        internal Metadata _Metadata { get; set; }
     }
 }

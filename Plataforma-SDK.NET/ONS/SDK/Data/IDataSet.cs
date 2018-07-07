@@ -5,12 +5,12 @@ using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Data
 {
-    public interface IDataSet
+    public interface IDataSet: IEnumerable
     {
-         IEnumerable<IEntityState> EntitiesStates {get;}
+        IEnumerable AllEntities {get;}
     }
 
-    public interface IDataSet<T>: IDataSet, IEnumerable<T> where T: BaseEntity
+    public interface IDataSet<T>: IDataSet, IEnumerable<T> where T: Model
     {
          void Insert(T entity);
 
@@ -18,6 +18,7 @@ namespace ONS.SDK.Data
 
          void Delete(T entity);
 
-         IEnumerable<EntityState<T>> AllStates {get;}
+         T FindById(string id);
+
     }
 }

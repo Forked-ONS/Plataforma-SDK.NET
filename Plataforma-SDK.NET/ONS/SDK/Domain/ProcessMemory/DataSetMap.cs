@@ -7,6 +7,6 @@ namespace ONS.SDK.Domain.ProcessMemmory
     public class DataSetMap
     {
         [JsonProperty("entities")]
-        public Dictionary<string, List<object>> Entities {get;set;}
+        public Dictionary<string, object> Entities {get;set;}
     }
 }

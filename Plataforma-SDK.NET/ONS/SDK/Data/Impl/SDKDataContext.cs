@@ -31,7 +31,7 @@ namespace ONS.SDK.Data.Impl
             }
         }
 
-        public IDataSet<T> Set<T>() where T: BaseEntity {
+        public IDataSet<T> Set<T>() where T: Model {
             return (IDataSet<T>) Set(typeof(T));
         }
 

@@ -8,8 +8,9 @@ namespace ONS.SDK.Data
     {
         IEnumerable<IDataSet> AllSet {get;}
 
-         IDataSet<T> Set<T>() where T: BaseEntity;
+         IDataSet<T> Set<T>() where T: Model;
 
          IDataSet Set(Type type);
+
     }
 }

@@ -22,31 +22,13 @@ namespace ONS.SDK.Data.Impl
                 foreach(var keyPair in dataSetMap.Entities) 
                 {       
                     var mapName = keyPair.Key;
-                    var entities = keyPair.Value;
+                    var entities = keyPair.Value as JArray;
 
-                    if (entities != null && entities.Any()) 
+                    if (entities != null) 
                     {
                         var type = SDKDataMap.GetMap(mapName);
-                        
-                        var typeEntityState = typeof(EntityState<>).MakeGenericType(type);
 
-                        var entitiesSet = (IList) Activator.CreateInstance(typeof(List<>).MakeGenericType(typeEntityState));
-                        
-                        foreach(var objEntity in entities) 
-                        {
-                            var jsonObj = objEntity as JObject;
-
-                            if (jsonObj != null) 
-                            {                                
-                                var jmetadata = jsonObj.GetValue("_metadata");
-                                var metadata = jmetadata.ToObject<Metadata>();
-                                var entity = jsonObj.ToObject(type);
-
-                                var entityState = Activator.CreateInstance(typeEntityState, entity, metadata);
-
-                                entitiesSet.Add(entityState);
-                            }
-                        }
+                        var entitiesSet = entities.ToObject(typeof(List<>).MakeGenericType(type));
 
                         var dataset = (IDataSet) Activator.CreateInstance(
                             typeof(SDKDataSet<>).MakeGenericType(type), 

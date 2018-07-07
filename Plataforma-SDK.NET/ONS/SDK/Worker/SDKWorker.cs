@@ -7,6 +7,8 @@ using System.Threading;
 using Microsoft.Extensions.Configuration;
 using ONS.SDK.Configuration;
 using ONS.SDK.Context;
+using ONS.SDK.Data;
+using ONS.SDK.Services;
 
 namespace ONS.SDK.Worker
 {
@@ -14,8 +16,11 @@ namespace ONS.SDK.Worker
     {
         private readonly ContextBuilder _contextBuilder;
 
-        public SDKWorker(ContextBuilder contextBuilder) {
+        private readonly IProcessMemoryService _processMemoryService;
+
+        public SDKWorker(ContextBuilder contextBuilder, IProcessMemoryService processMemoryService) {
             _contextBuilder = contextBuilder;
+            _processMemoryService = processMemoryService;
         }
 
         public object GetRunner(Type type) {
@@ -78,6 +83,19 @@ namespace ONS.SDK.Worker
                 else if (typeof(IContext).IsAssignableFrom(type)) {
                     retorno.Add(context);
                 }
+                else if (typeof(IDataSet).IsAssignableFrom(type)) {
+                    
+                    var methodSet = context.DataContext.GetType().GetMethods()
+                        .FirstOrDefault(m => m.Name == "Set" && m.IsGenericMethod);
+                    
+                    IDataSet dataSet = null;
+                    if (methodSet != null) {
+                        var typeGeneric = type.GetGenericArguments();
+                        methodSet = methodSet.MakeGenericMethod(typeGeneric);
+                        dataSet = (IDataSet) methodSet.Invoke(context.DataContext, new object[0]);
+                    }
+                    retorno.Add(dataSet);
+                }
             }
 
             return retorno.ToArray();
@@ -112,7 +130,28 @@ namespace ONS.SDK.Worker
             }
 
             methodInfo.Invoke(runner, _resolveArgs(methodInfo, context));
-            
+
+            // TODO salvando na memória de cálculo
+            context.Memory.Event.Payload = context.GetEvent().GetPayload();
+            foreach (var keyPair in context.Memory.DataSet.Entities.ToList()) {
+                var mapName = keyPair.Key;
+                var typeEntity = SDKDataMap.GetMap(mapName);
+                var setEntitiesState = context.DataContext.Set(typeEntity);
+                var listEntities = new List<object>();
+                foreach(var entityState in setEntitiesState.EntitiesStates) {
+                    var entityObj = entityState.Enclosure;
+                    listEntities.Add(entityObj);
+                }
+                context.Memory.DataSet.Entities[mapName] = listEntities;
+            }
+            var settings = new Newtonsoft.Json.JsonSerializerSettings
+            {
+                //ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver(),
+                    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+            };
+            Console.WriteLine("##############3 memory: " + Newtonsoft.Json.JsonConvert.SerializeObject(context.Memory, settings));
+
+            _processMemoryService.Commit(context.Memory);
         }
     }
 }

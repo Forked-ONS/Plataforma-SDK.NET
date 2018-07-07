@@ -1,5 +1,5 @@
 using ONS.SDK.Configuration;
-using ONS.SDK.Domain.Core;
+using ONS.SDK.Domain.ProcessMemmory;
 using ONS.SDK.Utils.Http;
 
 namespace ONS.SDK.Services.Impl.EventManager 

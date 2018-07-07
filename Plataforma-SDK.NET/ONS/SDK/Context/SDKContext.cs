@@ -1,4 +1,5 @@
-using ONS.SDK.Domain.Core;
+using ONS.SDK.Data;
+using ONS.SDK.Domain.ProcessMemmory;
 
 namespace ONS.SDK.Context
 {
@@ -6,8 +7,11 @@ namespace ONS.SDK.Context
     {
         private readonly Memory _memory;
 
-        public SDKContext(Memory memory) {
+        private readonly IDataContext _dataContext;
+
+        public SDKContext(Memory memory, IDataContext dataContext = null) {
             _memory = memory;
+            _dataContext = dataContext;
             Event = new SDKEvent<T>(_memory.Event);
         }
 
@@ -20,12 +24,12 @@ namespace ONS.SDK.Context
         public string EventOut { get{return _memory.EventOut;} }
         
         public bool Commit { get{return _memory.Commit;} }
-        
-        public ProcessMap Map { get{return _memory.Map;} }
 
         public IEvent<T> Event {get;set;}
 
         public Memory Memory { get{return _memory;} }
+
+        public IDataContext DataContext {get{return _dataContext;}}
 
         public IEvent GetEvent()
         {

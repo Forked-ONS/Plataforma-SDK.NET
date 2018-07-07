@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using ONS.SDK.Context;
 using ONS.SDK.Log;
 using Microsoft.Extensions.Logging;
+using ONS.SDK.Data;
 
 namespace ONS.SDK.Extensions.Builder
 {
@@ -36,19 +37,63 @@ namespace ONS.SDK.Extensions.Builder
             return app;
         }
 
-        public static IWebHostBuilder AddSDKBind<T>(this IWebHostBuilder builder)
+        public static IWebHostBuilder BindEvents<T>(this IWebHostBuilder builder)
         {
-            SDKConfiguration.Bind<T>();
+            SDKConfiguration.BindEvents<T>();
             
             return builder;
         }
 
-        public static IApplicationBuilder AddSDKBind<T>(this IApplicationBuilder builder)
+        public static IApplicationBuilder BindEvents<T>(this IApplicationBuilder builder)
         {
-            SDKConfiguration.Bind<T>();
+            SDKConfiguration.BindEvents<T>();
             
             return builder;
         }
-        
+
+        public static IWebHostBuilder BindDataMap<T>(this IWebHostBuilder builder, string mapName)
+        {
+            SDKDataMap.BindMap<T>(mapName);
+            
+            return builder;
+        }
+
+        public static IApplicationBuilder BindDataMap<T>(this IApplicationBuilder builder, string mapName)
+        {
+            SDKDataMap.BindMap<T>(mapName);
+            
+            return builder;
+        }
+
+        public static IWebHostBuilder BindDataMap<T>(this IWebHostBuilder builder)
+        {
+            SDKDataMap.BindMap<T>();
+            
+            return builder;
+        }
+
+        public static IApplicationBuilder BindDataMap<T>(this IApplicationBuilder builder)
+        {
+            SDKDataMap.BindMap<T>();
+            
+            return builder;
+        }
+
+        public static IWebHostBuilder UseDataMap<T>(
+            this IWebHostBuilder builder) where T: IDataMapCollection
+        {   
+            SDKDataMap.BindsMapCollection<T>();
+            
+            return builder;
+        }
+
+        public static IApplicationBuilder UseDataMap<T>(
+            this IApplicationBuilder builder) where T: IDataMapCollection
+        {   
+            SDKDataMap.BindsMapCollection<T>();
+            
+            return builder;
+        }
+
     }
 }

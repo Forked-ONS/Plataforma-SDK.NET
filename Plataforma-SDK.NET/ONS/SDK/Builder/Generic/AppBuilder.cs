@@ -11,6 +11,7 @@ using ONS.SDK.Extensions.DependencyInjection;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using ONS.SDK.Log;
+using ONS.SDK.Data;
 
 namespace ONS.SDK.Builder.Generic
 {
@@ -74,9 +75,9 @@ namespace ONS.SDK.Builder.Generic
             return this._app;
         }
 
-        public IAppBuilder AddSDKBind<T>() 
+        public IAppBuilder BindEvents<T>() 
         {
-            SDKConfiguration.Bind<T>();
+            SDKConfiguration.BindEvents<T>();
 
             return this;
         }
@@ -97,6 +98,27 @@ namespace ONS.SDK.Builder.Generic
             _startup = instance;
             
             instance.ConfigureServices (this._services);
+            
+            return this;
+        }
+
+        public IAppBuilder BindDataMap<T>(string mapName)
+        {
+            SDKDataMap.BindMap<T>(mapName);
+            
+            return this;
+        }
+
+        public IAppBuilder BindDataMap<T>()
+        {
+            SDKDataMap.BindMap<T>();
+            
+            return this;
+        }
+
+        public IAppBuilder UseDataMap<T>() where T: IDataMapCollection
+        {   
+            SDKDataMap.BindsMapCollection<T>();
             
             return this;
         }

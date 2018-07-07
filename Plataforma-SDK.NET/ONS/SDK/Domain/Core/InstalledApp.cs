@@ -1,3 +1,5 @@
+using ONS.SDK.Domain.Base;
+
 namespace ONS.SDK.Domain.Core {
     public class InstalledApp : Model {
         public string Host { get; set; }

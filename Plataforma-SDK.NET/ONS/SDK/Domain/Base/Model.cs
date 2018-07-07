@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace ONS.SDK.Domain.Core {
+namespace ONS.SDK.Domain.Base {
     public class Model {
 
         [JsonProperty("id")]

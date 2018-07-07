@@ -4,8 +4,10 @@ Context builder é a classe responsável por montar um objeto de contexto de exe
 using System;
 using Newtonsoft.Json.Linq;
 using ONS.SDK.Configuration;
+using ONS.SDK.Data;
 using ONS.SDK.Services;
 using ONS.SDK.Worker;
+using ONS.SDK.Data;
 
 namespace ONS.SDK.Context {
 
@@ -13,10 +15,14 @@ namespace ONS.SDK.Context {
 
         private IProcessMemoryService _processMemory;
 
+        private IDataContextBuilder _dataContextBuilder;
+
         public ContextBuilder () { }
 
-        public ContextBuilder(IProcessMemoryService processMemory) => 
+        public ContextBuilder(IProcessMemoryService processMemory, IDataContextBuilder dataContextBuilder) {
             this._processMemory = processMemory;
+            this._dataContextBuilder = dataContextBuilder;
+        }
 
         public IContext Build(string instanceId) {
 
@@ -29,7 +35,9 @@ namespace ONS.SDK.Context {
 
             var typeContext = typeof(SDKContext<>).MakeGenericType(typePayload);
             
-            var context = (IContext) Activator.CreateInstance(typeContext, memory);
+            var dataContext = this._dataContextBuilder.Build(memory.DataSet);
+
+            var context = (IContext) Activator.CreateInstance(typeContext, memory, dataContext);
 
             JObject jobjPayload = context.GetEvent().MemoryEvent.Payload as JObject;
             if (jobjPayload != null) {

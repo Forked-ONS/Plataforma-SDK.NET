@@ -1,5 +1,5 @@
 using ONS.SDK.Configuration;
-using ONS.SDK.Domain.Core;
+using ONS.SDK.Domain.ProcessMemmory;
 using ONS.SDK.Services;
 using ONS.SDK.Services.Impl;
 using Microsoft.Extensions.Logging;
@@ -41,10 +41,6 @@ namespace ONS.SDK.Services.Impl.ProcessMemory.ProcessMemoryClient
             }
             
             return retorno;
-
-            // TODO
-            /*var result = "{ \"event\": { \"name\": \"presentation.atualiza.cenario.request\" }}";
-            return JsonConvert.DeserializeObject<Memory>(result);*/
         }
 
         public void Commit(Memory memory)

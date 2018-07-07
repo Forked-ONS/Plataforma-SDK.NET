@@ -4,6 +4,7 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Domain.Core;
 using ONS.SDK.Platform.Core.Exceptions;
 using ONS.SDK.Utils.Http;
+using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Platform.Core {
     public class CoreService {

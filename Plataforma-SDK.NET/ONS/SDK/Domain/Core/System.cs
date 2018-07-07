@@ -1,3 +1,5 @@
+using ONS.SDK.Domain.Base;
+
 namespace ONS.SDK.Domain.Core {
     public class System : Model {
         public string Description { get; set; }

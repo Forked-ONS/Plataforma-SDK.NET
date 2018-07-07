@@ -1,7 +1,8 @@
 using System;
 using Newtonsoft.Json;
 
-namespace ONS.SDK.Domain.Core {
+namespace ONS.SDK.Domain.Base {
+    
     public class Metadata {
         
         [JsonProperty("branch")]

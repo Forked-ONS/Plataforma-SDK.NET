@@ -1,4 +1,5 @@
-using ONS.SDK.Domain.Core;
+using ONS.SDK.Data;
+using ONS.SDK.Domain.ProcessMemmory;
 
 namespace ONS.SDK.Context
 {
@@ -13,10 +14,10 @@ namespace ONS.SDK.Context
         string EventOut {get;}
         
         bool Commit {get;}
-        
-        ProcessMap Map {get;}
 
         Memory Memory {get;}
+
+        IDataContext DataContext {get;}
 
         IEvent GetEvent();
         void SetEvent(IEvent value);

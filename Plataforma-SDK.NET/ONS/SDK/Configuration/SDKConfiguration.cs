@@ -20,7 +20,7 @@ namespace ONS.SDK.Configuration
             }
         }
 
-        public static void Bind<T>() {
+        public static void BindEvents<T>() {
 
             // TODO validar tipo
             var type = typeof(T);
@@ -36,7 +36,7 @@ namespace ONS.SDK.Configuration
                 
                 var attr = (SDKEventAttribute) m.GetCustomAttributes(typeof(SDKEventAttribute), false).Single();
 
-                _validateInclude(attr.EventName, m);
+                _validateIncludeBindEvent(attr.EventName, m);
 
                 _binds[attr.EventName] = m;
             });
@@ -99,7 +99,7 @@ namespace ONS.SDK.Configuration
             ).Length > 0).ToList();
         }
 
-        private static void _validateInclude(string eventName, MethodInfo method) 
+        private static void _validateIncludeBindEvent(string eventName, MethodInfo method) 
         {
             if (_binds.Any() && _binds.ContainsKey(SDKEventAttribute.DefaultEvent)) {
 
@@ -130,7 +130,7 @@ namespace ONS.SDK.Configuration
             }
         }
 
-        public static void ValidateBinds() {
+        public static void ValidateBindsEvent() {
             // TODO validar os binds configurados com os descritos nos mapas
         }
 

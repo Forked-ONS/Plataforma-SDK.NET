@@ -13,7 +13,7 @@ namespace ONS.SDK.Test
         {
             AppBuilder.CreateDefaultBuilder(null)
             .UseStartup<Startup>()
-            .AddSDKBind<CalculoTaxaProcess>()
+            .BindEvents<CalculoTaxaProcess>()
             .RunSDK();
         }
     }

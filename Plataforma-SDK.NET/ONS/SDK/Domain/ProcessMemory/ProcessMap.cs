@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using ONS.SDK.Domain.Base;
 
-namespace ONS.SDK.Domain.Core {
+namespace ONS.SDK.Domain.ProcessMemmory {
+    
     public class ProcessMap : Model {
         
         [JsonProperty("content")]

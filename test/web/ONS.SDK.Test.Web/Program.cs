@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ONS.SDK.Extensions.Builder;
 using ONS.SDK.Test.Web.Process;
+using ONS.SDK.Test.Web.Entities;
 
 namespace ONS.SDK.Test.Web
 {
@@ -29,7 +30,8 @@ namespace ONS.SDK.Test.Web
             }
 
             webHost
-                .AddSDKBind<CenarioBusiness>()
+                .BindEvents<CenarioBusiness>()
+                .BindDataMap<Conta>()
                 .RunSDK();
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Domain.Core {
     public class Map : Model {

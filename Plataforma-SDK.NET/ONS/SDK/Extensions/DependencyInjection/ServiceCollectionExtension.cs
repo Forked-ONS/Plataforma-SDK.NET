@@ -11,6 +11,8 @@ using ONS.SDK.Services;
 using ONS.SDK.Services.Impl.ProcessMemory.ProcessMemoryClient;
 using ONS.SDK.Services.Impl.EventManager;
 using ONS.SDK.Worker;
+using ONS.SDK.Data.Impl;
+using ONS.SDK.Data;
 
 namespace ONS.SDK.Extensions.DependencyInjection
 {
@@ -24,6 +26,8 @@ namespace ONS.SDK.Extensions.DependencyInjection
             serviceCollection.AddSingleton<CoreConfig>();
             serviceCollection.AddSingleton<SDKExecutionContext>();
             serviceCollection.AddSingleton<ContextBuilder>();
+            
+            serviceCollection.AddSingleton<IDataContextBuilder, SDKDataContextBuilder>();
 
             serviceCollection.AddSingleton<IProcessMemoryService, ProcessMemoryService>();
             serviceCollection.AddSingleton<IEventManagerService, EventManagerService>();
@@ -35,6 +39,29 @@ namespace ONS.SDK.Extensions.DependencyInjection
 
             return serviceCollection;
         }
-        
+
+        public static IServiceCollection UseDataMap<T>(
+            this IServiceCollection serviceCollection) where T: IDataMapCollection
+        {   
+            SDKDataMap.BindsMapCollection<T>();
+            
+            return serviceCollection;
+        }
+
+        public static IServiceCollection BindDataMap<T>(
+            this IServiceCollection serviceCollection, string mapName)
+        {
+            SDKDataMap.BindMap<T>(mapName);
+            
+            return serviceCollection;
+        }
+
+        public static IServiceCollection BindDataMap<T>(this IServiceCollection serviceCollection)
+        {
+            SDKDataMap.BindMap<T>();
+            
+            return serviceCollection;
+        }
+
     }
 }

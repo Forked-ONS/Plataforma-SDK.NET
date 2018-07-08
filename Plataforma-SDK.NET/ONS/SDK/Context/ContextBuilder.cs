@@ -7,7 +7,6 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Data;
 using ONS.SDK.Services;
 using ONS.SDK.Worker;
-using ONS.SDK.Data;
 
 namespace ONS.SDK.Context {
 

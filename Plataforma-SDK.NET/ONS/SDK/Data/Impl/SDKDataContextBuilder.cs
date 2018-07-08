@@ -8,6 +8,7 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.Base;
 using ONS.SDK.Domain.ProcessMemmory;
+using ONS.SDK.Worker;
 
 namespace ONS.SDK.Data.Impl
 {
@@ -28,14 +29,19 @@ namespace ONS.SDK.Data.Impl
                     {
                         var type = SDKDataMap.GetMap(mapName);
 
-                        var entitiesSet = entities.ToObject(typeof(List<>).MakeGenericType(type));
+                        if (type != null) {
 
-                        var dataset = (IDataSet) Activator.CreateInstance(
-                            typeof(SDKDataSet<>).MakeGenericType(type), 
-                            mapName, entitiesSet
-                        );
-    
-                        dataSets.Add(dataset);
+                            var entitiesSet = entities.ToObject(typeof(List<>).MakeGenericType(type));
+
+                            var dataset = (IDataSet) Activator.CreateInstance(
+                                typeof(SDKDataSet<>).MakeGenericType(type), 
+                                mapName, entitiesSet
+                            );
+        
+                            dataSets.Add(dataset);
+                        } else {
+                            // LOG como warning
+                        }
                     }
 
                 }

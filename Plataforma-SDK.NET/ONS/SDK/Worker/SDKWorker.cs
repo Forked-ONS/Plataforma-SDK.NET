@@ -29,43 +29,6 @@ namespace ONS.SDK.Worker
             return SDKConfiguration.ServiceProvider.GetService(type);
         }
         
-        public void Run(IPayload payload, string eventName = SDKEventAttribute.DefaultEvent) 
-        {
-            // TODO validar parâmetros
-
-            var context = _contextBuilder.Build(payload, eventName);
-
-            if (context == null) {
-                // TODO mensagem de erro
-                throw new Exception("Erro ao tentar obter worker.");
-            }
-
-            Console.WriteLine("############# context.Event.Name: " + context.GetEvent().Name);
-        
-            MethodInfo methodInfo = SDKConfiguration.GetMethodByEvent(context.GetEvent().Name);
-            /*if (SDKConfiguration.Binds.ContainsKey(eventName)) {
-                methodInfo = SDKConfiguration.Binds[eventName];
-            }*/
-
-            if (methodInfo == null) {
-                // TODO mensagem de erro
-                throw new Exception("Erro ao tentar obter worker.");
-            }
-        
-            var runner = GetRunner(methodInfo.DeclaringType);    
-
-            if (runner == null) {
-                // TODO mensagem de erro
-                throw new Exception("methodInfo.DeclaringType");
-            }
-
-            var args = methodInfo.GetParameters();
-
-            // TODO apenas context de argumento
-            methodInfo.Invoke(runner, new [] {context});
-            //var args = methodInfo.GetParameters();
-        }
-
         private object[] _resolveArgs(MethodInfo methodInfo, IContext context) 
         {    
             var retorno = new List<object>();
@@ -104,6 +67,16 @@ namespace ONS.SDK.Worker
             return retorno.ToArray();
         }
 
+        public void Run(IPayload payload, string eventName = SDKEventAttribute.DefaultEvent) 
+        {
+            // TODO validar parâmetros e evento
+            
+            var context = _contextBuilder.Build(payload, eventName);
+
+            _run(context);
+            
+        }
+
         public void Run(string instanceId)
         {
             if (string.IsNullOrEmpty(instanceId)) {
@@ -112,9 +85,13 @@ namespace ONS.SDK.Worker
 
             var context = _contextBuilder.Build(instanceId);
 
+            _run(context);
+        }
+
+        private void _run(IContext context) {
+
             if (context == null) {
-                throw new SDKRuntimeException(
-                    string.Format("Error building instance context. INSTANCE_ID={0}", instanceId));
+                throw new SDKRuntimeException("Error building instance context.");
             }
 
             var methodInfo = SDKConfiguration.GetMethodByEvent(context.GetEvent().Name);

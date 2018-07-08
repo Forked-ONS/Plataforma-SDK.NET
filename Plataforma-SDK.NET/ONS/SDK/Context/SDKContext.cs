@@ -50,8 +50,12 @@ namespace ONS.SDK.Context
             {
                 var mapName = keyPair.Key;
                 var typeEntity = SDKDataMap.GetMap(mapName);
-                var setEntities = this.DataContext.Set(typeEntity);
-                this.Memory.DataSet.Entities[mapName] = setEntities.AllEntities;
+                if (typeEntity != null) {
+                    var setEntities = this.DataContext.Set(typeEntity);
+                    this.Memory.DataSet.Entities[mapName] = setEntities.AllEntities;
+                } else {
+                    // TODO log warning
+                }
             }
         }
     }

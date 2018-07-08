@@ -5,6 +5,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using ONS.SDK.Configuration;
 using ONS.SDK.Data;
+using ONS.SDK.Domain.ProcessMemmory;
 using ONS.SDK.Services;
 using ONS.SDK.Worker;
 
@@ -49,13 +50,19 @@ namespace ONS.SDK.Context {
         public IContext Build(IPayload payload, string eventName = SDKEventAttribute.DefaultEvent) {
 
             // TODO ajustar para construir a api para salvar
-            var memory = _processMemory.Head("User");
 
-            // TODO carregar evento
             var typePayload = payload.GetType();
 
+            var memory = new Memory();
+            var memoryEvent = new MemoryEvent();
+
+            memoryEvent.Payload = payload;
+            memoryEvent.Name = eventName;
+
+            memory.Event = memoryEvent;
+
             var typeContext = typeof(SDKContext<>).MakeGenericType(typePayload);
-            
+
             var context = (IContext) Activator.CreateInstance(typeContext, memory);
 
             return context;

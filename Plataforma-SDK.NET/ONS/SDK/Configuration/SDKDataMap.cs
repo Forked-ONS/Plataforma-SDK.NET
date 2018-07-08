@@ -68,7 +68,7 @@ namespace ONS.SDK.Configuration
             if (string.IsNullOrEmpty(typeName)) {
                 throw new SDKRuntimeException("Invalid typeName is null.");
             }
-            return _maps[typeName];
+            return _maps.ContainsKey(typeName)? _maps[typeName] : null;
         }
     }
 }

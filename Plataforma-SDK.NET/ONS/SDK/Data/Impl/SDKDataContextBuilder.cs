@@ -51,11 +51,5 @@ namespace ONS.SDK.Data.Impl
             return new SDKDataContext(dataSets);
         }
 
-        public DataSetMap ToDataSetMap(IDataContext dataContext) 
-        {
-            DataSetMap retorno = null;
-            
-            return retorno;
-        }
     }
 }

@@ -6,7 +6,5 @@ namespace ONS.SDK.Data
     public interface IDataContextBuilder
     {
         IDataContext Build(DataSetMap dataSetMap);
-
-        DataSetMap ToDataSetMap(IDataContext dataContext);
     }
 }

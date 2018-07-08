@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ONS.SDK.Data;
+using ONS.SDK.Domain.Base;
 using ONS.SDK.Worker;
 
 namespace ONS.SDK.Configuration
@@ -26,7 +27,7 @@ namespace ONS.SDK.Configuration
             SDKDataMap.BindsMap(dataMap.DataMaps);   
         }
 
-        public static void BindMap<T>() 
+        public static void BindMap<T>() where T: Model
         {
             var type = typeof(T);
 
@@ -37,13 +38,13 @@ namespace ONS.SDK.Configuration
                 BindMap<T>(mapName);
             } else {
                 throw new BadConfigException(
-                    string.Format("Not foun attribute[DataMapAttribute] of class with datamap name, type: {0}.",
+                    string.Format("Not found attribute[DataMapAttribute] of class with datamap name, type: {0}.",
                     type.FullName)
                 );
             }
         }
 
-        public static void BindMap<T>(string typeName) 
+        public static void BindMap<T>(string typeName) where T: Model 
         {
             var type = typeof(T);
 

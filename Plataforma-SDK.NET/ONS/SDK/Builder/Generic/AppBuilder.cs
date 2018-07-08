@@ -12,6 +12,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using ONS.SDK.Log;
 using ONS.SDK.Data;
+using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Builder.Generic
 {
@@ -102,14 +103,14 @@ namespace ONS.SDK.Builder.Generic
             return this;
         }
 
-        public IAppBuilder BindDataMap<T>(string mapName)
+        public IAppBuilder BindDataMap<T>(string mapName) where T: Model
         {
             SDKDataMap.BindMap<T>(mapName);
             
             return this;
         }
 
-        public IAppBuilder BindDataMap<T>()
+        public IAppBuilder BindDataMap<T>() where T: Model
         {
             SDKDataMap.BindMap<T>();
             

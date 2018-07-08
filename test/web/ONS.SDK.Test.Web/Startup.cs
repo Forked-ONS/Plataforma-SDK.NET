@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ONS.SDK.Test.Web.Process;
 using ONS.SDK.Extensions.Builder;
 using ONS.SDK.Extensions.DependencyInjection;
+
+using ONS.SDK.Test.Web.Process;
+using ONS.SDK.Test.Web.Entities;
 
 namespace ONS.SDK.Test.Web
 {
@@ -28,6 +30,10 @@ namespace ONS.SDK.Test.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.UseSDK();
+
+            services.BindEvents<CenarioBusiness>();
+
+            services.UseDataMap<EntitiesMap>();
             
             services.AddSingleton<CenarioBusiness>();
 

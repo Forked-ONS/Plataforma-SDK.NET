@@ -12,13 +12,18 @@ namespace ONS.SDK.Data
 
     public interface IDataSet<T>: IDataSet, IEnumerable<T> where T: Model
     {
-         void Insert(T entity);
 
-         void Update(T entity);
+        string MapName {get;}
 
-         void Delete(T entity);
+        void Insert(T entity);
 
-         T FindById(string id);
+        void Update(T entity);
+
+        void Delete(T entity);
+
+        T FindById(string id);
+
+        void DeleteById(string id);
 
     }
 }

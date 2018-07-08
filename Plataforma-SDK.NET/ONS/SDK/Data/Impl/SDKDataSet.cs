@@ -28,6 +28,12 @@ namespace ONS.SDK.Data.Impl
             }            
         }
 
+        public string MapName {
+            get {
+                return _typeName;
+            }
+        }
+
         public IEnumerable AllEntities {
             get {
                 return _entities;

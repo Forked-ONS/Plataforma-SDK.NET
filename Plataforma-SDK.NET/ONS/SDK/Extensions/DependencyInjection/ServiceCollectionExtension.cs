@@ -13,6 +13,7 @@ using ONS.SDK.Services.Impl.EventManager;
 using ONS.SDK.Worker;
 using ONS.SDK.Data.Impl;
 using ONS.SDK.Data;
+using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Extensions.DependencyInjection
 {
@@ -48,15 +49,22 @@ namespace ONS.SDK.Extensions.DependencyInjection
             return serviceCollection;
         }
 
+        public static IServiceCollection BindEvents<T>(this IServiceCollection serviceCollection)
+        {
+            SDKConfiguration.BindEvents<T>();
+            
+            return serviceCollection;
+        }
+
         public static IServiceCollection BindDataMap<T>(
-            this IServiceCollection serviceCollection, string mapName)
+            this IServiceCollection serviceCollection, string mapName) where T: Model
         {
             SDKDataMap.BindMap<T>(mapName);
             
             return serviceCollection;
         }
 
-        public static IServiceCollection BindDataMap<T>(this IServiceCollection serviceCollection)
+        public static IServiceCollection BindDataMap<T>(this IServiceCollection serviceCollection) where T: Model
         {
             SDKDataMap.BindMap<T>();
             

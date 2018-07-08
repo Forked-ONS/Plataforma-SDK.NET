@@ -29,10 +29,7 @@ namespace ONS.SDK.Test.Web
                 webHost.UseUrls("http://*:" + envport);
             }
 
-            webHost
-                .BindEvents<CenarioBusiness>()
-                .BindDataMap<Conta>()
-                .RunSDK();
+            webHost.RunSDK();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

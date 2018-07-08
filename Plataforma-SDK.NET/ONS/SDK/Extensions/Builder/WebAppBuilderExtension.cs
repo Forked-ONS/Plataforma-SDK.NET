@@ -9,6 +9,7 @@ using ONS.SDK.Context;
 using ONS.SDK.Log;
 using Microsoft.Extensions.Logging;
 using ONS.SDK.Data;
+using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Extensions.Builder
 {
@@ -51,28 +52,28 @@ namespace ONS.SDK.Extensions.Builder
             return builder;
         }
 
-        public static IWebHostBuilder BindDataMap<T>(this IWebHostBuilder builder, string mapName)
+        public static IWebHostBuilder BindDataMap<T>(this IWebHostBuilder builder, string mapName) where T: Model
         {
             SDKDataMap.BindMap<T>(mapName);
             
             return builder;
         }
 
-        public static IApplicationBuilder BindDataMap<T>(this IApplicationBuilder builder, string mapName)
+        public static IApplicationBuilder BindDataMap<T>(this IApplicationBuilder builder, string mapName) where T: Model
         {
             SDKDataMap.BindMap<T>(mapName);
             
             return builder;
         }
 
-        public static IWebHostBuilder BindDataMap<T>(this IWebHostBuilder builder)
+        public static IWebHostBuilder BindDataMap<T>(this IWebHostBuilder builder) where T: Model
         {
             SDKDataMap.BindMap<T>();
             
             return builder;
         }
 
-        public static IApplicationBuilder BindDataMap<T>(this IApplicationBuilder builder)
+        public static IApplicationBuilder BindDataMap<T>(this IApplicationBuilder builder) where T: Model
         {
             SDKDataMap.BindMap<T>();
             

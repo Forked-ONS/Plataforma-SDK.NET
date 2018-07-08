@@ -1,5 +1,6 @@
 using System;
 using ONS.SDK.Data;
+using ONS.SDK.Domain.Base;
 using ONS.SDK.Worker;
 
 namespace ONS.SDK.Builder 
@@ -10,9 +11,9 @@ namespace ONS.SDK.Builder
         
         IAppBuilder UseStartup<T>() where T : IStartup;
 
-        IAppBuilder BindDataMap<T>(string mapName);
+        IAppBuilder BindDataMap<T>(string mapName) where T: Model;
 
-        IAppBuilder BindDataMap<T>();
+        IAppBuilder BindDataMap<T>() where T: Model;
 
         IAppBuilder UseDataMap<T>() where T: IDataMapCollection;
 

@@ -83,6 +83,9 @@ namespace ONS.SDK.Worker
                 else if (typeof(IContext).IsAssignableFrom(type)) {
                     retorno.Add(context);
                 }
+                else if (typeof(IDataContext).IsAssignableFrom(type)) {
+                    retorno.Add(context.DataContext);
+                }
                 else if (typeof(IDataSet).IsAssignableFrom(type)) {
                     
                     var methodSet = context.DataContext.GetType().GetMethods()

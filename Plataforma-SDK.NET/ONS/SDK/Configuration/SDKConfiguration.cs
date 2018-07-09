@@ -10,6 +10,8 @@ namespace ONS.SDK.Configuration
 {
     public class SDKConfiguration
     {
+        public static string AppOriginSDK = "sdk_dotnet";
+
         private static IDictionary<string, MethodInfo> _binds = new Dictionary<string, MethodInfo>();
 
         public static IServiceProvider ServiceProvider {get;set;}

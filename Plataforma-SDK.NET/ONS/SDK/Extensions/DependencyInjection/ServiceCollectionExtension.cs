@@ -8,12 +8,14 @@ using ONS.SDK.Context;
 using ONS.SDK.Configuration;
 using ONS.SDK.Utils.Http;
 using ONS.SDK.Services;
-using ONS.SDK.Services.Impl.ProcessMemory.ProcessMemoryClient;
 using ONS.SDK.Services.Impl.EventManager;
 using ONS.SDK.Worker;
 using ONS.SDK.Data.Impl;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.Base;
+using ONS.SDK.Services.Impl.ProcessMemory;
+using ONS.SDK.Services.Impl.Executor;
+using ONS.SDK.Services.Impl.Core;
 
 namespace ONS.SDK.Extensions.DependencyInjection
 {
@@ -32,6 +34,20 @@ namespace ONS.SDK.Extensions.DependencyInjection
 
             serviceCollection.AddSingleton<IProcessMemoryService, ProcessMemoryService>();
             serviceCollection.AddSingleton<IEventManagerService, EventManagerService>();
+            serviceCollection.AddSingleton<IExecutorService, ExecutorService>();
+            serviceCollection.AddSingleton<IProcessMemoryService, ProcessMemoryService>();
+
+            serviceCollection.AddSingleton<IBranchService, BranchService>();
+            serviceCollection.AddSingleton<IDependencyDomainService, DependencyDomainService>();
+            serviceCollection.AddSingleton<IDomainModelService, DomainModelService>();
+            serviceCollection.AddSingleton<IInstalledAppService, InstalledAppService>();
+            serviceCollection.AddSingleton<IMapService, MapService>();
+            serviceCollection.AddSingleton<IOperationInstanceService, OperationInstanceService>();
+            serviceCollection.AddSingleton<IOperationService, OperationService>();
+            serviceCollection.AddSingleton<IPresentationInstanceService, PresentationInstanceService>();
+            serviceCollection.AddSingleton<IPresentationService, PresentationService>();
+            serviceCollection.AddSingleton<IProcessInstanceService, ProcessInstanceService>();
+            serviceCollection.AddSingleton<ISystemService, SystemService>();
 
             serviceCollection.AddTransient<HttpClient>();
             serviceCollection.AddTransient<JsonHttpClient>();

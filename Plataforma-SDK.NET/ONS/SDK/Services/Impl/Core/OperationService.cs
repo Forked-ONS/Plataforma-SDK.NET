@@ -3,15 +3,15 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Domain.Core;
 using ONS.SDK.Utils.Http;
 
-namespace ONS.SDK.Platform.Core
+namespace ONS.SDK.Services.Impl.Core
 {
-    public class OperationService : CoreService
+    public class OperationService : CoreService<Operation>, IOperationService
     {
         public OperationService(CoreConfig config, JsonHttpClient client) : base(config, client, "operation")
         {
         }
 
-        public List<Operation> FindByEventInAndSystemId(string systemId, string eventIn){
+        public List<Operation> FindByEventInAndSystemId(string systemId, string eventIn ){
             var criteria = new Criteria () {
                 FilterName = "bySystemIdAndEventIn",
                 Parameters = new List<Parameter> ()
@@ -26,7 +26,7 @@ namespace ONS.SDK.Platform.Core
                     }
                 }
             };
-            return this.Find<Operation>(criteria);
+            return this.Find(criteria);
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using ONS.SDK.Utils.Http;
 using Newtonsoft.Json;
 
-namespace ONS.SDK.Services.Impl.ProcessMemory.ProcessMemoryClient
+namespace ONS.SDK.Services.Impl.ProcessMemory
 {
     public class ProcessMemoryService : IProcessMemoryService 
     {
@@ -17,6 +17,8 @@ namespace ONS.SDK.Services.Impl.ProcessMemory.ProcessMemoryClient
         private readonly HttpClient _client;
         
         private readonly JsonHttpClient _jsonClient;
+
+        private readonly string _appOriginSDK = SDKConfiguration.AppOriginSDK;
 
         public ProcessMemoryService(ILogger<ProcessMemoryService> logger, 
             ProcessMemoryConfig conf, HttpClient client, JsonHttpClient jsonClient) 
@@ -29,7 +31,7 @@ namespace ONS.SDK.Services.Impl.ProcessMemory.ProcessMemoryClient
 
         public Memory Head(string processInstanceId) {
 
-            var url = $"{this._config.Url}/{processInstanceId}/head?app_origin=sdk_dotnet";
+            var url = $"{this._config.Url}/{processInstanceId}/head?app_origin={this._appOriginSDK}";
             
             Memory retorno = null;
 
@@ -45,9 +47,9 @@ namespace ONS.SDK.Services.Impl.ProcessMemory.ProcessMemoryClient
 
         public void Commit(Memory memory)
         {
-            var url = $"{this._config.Url}/{memory.InstanceId}/commit?app_origin=sdk_dotnet";
+            var url = $"{this._config.Url}/{memory.InstanceId}/commit?app_origin={this._appOriginSDK}";
 
-            this._jsonClient.Post<string>($"{this._config.Url}/{memory.InstanceId}/commit?app_origin=sdk_dotnet", memory);            
+            this._jsonClient.Post<string>($"{this._config.Url}/{memory.InstanceId}/commit?app_origin={this._appOriginSDK}", memory);            
         }
     }
 }

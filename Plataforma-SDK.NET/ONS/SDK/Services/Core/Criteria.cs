@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
-namespace ONS.SDK.Platform.Core {
+namespace ONS.SDK.Services {
+
     public class Criteria {
         public string FilterName { get; set; }
         public List<Parameter> Parameters { get; set; }

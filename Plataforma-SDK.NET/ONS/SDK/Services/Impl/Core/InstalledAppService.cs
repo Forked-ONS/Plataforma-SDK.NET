@@ -1,19 +1,21 @@
 using System.Collections.Generic;
 using ONS.SDK.Configuration;
 using ONS.SDK.Domain.Core;
+using ONS.SDK.Services;
 using ONS.SDK.Utils.Http;
 
-namespace ONS.SDK.Platform.Core
+namespace ONS.SDK.Services.Impl.Core
 {
-    public class DomainModelService : CoreService
+    public class InstalledAppService : CoreService<InstalledApp>, IInstalledAppService
     {
-        public DomainModelService(CoreConfig config, JsonHttpClient client) : base(config, client, "domainModel")
+        public InstalledAppService(CoreConfig config, JsonHttpClient client) : base(config, client, "installedApp")
         {
         }
 
-        public List<DomainModel> FindBySystemIdAndName(string systemId, string name) {
+
+        public List<InstalledApp> FindBySystemIdAndType(string systemId, string type){
             var criteria = new Criteria () {
-                FilterName = "bySystemIdAndName",
+                FilterName = "bySystemIdAndType",
                 Parameters = new List<Parameter> ()
                 {
                 new Parameter ()
@@ -22,12 +24,11 @@ namespace ONS.SDK.Platform.Core
                     },
                 new Parameter ()
                     {
-                        Name = "name", Value = name
+                        Name = "type", Value = type
                     }
                 }
             };
-            return this.Find<DomainModel>(criteria);
+            return this.Find(criteria);
         }
-
     }
 }

@@ -11,12 +11,12 @@ namespace ONS.SDK.Test.Web.Process
     public class CenarioBusiness
     {
         [SDKEvent(CenarioEvent.InserirCenario)]
-        public void InserirCenario(IContext<InseriCenarioPayload> context) {
+        public void InserirCenario(IContext<Conta> context) {
             Console.WriteLine("########## InserirCenario");
         }
 
         [SDKEvent(CenarioEvent.AlterarCenario)]
-        public void AlterarCenario(IContext<AlteraCenarioPayload> context, 
+        public void AlterarCenario(IContext<Conta> context, 
             IDataSet<Conta> contas) {
 
             var conta = contas.FirstOrDefault();

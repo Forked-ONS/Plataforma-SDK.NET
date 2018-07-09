@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ONS.SDK.Test.Web.Models;
 using ONS.SDK.Test.Web.Process;
+using ONS.SDK.Test.Web.Entities;
 using ONS.SDK.Worker;
 
 namespace ONS.SDK.Test.Web.Controllers
@@ -22,9 +24,10 @@ namespace ONS.SDK.Test.Web.Controllers
         [HttpGet("Inserir")]
         public string Inserir()
         {
-            var payload = new InseriCenarioPayload();
+            Console.WriteLine("###### Inserir");
+            var conta = _createConta();
 
-            _sdk.Run(payload, CenarioEvent.InserirCenario);
+            _sdk.Run(conta, CenarioEvent.InserirCenario);
 
             return "Inserir";
         }
@@ -32,11 +35,29 @@ namespace ONS.SDK.Test.Web.Controllers
         [HttpGet("Alterar")]
         public string Alterar()
         {
-            var payload = new AlteraCenarioPayload();
-
-            _sdk.Run(payload, CenarioEvent.AlterarCenario);
+            var conta = _createConta();
+            
+            _sdk.Run(conta, CenarioEvent.AlterarCenario);
 
             return "Alterar";
+        }
+
+        [HttpGet("Deletar")]
+        public string Deletar()
+        {
+            var conta = _createConta();
+            
+            //_sdk.Run(conta, CenarioEvent.DeletarCenario);
+
+            return "Deletar";
+        }
+
+        private Conta _createConta() {
+            return new Conta() {
+                Id = Request.Query["id"],
+                Name = Request.Query["name"],
+                Balance = Convert.ToInt32(Request.Query["balance"])
+            };
         }
 
     }

@@ -1,6 +1,6 @@
 using System;
 
-namespace ONS.SDK.Platform.Core.Exceptions
+namespace ONS.SDK.Services.Impl.Exceptions
 {
     public class InvalidEntityException : Exception
     {

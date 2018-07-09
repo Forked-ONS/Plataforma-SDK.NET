@@ -3,14 +3,13 @@ using Moq;
 using NUnit.Framework;
 using ONS.SDK.Configuration;
 using ONS.SDK.Domain.Core;
-using ONS.SDK.Platform.Core;
 using ONS.SDK.Utils.Http;
 
 namespace ONS.SDK.Platform.CoreTest
 {
     [TestFixture]
     public class BranchServiceTest
-    {
+    {/*
         [Test]
         public void ShouldGetBranchOnApiCore(){
             Mock<HttpClient> mock = new Mock<HttpClient> ();
@@ -37,7 +36,7 @@ namespace ONS.SDK.Platform.CoreTest
             mock.Verify(http => http.Post (It.IsAny<string>(), branchPersistBody));
         }
 
-
+*/
 
         private readonly string branchResponse = @"
         [

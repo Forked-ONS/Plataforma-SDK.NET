@@ -4,9 +4,9 @@ using ONS.SDK.Domain.Core;
 
 using ONS.SDK.Utils.Http;
 
-namespace ONS.SDK.Platform.Core
+namespace ONS.SDK.Services.Impl.Core
 {
-    public class BranchService : CoreService
+    public class BranchService : CoreService<Branch>, IBranchService
     {
         public BranchService(CoreConfig config, JsonHttpClient client) : base(config, client, "branch")
         {
@@ -27,7 +27,7 @@ namespace ONS.SDK.Platform.Core
                     }
                 }
             };
-            return this.Find<Branch>(criteria);
+            return this.Find(criteria);
         }
 
         public List<Branch> FindBySystemIdAndOwner(string systemId, string owner){
@@ -45,7 +45,7 @@ namespace ONS.SDK.Platform.Core
                     }
                 }
             };
-            return this.Find<Branch>(criteria);
+            return this.Find(criteria);
         }
     }
 }

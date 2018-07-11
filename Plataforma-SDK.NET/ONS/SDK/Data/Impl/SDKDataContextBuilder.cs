@@ -86,7 +86,7 @@ namespace ONS.SDK.Data.Impl
 
             memory.DataSet = dataSetMap;
 
-            return new SDKDataContext(dataSets);
+            return new SDKDataContext(dataSets, true);
         }
 
         private void _loadDataFromMapItem(string mapName, string entityName, 

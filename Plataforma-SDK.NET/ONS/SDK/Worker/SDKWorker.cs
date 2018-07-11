@@ -134,6 +134,10 @@ namespace ONS.SDK.Worker
                     string.Format("Type not register to dependence injection. Type={0}", methodInfo.DeclaringType));
             }
 
+            if (context.DataContext.DataLoaded) {
+                _processMemoryService.Commit(context.UpdateMemory());
+            }
+
             var args = _resolveArgs(methodInfo, context);
             try {
                 methodInfo.Invoke(runner, args);
@@ -145,9 +149,7 @@ namespace ONS.SDK.Worker
                 );
             }
 
-            context.UpdateMemory();
-            
-            _processMemoryService.Commit(context.Memory);
+            _processMemoryService.Commit(context.UpdateMemory());
 
             if (context.Commit && !context.Memory.Event.IsReproduction) {
                 var trackingEntities = context.DataContext.TrackingEntities;

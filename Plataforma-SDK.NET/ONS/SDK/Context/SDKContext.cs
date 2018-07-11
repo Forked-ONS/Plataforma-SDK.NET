@@ -43,7 +43,7 @@ namespace ONS.SDK.Context
             Event = (IEvent<T>)value;
         }
 
-        public void UpdateMemory() 
+        public Memory UpdateMemory() 
         {
             this.Memory.Event.Payload = this.GetEvent().GetPayload();
             foreach (var keyPair in this.Memory.DataSet.Entities.ToList()) 
@@ -57,6 +57,7 @@ namespace ONS.SDK.Context
                     // TODO log warning
                 }
             }
+            return this.Memory;
         }
     }
 

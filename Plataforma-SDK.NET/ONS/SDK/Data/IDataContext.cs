@@ -10,9 +10,10 @@ namespace ONS.SDK.Data
 
         IList<Model> TrackingEntities {get;}
 
-         IDataSet<T> Set<T>() where T: Model;
+        IDataSet<T> Set<T>() where T: Model;
 
-         IDataSet Set(Type type);
+        IDataSet Set(Type type);
 
+        bool DataLoaded {get;}
     }
 }

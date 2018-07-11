@@ -11,7 +11,7 @@ namespace ONS.SDK.Data.Impl
     {
         private readonly IDictionary<Type, IDataSet> _dataSets = new Dictionary<Type, IDataSet>();
 
-        public SDKDataContext(IEnumerable<IDataSet> dataSets) 
+        public SDKDataContext(IEnumerable<IDataSet> dataSets, bool? dataLoaded = null) 
         {
             if (dataSets == null) {
                 throw new SDKRuntimeException("DataSets list is null.");
@@ -23,7 +23,11 @@ namespace ONS.SDK.Data.Impl
                 }
                 _dataSets[type] = it;
             }
+
+            if (dataLoaded.HasValue) DataLoaded = dataLoaded.Value;
         }
+
+        public bool DataLoaded {get; private set;}
 
         public IEnumerable<IDataSet> AllSet {
             get {

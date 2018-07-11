@@ -1,7 +1,9 @@
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using ONS.SDK.Configuration;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.ProcessMemmory;
+using ONS.SDK.Log;
 
 namespace ONS.SDK.Context
 {
@@ -54,7 +56,8 @@ namespace ONS.SDK.Context
                     var setEntities = this.DataContext.Set(typeEntity);
                     this.Memory.DataSet.Entities[mapName] = setEntities.AllEntities;
                 } else {
-                    // TODO log warning
+                    var logger = SDKLoggerFactory.Get<SDKContext<T>>();
+                    logger.LogWarning($"Not found type corresponding to map name: {mapName}.");
                 }
             }
             return this.Memory;

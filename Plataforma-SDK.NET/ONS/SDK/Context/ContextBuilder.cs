@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ONS.SDK.Configuration;
@@ -13,33 +14,35 @@ using ONS.SDK.Domain.Core;
 using ONS.SDK.Domain.ProcessMemmory;
 using ONS.SDK.Services;
 using ONS.SDK.Worker;
+using Plataforma_SDK.NET.ONS.SDK.Utils;
 using YamlDotNet.Serialization;
 
 namespace ONS.SDK.Context {
 
     public class ContextBuilder {
 
-        private IProcessMemoryService _processMemory;
+        private readonly IProcessMemoryService _processMemory;
 
-        private IDataContextBuilder _dataContextBuilder;
+        private readonly IDataContextBuilder _dataContextBuilder;
 
-        private IExecutorService _executorService;
+        private readonly IExecutorService _executorService;
 
-        private IEventManagerService _eventManagerService;
+        private readonly IEventManagerService _eventManagerService;
 
-        private IOperationService _operationService;
+        private readonly IOperationService _operationService;
 
-        private IMapService _mapService;
+        private readonly IMapService _mapService;
 
-        private IExecutionContext _executionContext;
+        private readonly IExecutionContext _executionContext;
 
-        public ContextBuilder () { }
+        private readonly ILogger<ContextBuilder> _logger;
 
-        public ContextBuilder(IProcessMemoryService processMemory, 
+        public ContextBuilder(ILogger<ContextBuilder> logger, IProcessMemoryService processMemory, 
             IDataContextBuilder dataContextBuilder, IExecutorService executorService,
             IEventManagerService eventManagerService, IOperationService operationService, 
             IExecutionContext executionContext, IMapService mapService) 
         {
+            this._logger = logger;
             this._processMemory = processMemory;
             this._dataContextBuilder = dataContextBuilder;
             this._executorService = executorService;
@@ -47,6 +50,11 @@ namespace ONS.SDK.Context {
             this._operationService = operationService;
             this._executionContext = executionContext;
             this._mapService = mapService;
+        }
+
+        public IContext Build(ContextBuilderParameters parameters = null) {
+            
+            return parameters != null ? Build(parameters.Payload, parameters.EventName) : Build();
         }
 
         public IContext Build() {
@@ -91,10 +99,14 @@ namespace ONS.SDK.Context {
 
         private Memory _recoveryMemory(string processId, string instanceId) 
         {   
-            //_processMemory = null; Console.WriteLine("$############################## INSTANCE ID: " +instanceId );
             var memory = _processMemory.Head(instanceId);
             if (memory == null) {
                 throw new SDKRuntimeException($"Process Memory instance was not found. processId: {processId}, instanceId: {instanceId}");
+            }
+
+            if (this._logger.IsEnabled(LogLevel.Trace)) {
+                var objLogSerialized = JsonConvert.SerializeObject(memory);
+                this._logger.LogTrace($"Memory recovered from ProcessMemory instanceId[{instanceId}]. Memory: {objLogSerialized}");
             }
 
             if (memory.Event.IsReproduction) {
@@ -124,10 +136,17 @@ namespace ONS.SDK.Context {
             memory.Commit = operation.Commit;
 
             if (memory.Map == null) {
+                
                 var maps = this._mapService.FindByProcessId(operation.ProcessId);
+                
+                if (this._logger.IsEnabled(LogLevel.Trace)) {
+                    var objLogSerialized = JsonConvert.SerializeObject(maps);
+                    this._logger.LogTrace($"Maps recovery for findByProcessId[{operation.ProcessId}]. Maps: {objLogSerialized}");
+                }
+                
                 var map = maps.FirstOrDefault();
-                if (map != null) {
-                    Console.WriteLine("################### operations: " + JsonConvert.SerializeObject(map));
+                if (map != null) 
+                {    
                     memory.Map = ProcessMap.ConvertFromMap(map);
                 }
             }
@@ -142,9 +161,13 @@ namespace ONS.SDK.Context {
 
             var typeContext = typeof(SDKContext<>).MakeGenericType(typePayload);
             
-            Console.WriteLine("################### memory: " + JsonConvert.SerializeObject(memory));
-
-            var dataContext = this._dataContextBuilder.Build(memory);
+            IDataContext dataContext;
+            using(new SDKStopwatch(this._logger, 
+                "Execution of dataContext construction through SDK.", 
+                new LogValue("InstanceId=", memory.InstanceId))) 
+            {
+                dataContext = this._dataContextBuilder.Build(memory);
+            }
 
             var context = (IContext) Activator.CreateInstance(typeContext, memory, dataContext);
 
@@ -156,5 +179,20 @@ namespace ONS.SDK.Context {
             return context;
         }
         
+    }
+
+    public class ContextBuilderParameters {
+        
+        public IPayload Payload {get;private set;}
+        public string EventName {get;private set;}
+
+        public ContextBuilderParameters(IPayload payload, string eventName = SDKEventAttribute.DefaultEvent) {
+            this.Payload = payload;
+            this.EventName = eventName;
+        }
+
+        public override string ToString() {
+            return $"[{this.GetType().Name}] {{ Payload={Payload}, EventName={EventName} }}";
+        }
     }
 }

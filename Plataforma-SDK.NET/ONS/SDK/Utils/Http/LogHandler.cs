@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace ONS.SDK.Utils.Http
 {
@@ -41,8 +42,12 @@ namespace ONS.SDK.Utils.Http
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, 
             CancellationToken cancellationToken)
         {
+            Stopwatch stopwatch = null;
             if (_logger.IsEnabled(LogLevel.Trace)) 
             {
+                stopwatch = new Stopwatch();
+                stopwatch.Start();
+
                 var sb = new StringBuilder();
                 sb.AppendLine("Request:");
                 sb.AppendLine(request.ToString());
@@ -67,6 +72,11 @@ namespace ONS.SDK.Utils.Http
                 {
                     sb.AppendLine(await response.Content.ReadAsStringAsync());
                 }
+
+                var timeTotal = stopwatch.ElapsedMilliseconds;
+                stopwatch.Stop();
+
+                sb.AppendLine($"Tempo de execução da requisição [{timeTotal}ms].");
                 sb.AppendLine();
 
                 _logger.LogTrace(_applyReplaceData(sb.ToString()));

@@ -16,5 +16,9 @@ namespace ONS.SDK.Context {
             this.Branch = SDKConstants.BranchMaster;
             this.ReferenceDate = DateTime.Now;
         }
+
+        public override string ToString() {
+            return $"[{this.GetType().Name}] {{ Branch={Branch}, ReferenceDate={ReferenceDate}, InstanceId={InstanceId} }}";
+        }
     }
 }

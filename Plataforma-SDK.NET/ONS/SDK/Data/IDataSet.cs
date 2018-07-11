@@ -8,6 +8,8 @@ namespace ONS.SDK.Data
     public interface IDataSet: IEnumerable
     {
         IEnumerable AllEntities {get;}
+
+        IList<Model> TrackingEntities {get;}
     }
 
     public interface IDataSet<T>: IDataSet, IEnumerable<T> where T: Model

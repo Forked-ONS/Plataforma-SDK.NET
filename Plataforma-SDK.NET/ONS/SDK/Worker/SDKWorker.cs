@@ -9,6 +9,7 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Context;
 using ONS.SDK.Data;
 using ONS.SDK.Services;
+using ONS.SDK.Services.Domain;
 
 namespace ONS.SDK.Worker
 {
@@ -18,9 +19,12 @@ namespace ONS.SDK.Worker
 
         private readonly IProcessMemoryService _processMemoryService;
 
-        public SDKWorker(ContextBuilder contextBuilder, IProcessMemoryService processMemoryService) {
+        private readonly IDomainService _domainService;
+
+        public SDKWorker(ContextBuilder contextBuilder, IProcessMemoryService processMemoryService, IDomainService domainService) {
             _contextBuilder = contextBuilder;
             _processMemoryService = processMemoryService;
+            _domainService = domainService;
         }
 
         public object GetRunner(Type type) {
@@ -77,13 +81,9 @@ namespace ONS.SDK.Worker
             
         }
 
-        public void Run(string instanceId)
+        public void Run()
         {
-            if (string.IsNullOrEmpty(instanceId)) {
-                throw new SDKRuntimeException("Instance ID of process not found. ENV: INSTANCE_ID");
-            }
-
-            var context = _contextBuilder.Build(instanceId);
+            var context = _contextBuilder.Build();
 
             _run(context);
         }
@@ -113,15 +113,14 @@ namespace ONS.SDK.Worker
 
             context.UpdateMemory();
             
-            // TODO salvando na memória de cálculo
-            
-            var settings = new Newtonsoft.Json.JsonSerializerSettings
-            {
-                NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-            };
-            Console.WriteLine("##############3 memory: " + Newtonsoft.Json.JsonConvert.SerializeObject(context.Memory, settings));
-
             _processMemoryService.Commit(context.Memory);
+
+            if (context.Commit && !context.Memory.Event.IsReproduction) {
+                var trackingEntities = context.DataContext.TrackingEntities;
+                if (trackingEntities.Count > 0) {
+                    this._domainService.Persist(context.Memory.Map.Name, trackingEntities);
+                }
+            }
         }
     }
 }

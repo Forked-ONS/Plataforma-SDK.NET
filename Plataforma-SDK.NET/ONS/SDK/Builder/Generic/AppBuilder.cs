@@ -34,7 +34,9 @@ namespace ONS.SDK.Builder.Generic
             this._services = new ServiceCollection();
             
             this._configuration = _buildConfiguration();
-
+            
+            this._services.AddSingleton<IApp, App>();
+            
             _addServicesGeneric();
         }
 
@@ -67,9 +69,7 @@ namespace ONS.SDK.Builder.Generic
 
             SDKLoggerFactory.LoggerFactory = serviceProvider.GetService<ILoggerFactory>();
             
-            var executionContext = serviceProvider.GetService<SDKExecutionContext>();
-
-            this._app = new App(serviceProvider, _configuration, executionContext);
+            this._app = new App(serviceProvider, _configuration);
 
             SDKConfiguration.ServiceProvider = serviceProvider;
             

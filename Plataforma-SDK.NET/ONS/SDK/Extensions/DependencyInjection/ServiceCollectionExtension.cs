@@ -16,6 +16,8 @@ using ONS.SDK.Domain.Base;
 using ONS.SDK.Services.Impl.ProcessMemory;
 using ONS.SDK.Services.Impl.Executor;
 using ONS.SDK.Services.Impl.Core;
+using ONS.SDK.Services.Impl.Domain;
+using ONS.SDK.Services.Domain;
 
 namespace ONS.SDK.Extensions.DependencyInjection
 {
@@ -27,7 +29,7 @@ namespace ONS.SDK.Extensions.DependencyInjection
             serviceCollection.AddSingleton<EventManagerConfig>();
             serviceCollection.AddSingleton<ExecutorConfig>();
             serviceCollection.AddSingleton<CoreConfig>();
-            serviceCollection.AddSingleton<SDKExecutionContext>();
+            serviceCollection.AddSingleton<IExecutionContext, SDKExecutionContext>();
             serviceCollection.AddSingleton<ContextBuilder>();
             
             serviceCollection.AddSingleton<IDataContextBuilder, SDKDataContextBuilder>();
@@ -48,6 +50,7 @@ namespace ONS.SDK.Extensions.DependencyInjection
             serviceCollection.AddSingleton<IPresentationService, PresentationService>();
             serviceCollection.AddSingleton<IProcessInstanceService, ProcessInstanceService>();
             serviceCollection.AddSingleton<ISystemService, SystemService>();
+            serviceCollection.AddSingleton<IDomainService, DomainService>();
 
             serviceCollection.AddTransient<HttpClient>();
             serviceCollection.AddTransient<JsonHttpClient>();

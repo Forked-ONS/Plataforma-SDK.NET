@@ -5,6 +5,6 @@ namespace ONS.SDK.Data
 {
     public interface IDataContextBuilder
     {
-        IDataContext Build(DataSetMap dataSetMap);
+        IDataContext Build(Memory memory);
     }
 }

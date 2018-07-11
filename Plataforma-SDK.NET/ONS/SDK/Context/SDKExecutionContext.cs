@@ -1,17 +1,49 @@
+using System;
 using Microsoft.Extensions.Configuration;
 
 namespace ONS.SDK.Context {
-    public class SDKExecutionContext {
+
+    public class SDKExecutionContext: IExecutionContext 
+    {
+        public string SystemId { get; private set; }
+        public string ProcessId { get; private set; }
+        public string ProcessInstanceId { get; private set; }
 
         public SDKExecutionContext(IConfiguration configuration)
         {
             SystemId = configuration.GetValue("SYSTEM_ID","");
+            ProcessId = configuration.GetValue("PROCESS_ID","");
             ProcessInstanceId = configuration.GetValue("INSTANCE_ID","");
         }
 
-        public SDKExecutionContext() {}
+        public bool IsExecutionWeb { 
+            get {
+                return string.IsNullOrEmpty(ProcessInstanceId);
+            }
+        }
 
-        public string SystemId { get; private set; }
-        public string ProcessInstanceId { get; private set; }
+        public bool IsExecutionConsole { 
+            get {
+                return !string.IsNullOrEmpty(ProcessInstanceId);
+            }
+        }
+
+        [ThreadStatic]
+        private static ExecutionParameter _executionParameter;
+
+        public ExecutionParameter ExecutionParameter {
+            get {
+                if (_executionParameter == null) {
+                    _executionParameter = new ExecutionParameter();
+                    if (!string.IsNullOrEmpty(ProcessInstanceId)) {
+                        _executionParameter.InstanceId = ProcessInstanceId;
+                    }
+                }
+                return _executionParameter;
+            }
+            set {
+                _executionParameter = value;
+            }
+        }
     }
 }

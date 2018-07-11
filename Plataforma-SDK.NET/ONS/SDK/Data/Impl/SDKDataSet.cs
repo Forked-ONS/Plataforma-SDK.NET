@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.Base;
 using ONS.SDK.Worker;
+using ONS.SDK.Configuration;
+using ONS.SDK.Context;
 
 namespace ONS.SDK.Data.Impl
 {
@@ -40,6 +42,21 @@ namespace ONS.SDK.Data.Impl
             }
         }
 
+        private ExecutionParameter _executionParameter {
+            get {
+                return ((IExecutionContext) SDKConfiguration.ServiceProvider.GetService(typeof(IExecutionContext)))
+                    .ExecutionParameter;
+            }
+        }
+
+        public IList<Model> TrackingEntities {
+            get {
+                return _entities.Where(it => ChangeTrack.IsTracking(it._Metadata.ChangeTrack))
+                    .Select(it => (Model)it)
+                    .ToList();
+            }
+        }
+
         public T FindById(string id) {
             
             if (string.IsNullOrEmpty(id)) {
@@ -68,22 +85,24 @@ namespace ONS.SDK.Data.Impl
             if (entity == null) {
                 throw new SDKRuntimeException("System can't insert null entity.");
             }
-            if (string.IsNullOrEmpty(entity.Id)) {
-                throw new SDKRuntimeException("System can't insert entity with null id.");
-            }
-
-            var entityPersistent = FindById(entity.Id);
-
-            if (entityPersistent != null) {
-                throw new SDKRuntimeException(
-                    string.Format("Entity already exists in context. Entity.Id={0}, Entity.Type={1}", 
-                    entity.Id, entity.GetType().Name)
-                );
-            }
             
+            if (!string.IsNullOrEmpty(entity.Id)) {
+
+                var entityPersistent = FindById(entity.Id);
+
+                if (entityPersistent != null) {
+                    throw new SDKRuntimeException(
+                        string.Format("Entity already exists in context. Entity.Id={0}, Entity.Type={1}", 
+                        entity.Id, entity.GetType().Name)
+                    );
+                }
+            } else {
+                entity.Id = null;
+            }
+
             entity._Metadata = new Metadata() {
-                // TODO precisa verificar as demais propriedades.
                 Type = _typeName,
+                Branch = _executionParameter.Branch,
                 ChangeTrack = ChangeTrack.CREATE
             };
 
@@ -171,7 +190,7 @@ namespace ONS.SDK.Data.Impl
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _entities.GetEnumerator();
+            return _entities.Where(it => !string.Equals(it._Metadata.ChangeTrack, ChangeTrack.DELETE)).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

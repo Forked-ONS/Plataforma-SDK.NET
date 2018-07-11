@@ -28,9 +28,9 @@ namespace ONS.SDK.Utils.Http {
             return json;
         }
 
-        private T deserialize<T> (string json) {
+        private T deserialize<T>(string json) {
             if (json == null) {
-                return default (T);
+                return default(T);
             }
             return JsonConvert.DeserializeObject<T> (json, _jsonSettings);
         }
@@ -50,7 +50,7 @@ namespace ONS.SDK.Utils.Http {
         public T Get<T> (string url, params Header[] headers) {
             var resp = _client.Get (url, headers);
             var json = resp.Result;
-            return deserialize<T> (json);
+            return deserialize<T>(json);
         }
     }
 }

@@ -36,6 +36,7 @@ namespace ONS.SDK.Test.Web.Controllers
         public string Alterar()
         {
             var conta = _createConta();
+            conta.Id = Request.Query["id"];
             
             _sdk.Run(conta, CenarioEvent.AlterarCenario);
 
@@ -54,7 +55,6 @@ namespace ONS.SDK.Test.Web.Controllers
 
         private Conta _createConta() {
             return new Conta() {
-                Id = Request.Query["id"],
                 Name = Request.Query["name"],
                 Balance = Convert.ToInt32(Request.Query["balance"])
             };

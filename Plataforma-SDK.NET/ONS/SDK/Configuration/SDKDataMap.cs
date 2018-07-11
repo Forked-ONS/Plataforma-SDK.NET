@@ -70,5 +70,6 @@ namespace ONS.SDK.Configuration
             }
             return _maps.ContainsKey(typeName)? _maps[typeName] : null;
         }
+        
     }
 }

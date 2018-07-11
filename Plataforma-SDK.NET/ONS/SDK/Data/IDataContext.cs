@@ -8,6 +8,8 @@ namespace ONS.SDK.Data
     {
         IEnumerable<IDataSet> AllSet {get;}
 
+        IList<Model> TrackingEntities {get;}
+
          IDataSet<T> Set<T>() where T: Model;
 
          IDataSet Set(Type type);

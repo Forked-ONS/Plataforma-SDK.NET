@@ -23,13 +23,12 @@ namespace ONS.SDK.Extensions.Builder
 
             SDKConfiguration.ServiceProvider = app.Services;
 
-            var execContext = app.Services.GetService<SDKExecutionContext>();
+            var execContext = app.Services.GetService<IExecutionContext>();
             
-            if (!string.IsNullOrEmpty(execContext.ProcessInstanceId)) {
+            if (execContext.IsExecutionConsole) {
                 
                 var sdk = app.Services.GetService<SDKWorker>();
-
-                sdk.Run(execContext.ProcessInstanceId);
+                sdk.Run();
                 
             } else {
                 app.Run();

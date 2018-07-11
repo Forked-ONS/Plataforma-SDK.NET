@@ -19,17 +19,12 @@ namespace ONS.SDK.Builder.Generic
 
         public IConfiguration Configuration {get; private set;}
 
-        public SDKExecutionContext ExecutionContext {get; private set;}
-
-        public App(IServiceProvider serviceProvider, IConfiguration configuration, 
-            SDKExecutionContext executionContext) 
+        public App(IServiceProvider serviceProvider, IConfiguration configuration) 
         {
-            ServiceProvider = serviceProvider;
-            Configuration = configuration;
+            this.ServiceProvider = serviceProvider;
+            this.Configuration = configuration;
             
-            ExecutionContext = executionContext;
-            
-            _logger = SDKLoggerFactory.Get<App>();
+            this._logger = SDKLoggerFactory.Get<App>();
         }
 
         private void _validateConfigurations() 
@@ -46,7 +41,7 @@ namespace ONS.SDK.Builder.Generic
             _validateConfigurations();
 
             var sdk = ServiceProvider.GetService<SDKWorker>();
-            sdk.Run(ExecutionContext.ProcessInstanceId);
+            sdk.Run();
         }
 
     }

@@ -26,6 +26,9 @@ namespace ONS.SDK.Domain.ProcessMemmory {
         [JsonProperty("branch")]
         public string Branch { get; set; }
 
+        [JsonProperty("appOrigin")]
+        public string AppOrigin { get; set; }
+
         [JsonProperty("reproduction")]
         public Reproduction Reproduction { get; set; }
 
@@ -35,6 +38,7 @@ namespace ONS.SDK.Domain.ProcessMemmory {
         [JsonProperty("payload")]
         public object Payload { get; set; }
 
+        [JsonIgnore]
         public bool IsReproduction {
             get {
                 return Reproduction != null && 
@@ -43,6 +47,7 @@ namespace ONS.SDK.Domain.ProcessMemmory {
             }
         }
 
+        [JsonIgnore]
         public bool IsReprocess {
             get {
                 return Reprocess != null && 

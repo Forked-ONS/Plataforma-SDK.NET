@@ -6,15 +6,19 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using ONS.SDK.Context;
 using ONS.SDK.Log;
 
 namespace ONS.SDK.Utils.Http {
     public class HttpClient 
     {
         private readonly ILogger _logger;
+        private readonly IExecutionContext _executionContext;
 
-        public HttpClient(ILogger<HttpClient> logger) {
-            _logger = logger;
+        public HttpClient(ILogger<HttpClient> logger, IExecutionContext executionContext) {
+            this._logger = logger;
+            this._executionContext = executionContext;
+
         }
 
         async public virtual Task<string> Get (string url, params Header[] headers) {
@@ -49,8 +53,19 @@ namespace ONS.SDK.Utils.Http {
                     foreach (var header in headers) {
                         requestMessage.Headers.Add (header.Key, new List<string> () { header.Value });
                     }
+
+                    if (this._executionContext != null && this._executionContext.ExecutionParameter != null 
+                        && this._executionContext.ExecutionParameter.ReferenceDate.HasValue) 
+                    {
+                        requestMessage.Headers.Add(
+                            "Reference-Date", 
+                            new List<string>(){ Convert.ToString(this._executionContext.ExecutionParameter.ReferenceDate.Value) }
+                        );
+                    }
+
                     requestMessage.Content = content;
                     using (requestMessage) {
+
                         var response = await _client.SendAsync (requestMessage);
                         response.EnsureSuccessStatusCode ();
                         string responseBody = await response.Content.ReadAsStringAsync ();

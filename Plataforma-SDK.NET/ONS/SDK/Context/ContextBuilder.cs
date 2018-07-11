@@ -114,7 +114,7 @@ namespace ONS.SDK.Context {
 
             _executionContext.Begin(new ExecutionParameter() {
                 Branch = memory.Event.Branch,
-                ReferenceDate = memory.Event.ReferenceDate.HasValue ? memory.Event.ReferenceDate.Value : DateTime.Now,
+                ReferenceDate = memory.Event.ReferenceDate.HasValue ? memory.Event.ReferenceDate.Value : default(DateTime?),
                 InstanceId = instanceId
             });
 

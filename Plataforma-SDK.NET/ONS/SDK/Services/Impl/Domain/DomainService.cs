@@ -70,7 +70,7 @@ namespace ONS.SDK.Services.Impl.Domain
             var url = $"{this.Url}/{map}/{type}";
             
             if (!string.IsNullOrEmpty(filterName)) {
-                url += "?filter={filterName}";
+                url += $"?filter={filterName}";
             }
             if (parameters != null && parameters.Count > 0) {
                 foreach (var parameter in parameters)
@@ -87,8 +87,6 @@ namespace ONS.SDK.Services.Impl.Domain
         public void Persist(string map, IList<Model> entities) {
             
             var url = $"{this.Url}/{map}/persist";
-
-            System.Console.WriteLine("############## persist: " + Newtonsoft.Json.JsonConvert.SerializeObject(entities));
 
             this._client.Post<object>(url, entities,
                     new Header () { Key = "Branch", Value = this._branch },

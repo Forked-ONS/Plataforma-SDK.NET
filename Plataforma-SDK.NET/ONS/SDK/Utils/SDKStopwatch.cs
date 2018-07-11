@@ -67,7 +67,7 @@ namespace Plataforma_SDK.NET.ONS.SDK.Utils
 
                 this._logger.LogDebug(this._buildMessageLog(
                     new LogValue($"Finish: {this._message} / Time[{timeTotal}ms]"),
-                    new LogValue(" / Data: ", this._dataIdentifyLog)
+                    new LogValue(" / DataID: ", this._dataIdentifyLog)
                 ));
 
                 this._stopWatch = null;
@@ -87,9 +87,7 @@ namespace Plataforma_SDK.NET.ONS.SDK.Utils
             var sb = new StringBuilder();
             
             for (int i = 0; i < contentsMsg.Length; i++)
-            {
-                if (i > 0) { sb.Append("/ "); }
-                
+            {   
                 var keyValue = contentsMsg[i];
                 var valueStr = "" + keyValue.Value;
                 if (keyValue.Value != null && !string.IsNullOrEmpty(valueStr)) {

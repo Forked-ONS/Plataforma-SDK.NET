@@ -105,8 +105,7 @@ namespace ONS.SDK.Context {
             }
 
             if (this._logger.IsEnabled(LogLevel.Trace)) {
-                var objLogSerialized = JsonConvert.SerializeObject(memory);
-                this._logger.LogTrace($"Memory recovered from ProcessMemory. processId: {processId}, instanceId: {instanceId}. Memory: {objLogSerialized}");
+                this._logger.LogTrace($"Memory recovered from ProcessMemory. processId: {processId}, instanceId: {instanceId}.");
             }
 
             if (memory.Event.IsReproduction) {
@@ -138,11 +137,6 @@ namespace ONS.SDK.Context {
             if (memory.Map == null) {
                 
                 var maps = this._mapService.FindByProcessId(operation.ProcessId);
-                
-                if (this._logger.IsEnabled(LogLevel.Trace)) {
-                    var objLogSerialized = JsonConvert.SerializeObject(maps);
-                    this._logger.LogTrace($"Maps recovery for findByProcessId[{operation.ProcessId}]. Maps: {objLogSerialized}");
-                }
                 
                 var map = maps.FirstOrDefault();
                 if (map != null) 

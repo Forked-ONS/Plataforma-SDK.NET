@@ -106,7 +106,7 @@ namespace ONS.SDK.Context {
 
             if (this._logger.IsEnabled(LogLevel.Trace)) {
                 var objLogSerialized = JsonConvert.SerializeObject(memory);
-                this._logger.LogTrace($"Memory recovered from ProcessMemory instanceId[{instanceId}]. Memory: {objLogSerialized}");
+                this._logger.LogTrace($"Memory recovered from ProcessMemory. processId: {processId}, instanceId: {instanceId}. Memory: {objLogSerialized}");
             }
 
             if (memory.Event.IsReproduction) {

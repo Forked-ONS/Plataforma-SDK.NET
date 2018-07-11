@@ -90,7 +90,8 @@ namespace ONS.SDK.Context {
         }
 
         private Memory _recoveryMemory(string processId, string instanceId) 
-        {    
+        {   
+            //_processMemory = null; Console.WriteLine("$############################## INSTANCE ID: " +instanceId );
             var memory = _processMemory.Head(instanceId);
             if (memory == null) {
                 throw new SDKRuntimeException($"Process Memory instance was not found. processId: {processId}, instanceId: {instanceId}");
@@ -100,11 +101,11 @@ namespace ONS.SDK.Context {
                 memory.Event.Scope = SDKConstants.Reproduction;
             }
 
-            _executionContext.ExecutionParameter = new ExecutionParameter() {
+            _executionContext.Begin(new ExecutionParameter() {
                 Branch = memory.Event.Branch,
                 ReferenceDate = memory.Event.ReferenceDate.HasValue ? memory.Event.ReferenceDate.Value : DateTime.Now,
                 InstanceId = instanceId
-            };
+            });
 
             // TODO falta data de referência??
             var operations = _operationService.FindByProcessId(processId);

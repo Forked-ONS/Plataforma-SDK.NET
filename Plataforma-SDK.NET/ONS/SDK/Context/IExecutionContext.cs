@@ -1,8 +1,9 @@
+using System;
 using Microsoft.Extensions.Configuration;
 
 namespace ONS.SDK.Context {
     
-    public interface IExecutionContext 
+    public interface IExecutionContext: IDisposable
     {
         bool IsExecutionWeb {get;}
 
@@ -15,6 +16,8 @@ namespace ONS.SDK.Context {
         string ProcessInstanceId {get;}   
 
         ExecutionParameter  ExecutionParameter {get;set;}
+
+        IExecutionContext Begin(ExecutionParameter executionParameter);
     }
     
 }

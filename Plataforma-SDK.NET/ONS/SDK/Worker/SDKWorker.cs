@@ -21,10 +21,16 @@ namespace ONS.SDK.Worker
 
         private readonly IDomainService _domainService;
 
-        public SDKWorker(ContextBuilder contextBuilder, IProcessMemoryService processMemoryService, IDomainService domainService) {
+        private readonly IExecutionContext _executionContext;
+
+        public SDKWorker(ContextBuilder contextBuilder, 
+            IProcessMemoryService processMemoryService, IDomainService domainService, 
+            IExecutionContext executionContext) 
+        {
             _contextBuilder = contextBuilder;
             _processMemoryService = processMemoryService;
             _domainService = domainService;
+            _executionContext = executionContext;
         }
 
         public object GetRunner(Type type) {
@@ -73,19 +79,36 @@ namespace ONS.SDK.Worker
 
         public void Run(IPayload payload, string eventName = SDKEventAttribute.DefaultEvent) 
         {
-            // TODO validar parâmetros e evento
-            
-            var context = _contextBuilder.Build(payload, eventName);
+            using(this._executionContext) {
 
-            _run(context);
-            
+                try {
+                    var context = _contextBuilder.Build(payload, eventName);
+
+                    _run(context);
+                
+                } catch(SDKRuntimeException srex) {
+                    throw;
+                } catch(Exception ex) {
+                    throw new SDKRuntimeException("Platform SDKWorker execution error.", ex);
+                }
+            }
         }
 
         public void Run()
         {
-            var context = _contextBuilder.Build();
+            using(this._executionContext) {
 
-            _run(context);
+                try {
+                    var context = _contextBuilder.Build();
+
+                    _run(context);
+                
+                } catch(SDKRuntimeException srex) {
+                    throw;
+                } catch(Exception ex) {
+                    throw new SDKRuntimeException("Platform SDKWorker execution error.", ex);
+                }
+            }
         }
 
         private void _run(IContext context) {
@@ -94,12 +117,14 @@ namespace ONS.SDK.Worker
                 throw new SDKRuntimeException("Error building instance context.");
             }
 
-            var methodInfo = SDKConfiguration.GetMethodByEvent(context.GetEvent().Name);
+            var eventName = context.GetEvent().Name;
+
+            var methodInfo = SDKConfiguration.GetMethodByEvent(eventName);
             
             if (methodInfo == null) {
                 
                 throw new SDKRuntimeException(
-                    string.Format("Method not found to event. Event={0}", context.GetEvent().Name));
+                    string.Format("Method not found to event. Event={0}", eventName));
             }
         
             var runner = GetRunner(methodInfo.DeclaringType);    
@@ -109,7 +134,16 @@ namespace ONS.SDK.Worker
                     string.Format("Type not register to dependence injection. Type={0}", methodInfo.DeclaringType));
             }
 
-            methodInfo.Invoke(runner, _resolveArgs(methodInfo, context));
+            var args = _resolveArgs(methodInfo, context);
+            try {
+                methodInfo.Invoke(runner, args);
+            } catch(Exception ex) {
+                // TODO verificar se vai logar mais detalhes.
+                throw new SDKRuntimeException(
+                    $"Error attempting to execute business method that responds to platform event. method: {methodInfo.Name}", 
+                    ex
+                );
+            }
 
             context.UpdateMemory();
             

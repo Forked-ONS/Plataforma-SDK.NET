@@ -45,5 +45,15 @@ namespace ONS.SDK.Context {
                 _executionParameter = value;
             }
         }
+
+        public IExecutionContext Begin(ExecutionParameter executionParameter) {
+            ExecutionParameter = executionParameter;
+            return this;
+        }
+
+        public void Dispose()
+        {
+            ExecutionParameter = null;
+        }
     }
 }

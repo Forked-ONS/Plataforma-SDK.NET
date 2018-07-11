@@ -118,7 +118,6 @@ namespace ONS.SDK.Context {
                 InstanceId = instanceId
             });
 
-            // TODO falta data de referência??
             var operations = _operationService.FindByProcessId(processId);
 
             Operation operation = operation = operations != null ? 

@@ -39,7 +39,7 @@ namespace ONS.SDK.Test.Web.Controllers
             conta.Id = Request.Query["id"];
             
             _sdk.Run(conta, CenarioEvent.AlterarCenario);
-
+            
             return "Alterar";
         }
 

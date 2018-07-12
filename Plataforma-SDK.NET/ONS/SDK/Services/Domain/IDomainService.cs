@@ -9,8 +9,6 @@ using ONS.SDK.Utils.Http;
 namespace ONS.SDK.Services.Domain {
     public interface IDomainService {
         
-        IDomainService OnBranch(string branch);
-
         T FindById<T>(string map, string type, string id) where T: Model;
 
         List<T> Query<T>(string map, string type, string filterName = null, 

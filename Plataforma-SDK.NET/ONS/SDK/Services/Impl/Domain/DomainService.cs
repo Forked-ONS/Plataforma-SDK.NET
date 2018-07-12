@@ -12,13 +12,9 @@ namespace ONS.SDK.Services.Impl.Domain
 {
 
     public class DomainService: IDomainService {
-        
-        private string _systemId;
-        
+                
         private JsonHttpClient _client;
         
-        private InstalledApp _info;
-
         private IExecutionContext _executionContext;
 
         private string _instanceId {
@@ -33,26 +29,32 @@ namespace ONS.SDK.Services.Impl.Domain
             }
         }
 
-        private string Url => $"http://{this._info.Host}:{this._info.Port}";
-
-        public DomainService (IExecutionContext executionContext, JsonHttpClient client, IInstalledAppService installedAppService) {
-            this._systemId = executionContext.SystemId;
-            this._executionContext = executionContext;
-            this._client = client;
-            this._info = installedAppService.FindBySystemIdAndType(this._systemId, "domain").FirstOrDefault ();
-            // TODO executando local
-            this._info.Host = "localhost"; this._info.Port = 8087;
+        private string _urlDomainServiceLocal {
+            get {
+                return System.Environment.GetEnvironmentVariable("URL_DOMAIN_SERVICE_LOCAL");
+            }
         }
 
-        public IDomainService OnBranch (string branch) {
-            /*if (branch != "") {
-                this._branch = branch;
-            }*/
-            return this;
+        private readonly string _url;
+
+        public DomainService (IExecutionContext executionContext, JsonHttpClient client, IInstalledAppService installedAppService) {
+            
+            this._executionContext = executionContext;
+            this._client = client;
+            
+            var urlDomainServiceLocal = _urlDomainServiceLocal;
+            if (!string.IsNullOrEmpty(urlDomainServiceLocal)) {
+                _url = urlDomainServiceLocal;
+            } else {
+                var systemId = executionContext.SystemId;
+                var info = installedAppService.FindBySystemIdAndType(systemId, "domain").FirstOrDefault();
+                _url = $"http://{info.Host}:{info.Port}";
+            }
+
         }
 
         public T FindById<T>(string map, string type, string id) where T: Model {
-            var url = $"{this.Url}/{map}/{type}?filter=byId&id={id}";
+            var url = $"{this._url}/{map}/{type}?filter=byId&id={id}";
             return this._client.Get<List<T>> (url,
                     new Header () { Key = "Branch", Value = this._branch },
                     new Header () { Key = "Instance-Id", Value = this._instanceId })
@@ -67,7 +69,7 @@ namespace ONS.SDK.Services.Impl.Domain
         public List<T> Query<T>(string map, string type, 
             string filterName = null, IDictionary<string, object> parameters = null) where T: Model
         {
-            var url = $"{this.Url}/{map}/{type}";
+            var url = $"{this._url}/{map}/{type}";
             
             if (!string.IsNullOrEmpty(filterName)) {
                 url += $"?filter={filterName}";
@@ -86,7 +88,7 @@ namespace ONS.SDK.Services.Impl.Domain
 
         public void Persist(string map, IList<Model> entities) {
             
-            var url = $"{this.Url}/{map}/persist";
+            var url = $"{this._url}/{map}/persist";
 
             this._client.Post<object>(url, entities,
                     new Header () { Key = "Branch", Value = this._branch },

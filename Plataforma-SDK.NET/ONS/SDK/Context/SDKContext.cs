@@ -5,6 +5,7 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.ProcessMemmory;
 using ONS.SDK.Log;
+using ONS.SDK.Worker;
 
 namespace ONS.SDK.Context
 {
@@ -40,11 +41,19 @@ namespace ONS.SDK.Context
 
         public Fork CreateFork(string forkName, string forkDescription, DateTime? startedAt = null) 
         {
+            if (string.IsNullOrEmpty(forkName)) {
+                throw new SDKRuntimeException($"Fork name is required. InstanceId={InstanceId}");
+            }
+            if (string.Equals(forkName, Event.Branch)) {
+                throw new SDKRuntimeException($"Fork name is equals branch of current context. Fork.Name={forkName}, InstanceId={InstanceId}");
+            }
+
             this._memory.Fork = new Fork() {
                 Name = forkName,
                 Description = forkDescription,
                 StartedAt = startedAt
             };
+            
             return this._memory.Fork;
         }
 

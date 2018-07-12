@@ -36,9 +36,9 @@ namespace ONS.SDK.Data.Impl
             }
         }
 
-        public IEnumerable AllEntities {
+        public IList<Model> AllEntities {
             get {
-                return _entities;
+                return (IList<Model>) _entities;
             }
         }
 

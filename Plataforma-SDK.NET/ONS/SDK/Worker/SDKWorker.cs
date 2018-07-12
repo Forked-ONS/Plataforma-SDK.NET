@@ -15,6 +15,8 @@ using System.Diagnostics;
 using ONS.SDK.Utils;
 using Newtonsoft.Json;
 using ONS.SDK.Domain.ProcessMemmory;
+using ONS.SDK.Domain.Base;
+using ONS.SDK.Domain.Core;
 
 namespace ONS.SDK.Worker
 {
@@ -24,20 +26,25 @@ namespace ONS.SDK.Worker
 
         private readonly ContextBuilder _contextBuilder;
 
-        private readonly IProcessMemoryService _processMemoryService;
-
-        private readonly IDomainService _domainService;
-
         private readonly IExecutionContext _executionContext;
 
         private readonly WorkerEvent _workerEvent;
 
+        private readonly IProcessMemoryService _processMemoryService;
+
+        private readonly IDomainService _domainService;
+
+        private readonly IProcessInstanceService _processInstanceService;
+
+        private readonly IBranchService _branchService;
 
         public SDKWorker(ILogger<SDKWorker> logger, ContextBuilder contextBuilder, 
             IExecutionContext executionContext, 
             WorkerEvent workerEvent,
             IProcessMemoryService processMemoryService, 
-            IDomainService domainService) 
+            IDomainService domainService,
+            IProcessInstanceService processInstanceService,
+            IBranchService branchService) 
         {
             this._logger = logger;
             this._contextBuilder = contextBuilder;
@@ -45,6 +52,8 @@ namespace ONS.SDK.Worker
             this._processMemoryService = processMemoryService;
             this._domainService = domainService;
             this._executionContext = executionContext;
+            this._processInstanceService = processInstanceService;
+            this._branchService = branchService;
         }
 
         public void Run(IPayload payload, string eventName = SDKEventAttribute.DefaultEvent) 
@@ -146,14 +155,21 @@ namespace ONS.SDK.Worker
         private void _finishExecution(IContext context) 
         {
             var eventName = context.GetEvent().Name;    
+
+            if (context.Fork != null) 
+            {
+                this._fork(context);
+            }
             
             _processMemoryService.Commit(context.UpdateMemory());
 
             if (context.Commit 
                 && !context.Memory.Event.IsReproduction) 
             {
-                if (this._executionContext.ExecutionParameter.SynchronousPersistence) {
+                if (this._executionContext.ExecutionParameter.SynchronousPersistence) 
+                {
                     var trackingEntities = context.DataContext.TrackingEntities;
+                    
                     if (trackingEntities.Count > 0) {
                         this._domainService.Persist(context.Memory.Map.Name, trackingEntities);
                     }
@@ -162,6 +178,41 @@ namespace ONS.SDK.Worker
                     this._workerEvent.EmitEventPersistence(context);
                 }
             }    
+        }
+
+        private void _fork(IContext context) 
+        {
+            var fork = context.Fork;
+            var entities = context.DataContext.AllEntities;
+            var startedAt = DateTime.Now;
+
+            if (entities != null && entities.Any()) {
+                foreach (var entity in entities)
+                {
+                    var current = entity._Metadata.ModifiedAt;
+                    if (current.HasValue && current.Value < startedAt) {
+                        startedAt = current.Value;
+                    }
+
+                    if (ChangeTrack.IsTracking(entity)) {
+                        entity._Metadata.Branch = fork.Name;
+                    }
+                }
+            }
+            
+            fork.StartedAt = startedAt;
+            
+            var processInstance = new ProcessInstance() { Id = context.InstanceId, IsFork = true };
+            
+            this._processInstanceService.Save(processInstance);
+
+            var branches = this._branchService.FindBySystemIdAndName(context.SystemId, fork.Name);
+            if (branches == null || !branches.Any()) {
+                this._branchService.Save(fork);
+            }
+            else {
+                throw new SDKRuntimeException($"Fork already exist. Fork.Name={fork.Name}, InstanceId={context.InstanceId}");
+            }
         }
         
     }

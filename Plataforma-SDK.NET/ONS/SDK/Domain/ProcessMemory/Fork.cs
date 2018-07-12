@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Domain.ProcessMemmory {
     
-    public class Fork {
+    public class Fork: Model {
 
         public static string StatusOpen = "open";
 

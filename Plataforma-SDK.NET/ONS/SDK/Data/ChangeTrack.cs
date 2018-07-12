@@ -1,3 +1,5 @@
+using ONS.SDK.Domain.Base;
+
 namespace ONS.SDK.Data
 {
     public class ChangeTrack
@@ -20,6 +22,10 @@ namespace ONS.SDK.Data
 
         public static bool IsTracking(string changeTrack) {
             return IsCreate(changeTrack) || IsUpdate(changeTrack) || IsDelete(changeTrack);
+        }
+
+        public static bool IsTracking(Model model) {
+            return IsTracking(model._Metadata.ChangeTrack);
         }
     }
 }

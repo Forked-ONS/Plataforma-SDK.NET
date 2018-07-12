@@ -35,6 +35,17 @@ namespace ONS.SDK.Data.Impl
             }
         }
 
+        public IList<Model> AllEntities {
+            get {
+                var retorno = new List<Model>();
+                foreach (var itemSet in AllSet)
+                {
+                    retorno.AddRange(itemSet.AllEntities);
+                } 
+                return retorno;
+            }
+        }
+
         public IList<Model> TrackingEntities {
             get {
                 var retorno = new List<Model>();

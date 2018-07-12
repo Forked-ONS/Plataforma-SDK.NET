@@ -7,7 +7,7 @@ namespace ONS.SDK.Data
 {
     public interface IDataSet: IEnumerable
     {
-        IEnumerable AllEntities {get;}
+        IList<Model> AllEntities {get;}
 
         IList<Model> TrackingEntities {get;}
     }

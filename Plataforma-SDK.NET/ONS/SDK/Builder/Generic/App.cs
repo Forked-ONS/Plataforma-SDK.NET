@@ -29,9 +29,12 @@ namespace ONS.SDK.Builder.Generic
 
         private void _validateConfigurations() 
         {
-            Console.WriteLine("############ " + SDKConfiguration.Binds.Any());
-            if (!SDKConfiguration.Binds.Any()) {
-
+            if (SDKConfiguration.Binds.Any()) {
+                if (_logger.IsEnabled(LogLevel.Debug)) {
+                    var bindsStr = string.Join('/', SDKConfiguration.Binds);
+                    _logger.LogDebug($"The following methods have been configured to respond to system events. Binds: {bindsStr}");
+                }
+            } else {
                 _logger.LogWarning("No events have been configured to respond to platform services.");
             }
         }

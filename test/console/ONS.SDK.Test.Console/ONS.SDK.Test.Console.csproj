@@ -11,4 +11,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Plataforma-SDK.NET\Plataforma-SDK.NET.csproj" />
   </ItemGroup>
+   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

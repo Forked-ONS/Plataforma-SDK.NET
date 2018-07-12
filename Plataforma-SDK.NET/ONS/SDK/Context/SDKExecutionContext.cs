@@ -33,12 +33,6 @@ namespace ONS.SDK.Context {
 
         public ExecutionParameter ExecutionParameter {
             get {
-                if (_executionParameter == null) {
-                    _executionParameter = new ExecutionParameter();
-                    if (!string.IsNullOrEmpty(ProcessInstanceId)) {
-                        _executionParameter.InstanceId = ProcessInstanceId;
-                    }
-                }
                 return _executionParameter;
             }
             set {
@@ -46,8 +40,8 @@ namespace ONS.SDK.Context {
             }
         }
 
-        public IExecutionContext Begin(ExecutionParameter executionParameter) {
-            ExecutionParameter = executionParameter;
+        public IExecutionContext Begin(ExecutionParameter executionParameter = null) {
+            ExecutionParameter = executionParameter != null ? executionParameter: new ExecutionParameter();
             return this;
         }
 

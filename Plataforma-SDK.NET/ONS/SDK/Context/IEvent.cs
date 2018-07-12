@@ -9,7 +9,9 @@ namespace ONS.SDK.Context
 
         string InstanceId {get;}
 
-        DateTime? ReferenceData {get;}
+        DateTime? ReferenceDate {get;}
+
+        string Branch {get;}
 
         string Tag {get;}
 

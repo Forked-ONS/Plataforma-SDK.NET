@@ -19,6 +19,9 @@ namespace ONS.SDK.Domain.ProcessMemmory {
         [JsonProperty("eventOut")]
         public string EventOut { get; set; }
         
+        [JsonProperty("fork")]
+        public Fork Fork { get; set; }
+
         [JsonProperty("commit")]
         public bool Commit { get; set; }
         

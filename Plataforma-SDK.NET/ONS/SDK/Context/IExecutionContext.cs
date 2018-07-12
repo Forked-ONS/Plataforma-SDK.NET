@@ -17,7 +17,7 @@ namespace ONS.SDK.Context {
 
         ExecutionParameter  ExecutionParameter {get;set;}
 
-        IExecutionContext Begin(ExecutionParameter executionParameter);
+        IExecutionContext Begin(ExecutionParameter executionParameter = null);
     }
     
 }

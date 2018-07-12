@@ -56,7 +56,8 @@ namespace ONS.SDK.Extensions.DependencyInjection
             serviceCollection.AddTransient<JsonHttpClient>();
 
             serviceCollection.AddSingleton<SDKWorker>();
-
+            serviceCollection.AddSingleton<WorkerEvent>();
+            
             return serviceCollection;
         }
 

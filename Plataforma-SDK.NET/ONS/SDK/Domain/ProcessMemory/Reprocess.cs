@@ -9,5 +9,9 @@ namespace ONS.SDK.Domain.ProcessMemmory {
 
         [JsonProperty("to")]
         public string To;
+
+        public override string ToString() {
+            return $"[{this.GetType().Name}] {{ From={From}, To={To} }}";
+        }
     }
 }

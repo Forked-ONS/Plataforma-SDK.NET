@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using Microsoft.Extensions.Logging;
 
-namespace Plataforma_SDK.NET.ONS.SDK.Utils
+namespace ONS.SDK.Utils
 {
     public class SDKStopwatch: IDisposable
     {

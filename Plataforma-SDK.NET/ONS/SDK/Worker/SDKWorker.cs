@@ -12,8 +12,9 @@ using ONS.SDK.Services;
 using ONS.SDK.Services.Domain;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using Plataforma_SDK.NET.ONS.SDK.Utils;
+using ONS.SDK.Utils;
 using Newtonsoft.Json;
+using ONS.SDK.Domain.ProcessMemmory;
 
 namespace ONS.SDK.Worker
 {
@@ -29,12 +30,18 @@ namespace ONS.SDK.Worker
 
         private readonly IExecutionContext _executionContext;
 
+        private readonly WorkerEvent _workerEvent;
+
+
         public SDKWorker(ILogger<SDKWorker> logger, ContextBuilder contextBuilder, 
-            IProcessMemoryService processMemoryService, IDomainService domainService, 
-            IExecutionContext executionContext) 
+            IExecutionContext executionContext, 
+            WorkerEvent workerEvent,
+            IProcessMemoryService processMemoryService, 
+            IDomainService domainService) 
         {
             this._logger = logger;
             this._contextBuilder = contextBuilder;
+            this._workerEvent = workerEvent;
             this._processMemoryService = processMemoryService;
             this._domainService = domainService;
             this._executionContext = executionContext;
@@ -50,9 +57,9 @@ namespace ONS.SDK.Worker
             _run(null);
         }
 
-        public void _run(ContextBuilderParameters parameters) 
+        private void _run(ContextBuilderParameters parameters) 
         {
-            using(this._executionContext) {
+            using(this._executionContext.Begin()) {
 
                 try {
 
@@ -76,8 +83,10 @@ namespace ONS.SDK.Worker
                     }
                 
                 } catch(SDKRuntimeException srex) {
+                    this._workerEvent.EmitEventError(srex);
                     throw;
                 } catch(Exception ex) {
+                    this._workerEvent.EmitEventError(ex);
                     throw new SDKRuntimeException("Platform SDKWorker execution error.", ex);
                 }
             }
@@ -99,7 +108,7 @@ namespace ONS.SDK.Worker
                     string.Format("Method not found to event. Event={0}", eventName));
             }
         
-            var runner = GetRunner(methodInfo.DeclaringType);    
+            var runner = WorkerHelper.GetRunner(methodInfo.DeclaringType);    
 
             if (runner == null) {
                 throw new SDKRuntimeException(
@@ -110,7 +119,7 @@ namespace ONS.SDK.Worker
                 _processMemoryService.Commit(context.UpdateMemory());
             }
 
-            var args = _resolveArgs(methodInfo, context);
+            var args = WorkerHelper.ResolveArgs(methodInfo, context);
             try {
                 
                 using(new SDKStopwatch(this._logger, 
@@ -127,63 +136,33 @@ namespace ONS.SDK.Worker
                 );
             }
 
-            using(var watch = new SDKStopwatch(this._logger, "Save memory and dataset through SDK.",
+            using(new SDKStopwatch(this._logger, "Save memory and dataset through SDK.",
                 new LogValue("Event=", eventName), new LogValue("Method=", methodInfo.Name)))
             {
-                _processMemoryService.Commit(context.UpdateMemory());
+                 _finishExecution(context);
+            }
+        }
 
-                if (context.Commit && !context.Memory.Event.IsReproduction) {
+        private void _finishExecution(IContext context) 
+        {
+            var eventName = context.GetEvent().Name;    
+            
+            _processMemoryService.Commit(context.UpdateMemory());
+
+            if (context.Commit 
+                && !context.Memory.Event.IsReproduction) 
+            {
+                if (this._executionContext.ExecutionParameter.SynchronousPersistence) {
                     var trackingEntities = context.DataContext.TrackingEntities;
                     if (trackingEntities.Count > 0) {
                         this._domainService.Persist(context.Memory.Map.Name, trackingEntities);
                     }
-                }    
-            }
-        }
-
-        public object GetRunner(Type type) {
-            if (SDKConfiguration.ServiceProvider == null) {
-                throw new SDKRuntimeException("ServiceProvider not configurated in SDKConfiguration, verify configuration.");
-            }
-            return SDKConfiguration.ServiceProvider.GetService(type);
+                    this._workerEvent.EmitEventOut(context);
+                } else {
+                    this._workerEvent.EmitEventPersistence(context);
+                }
+            }    
         }
         
-        private object[] _resolveArgs(MethodInfo methodInfo, IContext context) 
-        {    
-            var retorno = new List<object>();
-            var parameters = methodInfo.GetParameters();
-
-            foreach(var parameter in parameters) {
-                var type = parameter.ParameterType;
-
-                if (typeof(IEvent).IsAssignableFrom(type)) {
-                    retorno.Add(context.GetEvent());
-                }
-                else if (typeof(IPayload).IsAssignableFrom(type)) {
-                    retorno.Add(context.GetEvent().GetPayload());
-                }
-                else if (typeof(IContext).IsAssignableFrom(type)) {
-                    retorno.Add(context);
-                }
-                else if (typeof(IDataContext).IsAssignableFrom(type)) {
-                    retorno.Add(context.DataContext);
-                }
-                else if (typeof(IDataSet).IsAssignableFrom(type)) {
-                    
-                    var methodSet = context.DataContext.GetType().GetMethods()
-                        .FirstOrDefault(m => m.Name == "Set" && m.IsGenericMethod);
-                    
-                    IDataSet dataSet = null;
-                    if (methodSet != null) {
-                        var typeGeneric = type.GetGenericArguments();
-                        methodSet = methodSet.MakeGenericMethod(typeGeneric);
-                        dataSet = (IDataSet) methodSet.Invoke(context.DataContext, new object[0]);
-                    }
-                    retorno.Add(dataSet);
-                }
-            }
-
-            return retorno.ToArray();
-        }
     }
 }

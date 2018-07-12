@@ -13,8 +13,8 @@ using ONS.SDK.Data;
 using ONS.SDK.Domain.Core;
 using ONS.SDK.Domain.ProcessMemmory;
 using ONS.SDK.Services;
+using ONS.SDK.Utils;
 using ONS.SDK.Worker;
-using Plataforma_SDK.NET.ONS.SDK.Utils;
 using YamlDotNet.Serialization;
 
 namespace ONS.SDK.Context {
@@ -77,6 +77,8 @@ namespace ONS.SDK.Context {
                 payload = new EmptyPayload();
             }
 
+            _executionContext.ExecutionParameter.SynchronousPersistence = true;
+
             var typePayload = payload.GetType();
 
             var memoryEvent = new MemoryEvent();
@@ -112,11 +114,8 @@ namespace ONS.SDK.Context {
                 memory.Event.Scope = SDKConstants.Reproduction;
             }
 
-            _executionContext.Begin(new ExecutionParameter() {
-                Branch = memory.Event.Branch,
-                ReferenceDate = memory.Event.ReferenceDate.HasValue ? memory.Event.ReferenceDate.Value : default(DateTime?),
-                InstanceId = instanceId
-            });
+            _executionContext.ExecutionParameter.MemoryEvent = memory.Event;
+            _executionContext.ExecutionParameter.InstanceId = instanceId;
 
             var operations = _operationService.FindByProcessId(processId);
 

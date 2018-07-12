@@ -5,7 +5,6 @@ namespace ONS.SDK.Context
 {
     public class SDKEvent<T>: IEvent<T> where T: IPayload
     {
-        
         private readonly MemoryEvent _memoryEvent;
 
         public SDKEvent(MemoryEvent memoryEvent) {
@@ -14,9 +13,11 @@ namespace ONS.SDK.Context
 
         public string Name {get {return _memoryEvent.Name;}}
 
+        public string Branch {get {return _memoryEvent.Branch;}}
+
         public string InstanceId {get {return _memoryEvent.InstanceId;}}
 
-        public DateTime? ReferenceData {get {return _memoryEvent.ReferenceDate;}}
+        public DateTime? ReferenceDate {get {return _memoryEvent.ReferenceDate;}}
 
         public string Tag {get {return _memoryEvent.Tag;}}
 

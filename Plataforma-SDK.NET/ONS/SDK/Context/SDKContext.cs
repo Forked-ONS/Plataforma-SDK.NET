@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using ONS.SDK.Configuration;
@@ -34,6 +35,18 @@ namespace ONS.SDK.Context
         public Memory Memory { get{return _memory;} }
 
         public IDataContext DataContext {get{return _dataContext;}}
+
+        public Fork Fork {get { return _memory.Fork; }}
+
+        public Fork CreateFork(string forkName, string forkDescription, DateTime? startedAt = null) 
+        {
+            this._memory.Fork = new Fork() {
+                Name = forkName,
+                Description = forkDescription,
+                StartedAt = startedAt
+            };
+            return this._memory.Fork;
+        }
 
         public IEvent GetEvent()
         {

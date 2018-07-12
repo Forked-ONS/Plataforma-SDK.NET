@@ -1,3 +1,4 @@
+using System;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.ProcessMemmory;
 
@@ -16,6 +17,10 @@ namespace ONS.SDK.Context
         bool Commit {get;}
 
         Memory Memory {get;}
+
+        Fork Fork {get;}
+
+        Fork CreateFork(string forkName, string forkDescription, DateTime? startedAt = null);
 
         Memory UpdateMemory();
 

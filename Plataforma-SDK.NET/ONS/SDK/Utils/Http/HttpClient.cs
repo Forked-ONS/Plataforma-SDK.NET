@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -68,11 +69,12 @@ namespace ONS.SDK.Utils.Http {
                     using (requestMessage) {
 
                         var response = await _client.SendAsync (requestMessage);
-                        var statusCode = response.StatusCode;
-
-                        _ensureSuccessStatusCode(response);    
                         
-                        string responseBody = await response.Content.ReadAsStringAsync();
+                        var statusCode = response.StatusCode;
+                        var reason = response.ReasonPhrase;
+                        var responseBody = response.Content.ReadAsStringAsync().Result;
+                        
+                        _ensureSuccessStatusCode(statusCode, responseBody, reason, url, response);    
 
                         if (_logger.IsEnabled(LogLevel.Debug))
                         {
@@ -97,15 +99,17 @@ namespace ONS.SDK.Utils.Http {
             }
         }
 
-        private void _ensureSuccessStatusCode(HttpResponseMessage response)
+        private void _ensureSuccessStatusCode(
+            HttpStatusCode statusCode, string responseBody, 
+            string reason, string url, HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
-                try {
-                    response.EnsureSuccessStatusCode();
-                } catch(Exception ex) {
-                    throw new SDKHttpException(response, ex.Message, ex);
-                }
+                throw new SDKHttpException(
+                    statusCode, 
+                    responseBody, 
+                    reason, 
+                    $"Response status code does not indicate success: {statusCode} ({reason}). Url: {url}");
             }
         }
 

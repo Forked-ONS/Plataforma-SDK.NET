@@ -42,7 +42,7 @@ namespace ONS.SDK.Worker
                     var executionParameter = this._executionContext.ExecutionParameter;    
 
                     var eventName = executionParameter.EventName;
-                    var lastIndex = eventName.IndexOf('.');
+                    var lastIndex = eventName.LastIndexOf('.');
                     if (lastIndex > 0) {
                     
                         var eventNameError = eventName.Substring(0, lastIndex) + ".error";

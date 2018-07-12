@@ -199,9 +199,7 @@ namespace ONS.SDK.Worker
                         startedAt = current.Value;
                     }
 
-                    if (ChangeTrack.IsTracking(entity)) {
-                        entity._Metadata.Branch = fork.Name;
-                    }
+                    entity._Metadata.Branch = fork.Name;
                 }
             }
             

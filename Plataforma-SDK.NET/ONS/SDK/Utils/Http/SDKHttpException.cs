@@ -12,14 +12,22 @@ namespace ONS.SDK.Worker {
 
         public string ReasonPhrase {get;private set;}
 
-        public SDKHttpException (string message) : base (message) { }
+        public SDKHttpException (HttpStatusCode statusCode, string responseBody, string reason) {
+            this.StatusCode = statusCode;
+            this.ResponseBody = responseBody;
+            this.ReasonPhrase = reason;
+         }
 
-        public SDKHttpException (HttpResponseMessage response, string message, Exception ex) : base (message, ex) { 
-            this.StatusCode = response.StatusCode;
-            this.ResponseBody = response.Content.ReadAsStringAsync().Result;
-            this.ReasonPhrase = response.ReasonPhrase;
+        public SDKHttpException(HttpStatusCode statusCode, string responseBody, string reason, string message) : base (message) {
+            this.StatusCode = statusCode;
+            this.ResponseBody = responseBody;
+            this.ReasonPhrase = reason;
+         }
+
+        public SDKHttpException (HttpStatusCode statusCode, string responseBody, string reason, string message, Exception ex) : base (message, ex) { 
+            this.StatusCode = statusCode;
+            this.ResponseBody = responseBody;
+            this.ReasonPhrase = reason;
         }
-
-        public SDKHttpException (string message, Exception ex) : base (message, ex) { }
     }
 }

@@ -184,7 +184,7 @@ namespace ONS.SDK.Context {
         }
 
         public override string ToString() {
-            return $"[{this.GetType().Name}] {{ Payload={Payload}, EventName={EventName} }}";
+            return $"{this.GetType().Name}[Payload={Payload}, EventName={EventName}]";
         }
     }
 }

@@ -51,8 +51,8 @@ namespace ONS.SDK.Context {
         }
 
         public override string ToString() {
-            return $"[{this.GetType().Name}] {{ SystemId={SystemId}, ProcessId={ProcessId}, "+
-                $"ProcessInstanceId={ProcessInstanceId}, ExecutionParameter={ExecutionParameter} }}";
+            return $"{this.GetType().Name}[SystemId={SystemId}, ProcessId={ProcessId}, "+
+                $"ProcessInstanceId={ProcessInstanceId}, ExecutionParameter={ExecutionParameter}]";
         }
     }
 }

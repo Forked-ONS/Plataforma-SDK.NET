@@ -92,9 +92,11 @@ namespace ONS.SDK.Worker
                     }
                 
                 } catch(SDKRuntimeException srex) {
+                    this._logger.LogError($"Error execution of event through SDK. Params={parameters} / ExecContext={this._executionContext}", srex);
                     this._workerEvent.EmitEventError(srex);
                     throw;
                 } catch(Exception ex) {
+                    this._logger.LogError($"Error execution of event through SDK. Params={parameters} / ExecContext={this._executionContext}");
                     this._workerEvent.EmitEventError(ex);
                     throw new SDKRuntimeException("Platform SDKWorker execution error.", ex);
                 }
@@ -133,20 +135,23 @@ namespace ONS.SDK.Worker
                 
                 using(new SDKStopwatch(this._logger, 
                     "Execution of business method to respond to the event.", 
-                    new LogValue("Event=", eventName), new LogValue("Method=", methodInfo.Name)))
+                    new LogValue("Event=", eventName), new LogValue("Method=", methodInfo.Name), 
+                    new LogValue("InstanceId=", context.InstanceId)))
                 {
                     methodInfo.Invoke(runner, args);
                 }
 
             } catch(Exception ex) {
                 throw new SDKRuntimeException(
-                    $"Error attempting to execute business method that responds to platform. Event={eventName}, Method={methodInfo.Name}", 
+                    $"Error attempting to execute business method that responds to platform. " + 
+                    $"Event={eventName}, Method={methodInfo.Name}, InstanceId={context.InstanceId}", 
                     ex
                 );
             }
 
             using(new SDKStopwatch(this._logger, "Save memory and dataset through SDK.",
-                new LogValue("Event=", eventName), new LogValue("Method=", methodInfo.Name)))
+                new LogValue("Event=", eventName), new LogValue("Method=", methodInfo.Name),
+                new LogValue("InstanceId=", context.InstanceId)))
             {
                  _finishExecution(context);
             }

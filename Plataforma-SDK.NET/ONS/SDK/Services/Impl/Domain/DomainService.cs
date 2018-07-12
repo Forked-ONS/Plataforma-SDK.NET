@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using ONS.SDK.Context;
 using ONS.SDK.Domain.Base;
 using ONS.SDK.Domain.Core;
@@ -29,26 +31,29 @@ namespace ONS.SDK.Services.Impl.Domain
             }
         }
 
-        private string _urlDomainServiceLocal {
-            get {
-                return System.Environment.GetEnvironmentVariable("URL_DOMAIN_SERVICE_LOCAL");
-            }
-        }
-
         private readonly string _url;
 
-        public DomainService (IExecutionContext executionContext, JsonHttpClient client, IInstalledAppService installedAppService) {
+        public DomainService(ILogger<DomainService> logger, IConfiguration configuration, IExecutionContext executionContext, JsonHttpClient client, IInstalledAppService installedAppService) {
             
             this._executionContext = executionContext;
             this._client = client;
             
-            var urlDomainServiceLocal = _urlDomainServiceLocal;
+            var urlDomainServiceLocal = configuration["URL_DOMAIN_SERVICE_LOCAL"];
+
             if (!string.IsNullOrEmpty(urlDomainServiceLocal)) {
                 _url = urlDomainServiceLocal;
+
+                if (logger.IsEnabled(LogLevel.Debug)) {
+                    logger.LogDebug($"Url configurated in env[URL_DOMAIN_SERVICE_LOCAL] to domain service: {this._url}");
+                }
             } else {
                 var systemId = executionContext.SystemId;
                 var info = installedAppService.FindBySystemIdAndType(systemId, "domain").FirstOrDefault();
                 _url = $"http://{info.Host}:{info.Port}";
+
+                if (logger.IsEnabled(LogLevel.Debug)) {
+                    logger.LogDebug($"Url configurated in installedService with sistemId[{systemId}] to domain service: {this._url}");
+                }
             }
 
         }

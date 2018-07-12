@@ -11,7 +11,7 @@ namespace ONS.SDK.Domain.ProcessMemmory {
         public string To;
 
         public override string ToString() {
-            return $"[{this.GetType().Name}] {{ From={From}, To={To} }}";
+            return $"{this.GetType().Name}[From={From}, To={To}]";
         }
     }
 }

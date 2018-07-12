@@ -38,7 +38,7 @@ namespace ONS.SDK.Data.Impl
 
         public IList<Model> AllEntities {
             get {
-                return (IList<Model>) _entities;
+                return _entities.Cast<Model>().ToList();
             }
         }
 

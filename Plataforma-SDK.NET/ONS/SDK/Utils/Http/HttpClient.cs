@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using ONS.SDK.Context;
 using ONS.SDK.Log;
+using ONS.SDK.Worker;
 
 namespace ONS.SDK.Utils.Http {
     public class HttpClient 
@@ -67,8 +68,11 @@ namespace ONS.SDK.Utils.Http {
                     using (requestMessage) {
 
                         var response = await _client.SendAsync (requestMessage);
-                        response.EnsureSuccessStatusCode ();
-                        string responseBody = await response.Content.ReadAsStringAsync ();
+                        var statusCode = response.StatusCode;
+
+                        _ensureSuccessStatusCode(response);    
+                        
+                        string responseBody = await response.Content.ReadAsStringAsync();
 
                         if (_logger.IsEnabled(LogLevel.Debug))
                         {
@@ -90,6 +94,18 @@ namespace ONS.SDK.Utils.Http {
                 _logger.LogError(msg, ex);
 
                 throw;
+            }
+        }
+
+        private void _ensureSuccessStatusCode(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                try {
+                    response.EnsureSuccessStatusCode();
+                } catch(Exception ex) {
+                    throw new SDKHttpException(response, ex.Message, ex);
+                }
             }
         }
 

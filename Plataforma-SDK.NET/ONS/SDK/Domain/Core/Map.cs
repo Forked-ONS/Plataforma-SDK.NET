@@ -38,7 +38,7 @@ namespace ONS.SDK.Domain.Core {
         }
 
         public override string ToString() {
-            return $"[{this.GetType().Name}] {{ Id={this.Id}, Name={this.Name}, ProcessId={this.ProcessId}, SystemId={this.SystemId} }}";
+            return $"{this.GetType().Name}[Id={this.Id}, Name={this.Name}, ProcessId={this.ProcessId}, SystemId={this.SystemId}]";
         }
     }
 }

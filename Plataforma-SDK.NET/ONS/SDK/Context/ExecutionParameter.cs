@@ -43,8 +43,8 @@ namespace ONS.SDK.Context {
         }
 
         public override string ToString() {
-            return $"[{this.GetType().Name}] {{ EventName={EventName}, Branch={Branch}, SynchronousPersistence={SynchronousPersistence}, " + 
-                $"ReferenceDate={ReferenceDate}, InstanceId={InstanceId}, Reprocess={Reprocess} }}";
+            return $"{this.GetType().Name}[EventName={EventName}, Branch={Branch}, SynchronousPersistence={SynchronousPersistence}, " + 
+                $"ReferenceDate={ReferenceDate}, InstanceId={InstanceId}, Reprocess={Reprocess}]";
         }
     }
 }

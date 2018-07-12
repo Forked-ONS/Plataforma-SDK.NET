@@ -32,34 +32,37 @@ namespace ONS.SDK.Worker
             this._eventManagerService = eventManagerService;
         }
 
-        public void EmitEventError(Exception ex) {
-            
-            MemoryEvent eventError = null;
+        public void EmitEventError(Exception exception) {
+            try {
+                MemoryEvent eventError = null;
 
-            if (this._executionContext != null && this._executionContext.ExecutionParameter != null &&
-                this._executionContext.ExecutionParameter.MemoryEvent != null) 
-            {
-                var executionParameter = this._executionContext.ExecutionParameter;    
+                if (this._executionContext != null && this._executionContext.ExecutionParameter != null &&
+                    this._executionContext.ExecutionParameter.MemoryEvent != null) 
+                {
+                    var executionParameter = this._executionContext.ExecutionParameter;    
 
-                var eventName = executionParameter.EventName;
-                var lastIndex = eventName.IndexOf('.');
-                if (lastIndex > 0) {
-                
-                    var eventNameError = eventName.Substring(0, lastIndex) + ".error";
-                    eventError = new MemoryEvent() {
-                        Name = eventNameError,
-                        InstanceId = executionParameter.InstanceId,
-                        Branch = executionParameter.Branch,
-                        Reprocess = executionParameter.MemoryEvent.Reprocess,
-                        Payload = new { message = ex.ToString() }
-                    };   
+                    var eventName = executionParameter.EventName;
+                    var lastIndex = eventName.IndexOf('.');
+                    if (lastIndex > 0) {
+                    
+                        var eventNameError = eventName.Substring(0, lastIndex) + ".error";
+                        eventError = new MemoryEvent() {
+                            Name = eventNameError,
+                            InstanceId = executionParameter.InstanceId,
+                            Branch = executionParameter.Branch,
+                            Reprocess = executionParameter.MemoryEvent.Reprocess,
+                            Payload = new { message = exception.ToString() }
+                        };   
+                    }
                 }
-            }
 
-            if (eventError != null) {
-                this._eventManagerService.Push(eventError);
-            } else {
-                this._logger.LogError("System can not send error event because it has no instance event information.");
+                if (eventError != null) {
+                    this._eventManagerService.Push(eventError);
+                } else {
+                    this._logger.LogError("System can not send error event because it has no instance event information.");
+                }
+            } catch(Exception ex) {
+                this._logger.LogError("Error trying to send error event to platform message manager", ex);
             }
         }
 

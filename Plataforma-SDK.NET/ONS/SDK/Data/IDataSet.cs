@@ -7,6 +7,8 @@ namespace ONS.SDK.Data
 {
     public interface IDataSet: IEnumerable
     {
+        string MapName {get;}
+        
         IList<Model> AllEntities {get;}
 
         IList<Model> TrackingEntities {get;}
@@ -14,9 +16,6 @@ namespace ONS.SDK.Data
 
     public interface IDataSet<T>: IDataSet, IEnumerable<T> where T: Model
     {
-
-        string MapName {get;}
-
         void Insert(T entity);
 
         void Update(T entity);

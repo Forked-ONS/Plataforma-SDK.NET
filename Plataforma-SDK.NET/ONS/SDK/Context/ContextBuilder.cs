@@ -59,20 +59,28 @@ namespace ONS.SDK.Context {
 
         public IContext Build() {
 
-            if (string.IsNullOrEmpty(_executionContext.ProcessId)) {
+            if (this._logger.IsEnabled(LogLevel.Debug)) {
+                this._logger.LogDebug($"Building context from ExecutionContext={this._executionContext}");
+            }
+
+            if (string.IsNullOrEmpty(this._executionContext.ProcessId)) {
                 throw new SDKRuntimeException("Process ID of process not found. ENV: PROCESS_ID");
             }
-            if (string.IsNullOrEmpty(_executionContext.ProcessInstanceId)) {
+            if (string.IsNullOrEmpty(this._executionContext.ProcessInstanceId)) {
                 throw new SDKRuntimeException("Instance ID of process not found. ENV: INSTANCE_ID");
             }
 
-            var memory = _recoveryMemory(_executionContext.ProcessId, _executionContext.ProcessInstanceId);
+            var memory = _recoveryMemory(this._executionContext.ProcessId, this._executionContext.ProcessInstanceId);
 
             return _buildContextFromMemory(memory);
         }
         
         public IContext Build(IPayload payload, string eventName = SDKEventAttribute.DefaultEvent) 
         {
+            if (this._logger.IsEnabled(LogLevel.Debug)) {
+                this._logger.LogDebug($"Building context from Payload={payload} and Event={eventName}");
+            }
+
             if (payload == null) {
                 payload = new EmptyPayload();
             }
@@ -101,6 +109,10 @@ namespace ONS.SDK.Context {
 
         private Memory _recoveryMemory(string processId, string instanceId) 
         {   
+            if (this._logger.IsEnabled(LogLevel.Debug)) {
+                this._logger.LogDebug($"Recovery memory to building context. ProcessId={processId} and InstanceId={instanceId}");
+            }
+
             var memory = _processMemory.Head(instanceId);
             if (memory == null) {
                 throw new SDKRuntimeException($"Process Memory instance was not found. processId: {processId}, instanceId: {instanceId}");
@@ -145,8 +157,12 @@ namespace ONS.SDK.Context {
 
             return memory;
         }
-        private IContext _buildContextFromMemory(Memory memory) {
-            
+        private IContext _buildContextFromMemory(Memory memory) 
+        {    
+            if (this._logger.IsEnabled(LogLevel.Debug)) {
+                this._logger.LogDebug($"Building context from memory. InstanceId={memory.InstanceId}");
+            }
+
             var eventName = memory.Event.Name;
 
             var typePayload = SDKConfiguration.GetTypePayload(eventName);

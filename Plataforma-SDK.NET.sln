@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma-SDK.NET", "Plataforma-SDK.NET\Plataforma-SDK.NET.csproj", "{A53C9834-553F-4057-8A47-A716E77E4CC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ONS.SDK", "sdk\ONS.SDK\ONS.SDK.csproj", "{A53C9834-553F-4057-8A47-A716E77E4CC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plataforma-SDK.NET.Tests", "Plataforma-SDK.NET.Tests\Plataforma-SDK.NET.Tests.csproj", "{CA7231E6-EAF4-4952-B1C2-8302CBCC12E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ONS.SDK.Tests", "test\unit\ONS.SDK.Test.Unit\ONS.SDK.Test.Unit.csproj", "{CA7231E6-EAF4-4952-B1C2-8302CBCC12E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

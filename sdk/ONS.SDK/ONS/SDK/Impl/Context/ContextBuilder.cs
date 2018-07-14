@@ -160,6 +160,7 @@ namespace ONS.SDK.Impl.Context {
 
             return memory;
         }
+        
         private IContext _buildContextFromMemory(Memory memory) 
         {    
             if (this._logger.IsEnabled(LogLevel.Debug)) {

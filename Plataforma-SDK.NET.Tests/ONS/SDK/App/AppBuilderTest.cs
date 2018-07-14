@@ -2,7 +2,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using ONS.SDK.Builder;
-using ONS.SDK.Builder.Generic;
 using ONS.SDK.Extensions.Builder;
 
 namespace ONS.SDK.AppTest {

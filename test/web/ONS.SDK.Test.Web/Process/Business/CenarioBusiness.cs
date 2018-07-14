@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using ONS.SDK.Worker;
 using ONS.SDK.Context;
-using ONS.SDK.Data;
+using ONS.SDK.Data.Persistence;
 using ONS.SDK.Test.Web.Entities;
 using Newtonsoft.Json;
 
@@ -10,7 +10,7 @@ namespace ONS.SDK.Test.Web.Process
 {
     public class CenarioBusiness
     {
-        //[SDKEvent(CenarioEvent.InserirCenario)]
+        [SDKEvent(CenarioEvent.InserirCenario)]
         public void InserirCenario(Conta conta, IDataSet<Conta> contas) 
         {
             Console.WriteLine("########## InserirCenario");

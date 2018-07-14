@@ -8,16 +8,19 @@ using ONS.SDK.Context;
 using ONS.SDK.Configuration;
 using ONS.SDK.Utils.Http;
 using ONS.SDK.Services;
-using ONS.SDK.Services.Impl.EventManager;
 using ONS.SDK.Worker;
-using ONS.SDK.Data.Impl;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.Base;
-using ONS.SDK.Services.Impl.ProcessMemory;
-using ONS.SDK.Services.Impl.Executor;
-using ONS.SDK.Services.Impl.Core;
-using ONS.SDK.Services.Impl.Domain;
 using ONS.SDK.Services.Domain;
+using ONS.SDK.Data.Persistence;
+using ONS.SDK.Impl.Worker;
+using ONS.SDK.Impl.Data.Persistence;
+using ONS.SDK.Impl.Context;
+using ONS.SDK.Impl.Services.ProcessMemory;
+using ONS.SDK.Impl.Services.EventManager;
+using ONS.SDK.Impl.Services.Executor;
+using ONS.SDK.Impl.Services.Core;
+using ONS.SDK.Impl.Services.Domain;
 
 namespace ONS.SDK.Extensions.DependencyInjection
 {
@@ -30,7 +33,7 @@ namespace ONS.SDK.Extensions.DependencyInjection
             serviceCollection.AddSingleton<ExecutorConfig>();
             serviceCollection.AddSingleton<CoreConfig>();
             serviceCollection.AddSingleton<IExecutionContext, SDKExecutionContext>();
-            serviceCollection.AddSingleton<ContextBuilder>();
+            serviceCollection.AddSingleton<IContextBuilder, ContextBuilder>();
             
             serviceCollection.AddSingleton<IDataContextBuilder, SDKDataContextBuilder>();
 
@@ -55,7 +58,7 @@ namespace ONS.SDK.Extensions.DependencyInjection
             serviceCollection.AddTransient<HttpClient>();
             serviceCollection.AddTransient<JsonHttpClient>();
 
-            serviceCollection.AddSingleton<SDKWorker>();
+            serviceCollection.AddSingleton<ISDKWorker, SDKWorker>();
             serviceCollection.AddSingleton<WorkerEvent>();
             
             return serviceCollection;

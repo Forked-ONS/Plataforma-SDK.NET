@@ -27,7 +27,7 @@ namespace ONS.SDK.Extensions.Builder
             
             if (execContext.IsExecutionConsole) {
                 
-                var sdk = app.Services.GetService<SDKWorker>();
+                var sdk = app.Services.GetService<ISDKWorker>();
                 sdk.Run();
                 
             } else {

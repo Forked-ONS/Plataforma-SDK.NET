@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using ONS.SDK.Configuration;
 using ONS.SDK.Context;
 using ONS.SDK.Domain.Base;
 using ONS.SDK.Domain.Core;
@@ -21,13 +22,15 @@ namespace ONS.SDK.Impl.Services.Domain
 
         private string _instanceId {
             get {
-                return _executionContext.ExecutionParameter.InstanceId;
+                return _executionContext.ExecutionParameter != null? 
+                    _executionContext.ExecutionParameter.InstanceId : null;
             }
         }
 
         private string _branch {
             get {
-                return _executionContext.ExecutionParameter.Branch;
+                return _executionContext.ExecutionParameter != null? 
+                    _executionContext.ExecutionParameter.Branch : SDKConstants.BranchMaster;
             }
         }
 

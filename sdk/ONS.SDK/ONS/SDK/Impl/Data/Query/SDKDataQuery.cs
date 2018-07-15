@@ -99,7 +99,9 @@ namespace ONS.SDK.Impl.Data.Query
                     var filterName = filter.Key;
                     var query = filter.Value;
 
-                    retorno[filterName] = QueryHelper.GetParametersName(query);
+                    if (!string.IsNullOrEmpty(query)) {
+                        retorno[filterName] = QueryHelper.GetParametersName(query);
+                    }
                 }
             }
             

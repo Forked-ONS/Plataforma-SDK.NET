@@ -21,6 +21,8 @@ using ONS.SDK.Impl.Services.EventManager;
 using ONS.SDK.Impl.Services.Executor;
 using ONS.SDK.Impl.Services.Core;
 using ONS.SDK.Impl.Services.Domain;
+using ONS.SDK.Data.Query;
+using ONS.SDK.Impl.Data.Query;
 
 namespace ONS.SDK.Extensions.DependencyInjection
 {
@@ -36,6 +38,7 @@ namespace ONS.SDK.Extensions.DependencyInjection
             serviceCollection.AddSingleton<IContextBuilder, ContextBuilder>();
             
             serviceCollection.AddSingleton<IDataContextBuilder, SDKDataContextBuilder>();
+            serviceCollection.AddSingleton<IDataQuery, SDKDataQuery>();
 
             serviceCollection.AddSingleton<IProcessMemoryService, ProcessMemoryService>();
             serviceCollection.AddSingleton<IEventManagerService, EventManagerService>();

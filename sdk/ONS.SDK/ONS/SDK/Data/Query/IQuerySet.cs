@@ -17,7 +17,7 @@ namespace ONS.SDK.Data.Query
 
     }
 
-    public interface IQuerySet<T> where T: Model {
+    public interface IQuerySet<T>: IQuerySet where T: Model {
         
         T ById(string id);
 

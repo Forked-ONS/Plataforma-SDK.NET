@@ -9,7 +9,7 @@ namespace ONS.SDK.Impl.Data.Query
     {
         public static IList<string> GetParametersName(string query)
         {
-            return Regex.Matches(query, @"[$|:]\w+").Select(m => m.Value).ToList();
+            return Regex.Matches(query, @"[$|:]\w+").Select(m => m.Value.Substring(1)).ToList();
         }
 
         public static IDictionary<string, object> MakeParameters(
@@ -47,6 +47,7 @@ namespace ONS.SDK.Impl.Data.Query
             if (parametersName != null && parametersName.Any()) {
                 foreach(var paramName in parametersName) {
                     var token = objParameter.SelectToken(paramName);
+                    System.Console.WriteLine("####################3 paramName: " + paramName + "/ toke: "+objParameter);
                     if (token != null) {
                         retorno[paramName] = token.ToString();
                     } else {

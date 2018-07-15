@@ -18,8 +18,10 @@ namespace ONS.SDK.Impl.Services.EventManager
 
         static EventManagerService() {
             _agreededErroSendEvent = new AgreededErroSendEvent[]{
-                new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, RegexMessage = new Regex("has no subscribers")  },
-                new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, ErrorCode="empty_queue",  RegexMessage = new Regex("empty_queue")  }
+                //new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, RegexMessage = new Regex("has no subscribers")  },
+                //new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, ErrorCode="empty_queue",  RegexMessage = new Regex("empty_queue")  }
+                // TODO verificar pois o event manager está retornando erros estranhos
+                new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, ErrorCode="system_error"  }
             };
         }
 

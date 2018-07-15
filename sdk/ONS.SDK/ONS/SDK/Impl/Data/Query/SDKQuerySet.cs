@@ -10,6 +10,7 @@ using ONS.SDK.Domain.Base;
 using ONS.SDK.Log;
 using ONS.SDK.Services.Domain;
 using ONS.SDK.Worker;
+using System;
 
 namespace ONS.SDK.Impl.Data.Query
 {
@@ -76,7 +77,7 @@ namespace ONS.SDK.Impl.Data.Query
                 throw new SDKRuntimeException("Filter name is required.");
             }
             if (!_filters.ContainsKey(filterName)) {
-                throw new SDKRuntimeException("Filter not found in map of process.");
+                throw new SDKRuntimeException($"Filter not found in map of process. filterName:{filterName}");
             }
         }
 
@@ -120,8 +121,16 @@ namespace ONS.SDK.Impl.Data.Query
             IDictionary<string, object> parameters = null;
             if (filter.GetParameters() != null) {
                 var parametersName = _filters[filter.Name];
+                Console.WriteLine("############# parametersName: " + Newtonsoft.Json.JsonConvert.SerializeObject(parametersName));
                 parameters = QueryHelper.MakeParameters(parametersName, filter.GetParameters());
             }
+
+            if (parameters == null) {
+                parameters = new Dictionary<string, object>();
+            }
+            
+            parameters.Add(SDKConstants.ParamNamePage, filter.Page);
+            parameters.Add(SDKConstants.ParamNamePageSize, filter.PageSize);
 
             var result = this._domainService.Query<T>(_mapName, _entityName, filter.Name, parameters);
             // TODO percisará obter esse parâmetro

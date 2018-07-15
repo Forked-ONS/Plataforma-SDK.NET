@@ -27,13 +27,23 @@ namespace ONS.SDK.Test.Web.Process
             IDataSet<Conta> contas) {
 
             var conta = context.Event.Payload;
-            //var conta = contas.FirstOrDefault();
-            //var contas = context.DataContext.Set<Conta>();
-
+            
             if (conta != null)
             {
                 Console.WriteLine("########## Conta: " + conta.Id + ", Name: " + conta.Name);    
                 contas.Update(conta);
+            }
+
+            Console.WriteLine("########## " + JsonConvert.SerializeObject(contas));
+        }
+
+        [SDKEvent(CenarioEvent.ExcluirCenario)]
+        public void ExcluirCenario(Conta conta, IDataSet<Conta> contas) {
+
+            if (conta != null)
+            {
+                Console.WriteLine("########## Conta: " + conta.Id);    
+                contas.DeleteById(conta.Id);
             }
 
             Console.WriteLine("########## " + JsonConvert.SerializeObject(contas));

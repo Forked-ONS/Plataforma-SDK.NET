@@ -143,11 +143,17 @@ namespace ONS.SDK.Impl.Worker
                 }
 
             } catch(Exception ex) {
-                throw new SDKRuntimeException(
-                    $"Error attempting to execute business method that responds to platform. " + 
-                    $"Event={eventName}, Method={methodInfo.Name}, InstanceId={context.InstanceId}", 
-                    ex
-                );
+                
+                var sdkExcpt = ex.InnerException as SDKRuntimeException;
+                if (sdkExcpt != null) {
+                    throw sdkExcpt;
+                } else {
+                    throw new SDKRuntimeException(
+                        $"Error attempting to execute business method that responds to platform. " + 
+                        $"Event={eventName}, Method={methodInfo.Name}, InstanceId={context.InstanceId}", 
+                        ex
+                    );
+                }
             }
 
             using(new SDKStopwatch(this._logger, "Save memory and dataset through SDK.",

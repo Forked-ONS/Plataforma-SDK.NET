@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ONS.SDK.Services.Domain {
     
@@ -15,6 +17,6 @@ namespace ONS.SDK.Services.Domain {
         public string Name { get; set; }
         
         public IDictionary<string, object> Parameters { get; set; }
-        
+
     }
 }

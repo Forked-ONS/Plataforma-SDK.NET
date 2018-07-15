@@ -13,6 +13,7 @@ using ONS.SDK.Data;
 using ONS.SDK.Data.Persistence;
 using ONS.SDK.Domain.Base;
 using ONS.SDK.Domain.ProcessMemmory;
+using ONS.SDK.Impl.Data.Query;
 using ONS.SDK.Services.Domain;
 using ONS.SDK.Worker;
 
@@ -20,8 +21,6 @@ namespace ONS.SDK.Impl.Data.Persistence
 {
     public class SDKDataContextBuilder: IDataContextBuilder
     {
-        private const string FilterNameAll = "all";
-
         private readonly ILogger<SDKDataContextBuilder> _logger;
 
         private readonly IDomainService _domainService;
@@ -95,12 +94,12 @@ namespace ONS.SDK.Impl.Data.Persistence
             IList entitiesSet, JObject payload) 
         {
             var filters = new List<Filter>();
-            if (mapItem.Filters.ContainsKey(FilterNameAll)) {
+            if (mapItem.Filters.ContainsKey(SDKConstants.FilterNameAll)) {
                 
                 var filter = new Filter() {
                     Map = mapName,
                     Entity = entityName,
-                    Name = FilterNameAll
+                    Name = SDKConstants.FilterNameAll
                 };
                 
                 filters.Add(filter);
@@ -115,19 +114,10 @@ namespace ONS.SDK.Impl.Data.Persistence
                     };
 
                     var filterToAdd = true;
-                    if (string.IsNullOrEmpty(itemFilter.Value)) {
-
-                        var parameters = _getParametersName(itemFilter.Value);
-                        
-                        foreach(var paramName in parameters) {
-                            var token = payload.SelectToken(paramName);
-                            if (token != null) {
-                                filter.Parameters[paramName] = token.ToString();
-                            } else {
-                                filterToAdd = false;
-                                break;
-                            }
-                        }
+                    if (!string.IsNullOrEmpty(itemFilter.Value)) 
+                    {
+                        filter.Parameters = QueryHelper
+                            .MakeParameters(itemFilter.Value, payload, out filterToAdd);
                     }
 
                     if (filterToAdd) {
@@ -169,11 +159,6 @@ namespace ONS.SDK.Impl.Data.Persistence
                 }
             }
             return retorno;
-        }
-
-        private List<string> _getParametersName(string query)
-        {
-            return Regex.Matches(query, @"[$|:]\w+").Select(m => m.Value).ToList();
         }
 
         private IDataContext _buildFromDataSet(DataSetMap dataSetMap) 

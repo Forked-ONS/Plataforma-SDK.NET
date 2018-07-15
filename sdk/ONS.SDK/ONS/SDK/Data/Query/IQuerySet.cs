@@ -5,9 +5,21 @@ using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Data.Query
 {
+    public interface IQuerySet {
+
+        int Count(string filterName = null, object filter = null);
+
+        int Count(IQueryFilter filter);
+
+        bool Any(string filterName = null, object filter = null);
+
+        bool Any(IQueryFilter filter);
+
+    }
+
     public interface IQuerySet<T> where T: Model {
         
-        IList<T> ById(string id);
+        T ById(string id);
 
         IList<T> All();
 
@@ -17,13 +29,6 @@ namespace ONS.SDK.Data.Query
 
         IPagedResult<T> FindPaged(IQueryPagedFilter filter);
 
-        int Count(string filterName = null, object filter = null);
-
-        int Count(IQueryFilter filter);
-
-        bool Any(string filterName = null, object filter = null);
-
-        bool Any(IQueryFilter filter);
     }
 
 }

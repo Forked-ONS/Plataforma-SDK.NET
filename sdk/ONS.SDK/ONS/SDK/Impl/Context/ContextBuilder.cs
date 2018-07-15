@@ -141,7 +141,7 @@ namespace ONS.SDK.Impl.Context {
                 throw new SDKRuntimeException($"Operation not found for process {processId}");
             }
             
-            memory.ProcessId = operation.ProcessId;
+            memory.ProcessId = processId;
             memory.SystemId = operation.SystemId;
             memory.InstanceId = instanceId;
             memory.EventOut = operation.Event_Out;
@@ -149,7 +149,7 @@ namespace ONS.SDK.Impl.Context {
 
             if (memory.Map == null) {
                 
-                var maps = this._mapService.FindByProcessId(operation.ProcessId);
+                var maps = this._mapService.FindByProcessId(processId);
                 
                 var map = maps.FirstOrDefault();
                 if (map != null) 

@@ -9,4 +9,8 @@ namespace ONS.SDK.Data.Query
     
     }
 
+    public interface IQueryPagedFilter<T>: IQueryPagedFilter, IQueryFilter<T> {
+    
+    }
+
 }

@@ -151,7 +151,7 @@ namespace ONS.SDK.Impl.Worker
                     throw new SDKRuntimeException(
                         $"Error attempting to execute business method that responds to platform. " + 
                         $"Event={eventName}, Method={methodInfo.Name}, InstanceId={context.InstanceId}", 
-                        ex
+                        ex.InnerException
                     );
                 }
             }

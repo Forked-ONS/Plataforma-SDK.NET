@@ -75,7 +75,7 @@ namespace ONS.SDK.Test.Web.Controllers
         }
 
         [HttpGet("ByName")]
-        public IList<Conta> FindByName()
+        public IPagedResult<Conta> FindByName()
         {
             Console.WriteLine("###### ByName ");
 
@@ -87,7 +87,7 @@ namespace ONS.SDK.Test.Web.Controllers
                 PageSize = Convert.ToInt32(Request.Query["page_size"])
             };
 
-            return _query.Set<Conta>().FindPaged(filter).Result;
+            return _query.Set<Conta>().FindPaged(filter);
         }
 
         [HttpGet("All")]

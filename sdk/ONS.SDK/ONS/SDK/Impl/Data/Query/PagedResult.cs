@@ -16,14 +16,5 @@ namespace ONS.SDK.Impl.Data.Query
 
         public IList<T> Result {get;set;}
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return this.Result.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.Result.GetEnumerator();
-        }
     }
 }

@@ -5,7 +5,7 @@ using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Data.Query
 {
-    public interface IPagedResult<T>: IEnumerable<T> where T: Model {
+    public interface IPagedResult<T> where T: Model {
         
         int Page {get;}
 

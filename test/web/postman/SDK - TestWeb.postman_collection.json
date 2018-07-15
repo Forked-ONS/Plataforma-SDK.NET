@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "9ffdf16d-ad0c-4511-837a-7e8447bccc1b",
+		"name": "SDK - TestWeb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "All Cenarios",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n \"mes\": 12, \"ano\":2014, \n       \"_metadata\": {\n           \"type\": \"tipo-taxa\",\n           \"changeTrack\":\"create\",\n           \"branch\":\"master\"\n       }}]"
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/cenario/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"cenario",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n \"mes\": 12, \"ano\":2014, \n       \"_metadata\": {\n           \"type\": \"tipo-taxa\",\n           \"changeTrack\":\"create\",\n           \"branch\":\"master\"\n       }}]"
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/cenario/byid/223f77b2-07f7-4ffb-b6ae-8a5816a58916",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"cenario",
+						"byid",
+						"223f77b2-07f7-4ffb-b6ae-8a5816a58916"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ByName",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n \"mes\": 12, \"ano\":2014, \n       \"_metadata\": {\n           \"type\": \"tipo-taxa\",\n           \"changeTrack\":\"create\",\n           \"branch\":\"master\"\n       }}]"
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/cenario/byid/223f77b2-07f7-4ffb-b6ae-8a5816a58916",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"cenario",
+						"byid",
+						"223f77b2-07f7-4ffb-b6ae-8a5816a58916"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Excluir",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n \"mes\": 12, \"ano\":2014, \n       \"_metadata\": {\n           \"type\": \"tipo-taxa\",\n           \"changeTrack\":\"create\",\n           \"branch\":\"master\"\n       }}]"
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/cenario/byid/223f77b2-07f7-4ffb-b6ae-8a5816a58916",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"cenario",
+						"byid",
+						"223f77b2-07f7-4ffb-b6ae-8a5816a58916"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inserir Cenario",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n \"mes\": 12, \"ano\":2014, \n       \"_metadata\": {\n           \"type\": \"tipo-taxa\",\n           \"changeTrack\":\"create\",\n           \"branch\":\"master\"\n       }}]"
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/cenario/inserir?name=teste92&balance=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"cenario",
+						"inserir"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "teste92"
+						},
+						{
+							"key": "balance",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

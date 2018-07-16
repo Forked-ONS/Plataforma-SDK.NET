@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="ONS.AuthProvider.Validator" Version="1.0.0" />
+    <PackageReference Include="ONS.SDK" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\sdk\ONS.SDK\ONS.SDK.csproj" />

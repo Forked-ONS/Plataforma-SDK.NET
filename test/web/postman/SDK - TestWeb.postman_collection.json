@@ -36,6 +36,36 @@
 			"response": []
 		},
 		{
+			"name": "Protected All Cenarios",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n \"mes\": 12, \"ano\":2014, \n       \"_metadata\": {\n           \"type\": \"tipo-taxa\",\n           \"changeTrack\":\"create\",\n           \"branch\":\"master\"\n       }}]"
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/cenario/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"cenario",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "ById",
 			"request": {
 				"method": "GET",

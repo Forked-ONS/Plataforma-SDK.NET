@@ -20,6 +20,12 @@ namespace ONS.SDK.Test.Web
 {
     public class Startup
     {
+        private const string KeyConfigIssuer = "Auth:Validate:Issuer";
+        private const string KeyConfigAudience = "Auth:Validate:Audience";
+        private const string KeyConfigSecretKey = "Auth:Validate:SecretKey";
+        private const string KeyConfigUseRsa = "Auth:Validate:UseRsa";
+        private const string KeyConfigRsaPublicKeyXml = "Auth:Validate:RsaPublicKeyXml";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -45,6 +51,23 @@ namespace ONS.SDK.Test.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var configIssuer = Configuration[KeyConfigIssuer];
+            var configAudience = Configuration[KeyConfigAudience];
+            var configSecretKey = Configuration[KeyConfigSecretKey];
+            var configUseRsa = "true".Equals(Configuration[KeyConfigUseRsa], StringComparison.InvariantCultureIgnoreCase);
+            var configRsaPublicKeyXml = Configuration[KeyConfigRsaPublicKeyXml];
+
+            var authOptions = new AuthProvider.Validator.AuthValidateOptions
+            {
+                ValidIssuer = configIssuer,
+                ValidAudience = configAudience,
+                ValidSecretKey = configSecretKey,
+                UseRsa = configUseRsa,
+                FileRsaPublicKeyXml = configRsaPublicKeyXml
+            };
+            Console.WriteLine("#### authOptions: " + authOptions);
+            AuthProvider.Validator.AuthConfigurationValidate.Configure(services, authOptions);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -59,6 +82,8 @@ namespace ONS.SDK.Test.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }

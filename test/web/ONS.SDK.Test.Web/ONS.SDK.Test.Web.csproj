@@ -10,6 +10,16 @@
     <PackageReference Include="ONS.SDK" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ONS.AuthProvider.Validator">
+      <HintPath>..\..\..\nuget\ONS.AuthProvider.Validator.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\sdk\ONS.SDK\ONS.SDK.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="rsa-public-key.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

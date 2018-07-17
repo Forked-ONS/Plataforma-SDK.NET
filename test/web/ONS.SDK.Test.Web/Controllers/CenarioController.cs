@@ -18,7 +18,7 @@ namespace ONS.SDK.Test.Web.Controllers
 {
     [Route("api/[controller]")]
     [ErrorHandlingFilter]
-    public class CenarioController : Controller
+    public class CenarioController : ControllerBase
     {
         private readonly ILogger<CenarioController> _logger;
         

@@ -54,12 +54,12 @@ dotnet pack ..\sdk\ONS.SDK\ONS.SDK.csproj --output ..\..\nuget\nupkgs --include-
 
 #### docker push
 
-.\nuget.exe push .\nupkgs\ONS.SDK.1.0.0.nupkg -source http://127.0.0.1:80 -apikey "112233"
+dotnet nuget push .\nupkgs\ONS.SDK.1.0.0.nupkg -s http://127.0.0.1:80 -k "112233"
 
 
 #### deletar pack do repositório nuget
 
-.\nuget.exe delete "ONS.SDK" "1.0.0" -s http://localhost:80 -apiKey "112233"
+dotnet nuget delete "ONS.SDK" "1.0.0" -s http://localhost:80 -k "112233"
 
 
 #### nuget install

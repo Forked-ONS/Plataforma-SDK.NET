@@ -8,12 +8,29 @@ using ONS.SDK.Context;
 
 namespace ONS.SDK.Configuration
 {
+    /// <summary>
+    /// Mantém as configurações de eventos do SDK.
+    /// Configrações de Binds de Eventos para métodos de negócio do micro-serviço.
+    /// </summary>
     public class SDKConfiguration
     {
+        /// <summary>
+        /// Nome da origem do SDK que está executando a funcionalidade. 
+        /// </summary>
         public static string AppOriginSDK = "sdk_dotnet";
 
+        /// <summary>
+        /// Lista de Binds de métodos de negócio registrado para atender eventos do sistema.
+        /// </summary>
+        /// <typeparam name="string">Nome do evento de sistema.</typeparam>
+        /// <typeparam name="MethodInfo">Método de negócio responsável por responder ao evento.</typeparam>
+        /// <returns></returns>
         private static IDictionary<string, MethodInfo> _binds = new Dictionary<string, MethodInfo>();
 
+        /// <summary>
+        /// Obtém o provedor de componentes definidos como dependência de IoC.
+        /// </summary>
+        /// <value>Provedor de componentes definidos em IoC</value>
         public static IServiceProvider ServiceProvider {get;set;}
 
         public static IDictionary<string, MethodInfo> Binds {
@@ -22,15 +39,20 @@ namespace ONS.SDK.Configuration
             }
         }
 
+        /// <summary>
+        /// Realiza a configuração dos métodos definidos em uma classe para atender  
+        /// eventos do sistema.
+        /// Esse registro depende de configuração de evento do método, 
+        /// utilizando o attribute SDKEventAttribute.  
+        /// </summary>
+        /// <typeparam name="T">Tipo da classe com os métodos que respondem à eventos.</typeparam>
         public static void BindEvents<T>() {
 
-            // TODO validar tipo
             var type = typeof(T);
             var methodsEvt = _getMethodTypeEvent(type);
 
             if (!methodsEvt.Any()) {
-                // TODO error
-                throw new Exception(
+                throw new BadConfigException(
                     string.Format("No method was found to attend some event for the informed type:[{0}].", type.FullName));
             }
 
@@ -44,6 +66,12 @@ namespace ONS.SDK.Configuration
             });
         }
 
+        /// <summary>
+        /// Indica o tipo da classe do payload do evento de sistema.
+        /// Responsável por passar parâmetros do evento.
+        /// </summary>
+        /// <param name="eventName">Nome do evento de sistema.</param>
+        /// <returns>Tipo da classe de parâmetros do evento.</returns>
         public static Type GetTypePayload(string eventName) 
         {
             Type retorno = null;
@@ -74,6 +102,11 @@ namespace ONS.SDK.Configuration
             return retorno;
         }
 
+        /// <summary>
+        /// Obtém o método de negócio responsável por atender um evento do sistema.
+        /// </summary>
+        /// <param name="eventName">Nome do evento de sistema.</param>
+        /// <returns>Método de negócio responsável por atender um evento do sistema.</returns>
         public static MethodInfo GetMethodByEvent(string eventName) 
         {
             MethodInfo retorno = null;
@@ -130,10 +163,6 @@ namespace ONS.SDK.Configuration
 
                 throw new BadConfigException(msg);
             }
-        }
-
-        public static void ValidateBindsEvent() {
-            // TODO validar os binds configurados com os descritos nos mapas
         }
 
     }

@@ -1,6 +1,10 @@
 using Microsoft.Extensions.Configuration;
 
 namespace ONS.SDK.Configuration {
+
+    /// <summary>
+    /// Classe que representa as configurações de serviços do event-manager da plataforma.
+    /// </summary>
     public class EventManagerConfig : BaseServiceConfig {
         public EventManagerConfig (IConfiguration conf) {
             this.Host = conf.GetValue ("EVENT_MANAGER_HOST", "localhost");

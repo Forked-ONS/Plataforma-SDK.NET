@@ -5,24 +5,43 @@ using ONS.SDK.Domain.ProcessMemmory;
 
 namespace ONS.SDK.Context {
 
+    /// <summary>
+    /// Parâmetros de execução de uma serviço de negócio para atender um evento do sistema.
+    /// </summary>
     public class ExecutionParameter 
     {
+        /// <summary>
+        /// Evento da memória de processamento.
+        /// </summary>
         public MemoryEvent MemoryEvent { get; internal set; }
 
+        /// <summary>
+        /// Indica se a persistência dos dados deve ser executada de forma síncrona ou assíncrona, 
+        /// após a execução do método de negócio.
+        /// </summary>
         public bool SynchronousPersistence { get; internal set; }
 
+        /// <summary>
+        /// Nome do evento na memória de processamento, durante a execução do evento.
+        /// </summary>
         public string EventName { 
             get {
                 return MemoryEvent != null? MemoryEvent.Name : null;
             } 
         }
 
+        /// <summary>
+        /// Indica o branch de execução do evento.
+        /// </summary>
         public string Branch { 
             get {
                 return MemoryEvent != null? MemoryEvent.Branch : null;
             } 
         }
 
+        /// <summary>
+        /// Data de referência da execução do evento.
+        /// </summary>
         public DateTime? ReferenceDate { 
             get {
                 return MemoryEvent != null && MemoryEvent.ReferenceDate.HasValue ? 
@@ -30,12 +49,18 @@ namespace ONS.SDK.Context {
             } 
         }
 
+        /// <summary>
+        /// Informações de reprocessamento do evento, caso esse seja de reprocessamento.
+        /// </summary>
         public Reprocess Reprocess {
             get {
                 return MemoryEvent != null? MemoryEvent.Reprocess : null;
             }
         }
 
+        /// <summary>
+        /// Identificador da instância de execução do evento.
+        /// </summary>
         public string InstanceId { get; internal set; }
         
         public ExecutionParameter()

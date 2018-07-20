@@ -47,7 +47,7 @@ namespace ONS.SDK.Impl.Data.Query
             if (parametersName != null && parametersName.Any()) {
                 foreach(var paramName in parametersName) {
                     var token = objParameter.SelectToken(paramName);
-                    System.Console.WriteLine("####################3 paramName: " + paramName + "/ toke: "+objParameter);
+                    
                     if (token != null) {
                         retorno[paramName] = token.ToString();
                     } else {

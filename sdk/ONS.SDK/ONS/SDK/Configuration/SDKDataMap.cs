@@ -7,10 +7,18 @@ using ONS.SDK.Worker;
 
 namespace ONS.SDK.Configuration
 {
+    /// <summary>
+    /// Mantém as configurações de mapeamento de entidades do sistema e configuradas no mapa.
+    /// As classes mapeadas para cada entidade do mapa de dados são registras e controladas nesta classe.
+    /// </summary>
     public class SDKDataMap
     {
         private static IDictionary<string, Type> _maps = new Dictionary<string, Type>();
 
+        /// <summary>
+        /// Registra a lista de classes mapeadas para entidades do mapa para serem configuradas.
+        /// </summary>
+        /// <param name="maps">Lista de mapeamento de classes e entidades do mapa.</param>
         public static void BindsMap(IDictionary<string, Type> maps) {
             if (maps != null && maps.Count > 0) {
                 foreach(var it in maps) {
@@ -19,6 +27,10 @@ namespace ONS.SDK.Configuration
             }
         }
 
+        /// <summary>
+        /// Indica a classe que registra uma coleção de mapeamento de entidades.
+        /// </summary>
+        /// <typeparam name="T">Tipo da classe que mantém a coleção de mapeamento de entidades do mapa.</typeparam>
         public static void BindsMapCollection<T>() where T: IDataMapCollection {
             var type = typeof(T);
             
@@ -27,6 +39,11 @@ namespace ONS.SDK.Configuration
             SDKDataMap.BindsMap(dataMap.DataMaps);   
         }
 
+        /// <summary>
+        /// Registra uma classe como mapeamento de dados de uma entidade do mapa do serviço.
+        /// Neste caso, a classe de mapeamento deve estar decorada com o attribute DataMapAttribute.
+        /// </summary>
+        /// <typeparam name="T">Tipo da classe que faz mapeamento a entidade do mapa.</typeparam>
         public static void BindMap<T>() where T: Model
         {
             var type = typeof(T);
@@ -44,6 +61,11 @@ namespace ONS.SDK.Configuration
             }
         }
 
+        /// <summary>
+        /// Registra uma classe como mapeamento de dados de uma entidade do mapa do serviço.
+        /// </summary>
+        /// <param name="typeName">Nome da entidade no mapa.</param>
+        /// <typeparam name="T">Tipo da classe que faz mapeamento a entidade do mapa.</typeparam>
         public static void BindMap<T>(string typeName) where T: Model 
         {
             var type = typeof(T);
@@ -63,6 +85,11 @@ namespace ONS.SDK.Configuration
             _maps[typeName] = type;
         }
 
+        /// <summary>
+        /// Obtém o tipo da classe mapeada para um tipo de entidade no mapa do serviço.
+        /// </summary>
+        /// <param name="typeName">Nome da entidade no mapa do serviço.</param>
+        /// <returns>Tipo da classe mapeada para um tipo de entidade no mapa.</returns>
         public static Type GetMap(string typeName) 
         {
             if (string.IsNullOrEmpty(typeName)) {

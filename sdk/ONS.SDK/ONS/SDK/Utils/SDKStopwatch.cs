@@ -5,6 +5,10 @@ using Microsoft.Extensions.Logging;
 
 namespace ONS.SDK.Utils
 {
+    /// <summary>
+    /// Representa um stopwatch para o SDK, com modelo de log de informações de tempo de execução
+    /// de um bloco de código. Onde é monitorado e logado o tempo de execução de um trecho de código. 
+    /// </summary>
     public class SDKStopwatch: IDisposable
     {
         private Stopwatch _stopWatch;
@@ -15,15 +19,31 @@ namespace ONS.SDK.Utils
         
         private string _dataIdentifyLog;
 
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="logger">Parâmetro do construtor.</param>
         public SDKStopwatch(ILogger logger) {
             this._logger = logger;
         }
 
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="logger">Parâmetro do construtor.</param>
+        /// <param name="message">Parâmetro do construtor.</param>
+        /// <param name="dataIdentifyLog">Parâmetro do construtor.</param>
         public SDKStopwatch(ILogger logger, string message, params LogValue[] dataIdentifyLog) {
             this._logger = logger;
             Start(message, dataIdentifyLog);
         }
 
+        /// <summary>
+        /// Inicia a monitoração de um trecho de código, com log e registro de tempo de execução.
+        /// </summary>
+        /// <param name="message">Mensagem de log registrado ao iniciar um trecho de código.</param>
+        /// <param name="dataIdentifyLog">Dados para serem logados ao iniciar o trecho de código.</param>
+        /// <returns>Próprio gerenciador de tempo de execução.</returns>
         public SDKStopwatch Start(string message, params LogValue[] dataIdentifyLog) {
             
             if (this._logger.IsEnabled(LogLevel.Debug)) {
@@ -43,6 +63,11 @@ namespace ONS.SDK.Utils
             return this;
         }
 
+        /// <summary>
+        /// Registra log durante a monitoração de tempo de execução.
+        /// </summary>
+        /// <param name="messageLog">Mensagem que deve ser logada.</param>
+        /// <param name="dataLog">Dados para serem logados em conjunto com a mensagem.</param>
         public void Log(string messageLog, params LogValue[] dataLog) {
             
             if (this._logger.IsEnabled(LogLevel.Debug)) {
@@ -58,6 +83,10 @@ namespace ONS.SDK.Utils
             }   
         }
 
+        /// <summary>
+        /// Finaliza a monitoração do tempo de execução de um trecho de código, 
+        /// e registra log com os dados e tempos de execução.
+        /// </summary>
         public void Dispose() {
             
             if (this._logger.IsEnabled(LogLevel.Debug)) {
@@ -119,28 +148,51 @@ namespace ONS.SDK.Utils
         }
     }
 
+    /// <summary>
+    /// Representa um valor de log a ser registrado.
+    /// </summary>
     public class LogValue {
 
+        /// <summary>
+        /// Chave que representa um valor a ser logado.
+        /// </summary>
         public string Key {get; private set;}
 
         private Func<object> _funcValue;
         private object _value;
 
+        /// <summary>
+        /// Valor a ser logado.
+        /// </summary>
         public object Value {
             get {
                 return _funcValue != null ? this._funcValue() : this._value ;
             }
         }
 
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="key">Parâmetro do construtor.</param>
         public LogValue(string key) {
             Key = key;
         }
 
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="key">Parâmetro do construtor.</param>
+        /// <param name="funcValue">Parâmetro do construtor.</param>
         public LogValue(string key, Func<object> funcValue) {
             this.Key = key;
             this._funcValue = funcValue;
         }
 
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="key">Parâmetro do construtor.</param>
+        /// <param name="value">Parâmetro do construtor.</param>
         public LogValue(string key, object value) {
             this.Key = key;
             this._value = value;

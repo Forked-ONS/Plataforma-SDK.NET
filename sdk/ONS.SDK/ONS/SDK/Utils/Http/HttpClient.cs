@@ -12,36 +12,66 @@ using ONS.SDK.Log;
 using ONS.SDK.Worker;
 
 namespace ONS.SDK.Utils.Http {
+
+    /// <summary>
+    /// Define um client http para o SDK.
+    /// </summary>
     public class HttpClient 
     {
         private readonly ILogger _logger;
         private readonly IExecutionContext _executionContext;
 
+        /// <summary>
+        /// Construtor do HttpCliente.
+        /// </summary>
+        /// <param name="logger">Parâmetro do construtor</param>
+        /// <param name="executionContext">Parâmetro do construtor</param>
         public HttpClient(ILogger<HttpClient> logger, IExecutionContext executionContext) {
             this._logger = logger;
             this._executionContext = executionContext;
 
         }
 
+        /// <summary>
+        /// Executa um requisição com método Get do protocolo http.
+        /// </summary>
+        /// <param name="url">Url da requisição</param>
+        /// <param name="headers">Cabeçalho para ser adicionado na requisição</param>
+        /// <returns>Conteúdo da resposta à requsisição</returns>
         async public virtual Task<string> Get (string url, params Header[] headers) {
             return await Do(HttpMethod.Get, url, "", headers);
         }
 
+        /// <summary>
+        /// Executa um requisição com método Post do protocolo http.
+        /// </summary>
+        /// <param name="url">Url da requisição</param>
+        /// <param name="json">Conteúdo do corpo da requisição</param>
+        /// <param name="headers">Cabeçalho para ser adicionado na requisição</param>
+        /// <returns>Conteúdo da resposta à requsisição</returns>
         async public virtual Task<string> Post (string url, string json, params Header[] headers) {
             return await Do(HttpMethod.Post, url, json, headers);
         }
 
+        /// <summary>
+        /// Executa um requisição com método Put do protocolo http.
+        /// </summary>
+        /// <param name="url">Url da requisição</param>
+        /// <param name="json">Conteúdo do corpo da requisição</param>
+        /// <param name="headers">Cabeçalho para ser adicionado na requisição</param>
+        /// <returns>Conteúdo da resposta à requsisição</returns>
         async public virtual Task<string> Put (string url, string json, params Header[] headers) {
             return await Do(HttpMethod.Put, url, json, headers);
         }
 
-        private System.Net.Http.HttpClient _createHttpClient()
-        {
-            return new System.Net.Http.HttpClient(
-                new LogHandler(new HttpClientHandler(), _logger)
-            );
-        }
-
+        /// <summary>
+        /// Executa um requisição http com método informado.
+        /// </summary>
+        /// <param name="method">Método da requisição http</param>
+        /// <param name="url">Url da requisição</param>
+        /// <param name="json">Conteúdo do corpo da requisição</param>
+        /// <param name="headers">Cabeçalho para ser adicionado na requisição</param>
+        /// <returns>Conteúdo da resposta à requsisição</returns>
         async public virtual Task<string> Do (HttpMethod method, string url, string json, params Header[] headers) {
             var content = new StringContent (json, Encoding.UTF8, "application/json");
 
@@ -99,6 +129,14 @@ namespace ONS.SDK.Utils.Http {
             }
         }
 
+        private System.Net.Http.HttpClient _createHttpClient()
+        {
+            return new System.Net.Http.HttpClient(
+                new LogHandler(new HttpClientHandler(), _logger)
+            );
+        }
+
+        
         private void _ensureSuccessStatusCode(
             HttpStatusCode statusCode, string responseBody, 
             string reason, string url, HttpResponseMessage response)

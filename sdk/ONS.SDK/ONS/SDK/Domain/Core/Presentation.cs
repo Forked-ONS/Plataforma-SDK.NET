@@ -2,6 +2,9 @@ using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Domain.Core
 {
+    /// <summary>
+    /// Representa um process do tipo presentation do core da plataforma.
+    /// </summary>
     public class Presentation : Model
     {
         public string Name {get;set;}

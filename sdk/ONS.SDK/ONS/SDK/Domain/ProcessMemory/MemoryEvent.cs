@@ -6,6 +6,10 @@ using ONS.SDK.Worker;
 
 namespace ONS.SDK.Domain.ProcessMemmory {
     
+    /// <summary>
+    /// Evento original que disparou a execução do processamento, 
+    /// ao qual se refere a memória.
+    /// </summary>
     public class MemoryEvent 
     {
         [JsonProperty("name")]

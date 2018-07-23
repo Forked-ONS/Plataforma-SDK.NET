@@ -1,6 +1,10 @@
 using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Domain.Core {
+
+    /// <summary>
+    /// Representa uma instância de operação de processo do core da plataforma.
+    /// </summary>
     public class OperationInstance : Model {
 
         public string EventName { get; set; }

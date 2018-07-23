@@ -3,6 +3,10 @@ using Newtonsoft.Json;
 using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Domain.Core {
+
+    /// <summary>
+    /// Representa o mapa de entidades dos processos do core da plataforma.
+    /// </summary>
     public class Map : Model {
         
         [JsonProperty("name")]

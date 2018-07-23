@@ -2,7 +2,12 @@ using System;
 using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Domain.Core {
+
+    /// <summary>
+    /// Representa uma instância de aplicação de processo no core da plataforma.
+    /// </summary>
     public class ProcessInstance : Model {
+        
         public string Baseline { get; set; }
         public bool IsFork { get; set; }
         public string Origin_Event_Name { get; set; }

@@ -10,6 +10,9 @@ using YamlDotNet.Serialization;
 
 namespace ONS.SDK.Domain.ProcessMemmory {
     
+    /// <summary>
+    /// Informações do Mapa de entidades do processo.
+    /// </summary>
     public class ProcessMap : Model {
         
         [JsonProperty("content")]

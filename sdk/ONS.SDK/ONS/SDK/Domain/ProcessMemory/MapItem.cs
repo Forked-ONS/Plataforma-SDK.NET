@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace ONS.SDK.Domain.ProcessMemmory {
     
+    /// <summary>
+    /// Representa um item de mapa de entidade da memória de processamento.
+    /// </summary>
     public class MapItem {
         
         [JsonProperty("model")]

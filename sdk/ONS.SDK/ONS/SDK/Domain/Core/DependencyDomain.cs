@@ -1,6 +1,10 @@
 using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Domain.Core {
+
+    /// <summary>
+    /// Representa a entidade de dependência de domínio do core da plataforma.
+    /// </summary>
     public class DependencyDomain : Model {
         public string Entity { get; set; }
         public string Filter { get; set; }

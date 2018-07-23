@@ -4,9 +4,9 @@ using ONS.SDK.Domain.Base;
 namespace ONS.SDK.Services
 {
     /// <summary>
-    /// 
+    /// Define os métodos básicos para atender serviços de uma entidade do core.
     /// </summary>
-    /// <typeparam name="T">Tipo relacionado ao serviço </typeparam>
+    /// <typeparam name="T">Tipo de entidade do core relacionado ao serviço</typeparam>
     public interface ICoreService<T>
     {
          void Save (List<Model> entities);

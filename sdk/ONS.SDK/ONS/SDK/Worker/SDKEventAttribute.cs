@@ -18,6 +18,10 @@ namespace ONS.SDK.Worker
         /// <value>Nome do evento ao qual o método deve responder.</value>
         public string EventName {get;private set;}
         
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="eventName">Nome do evento ao qual o método decorado deve responder</param>
         public SDKEventAttribute(string eventName = DefaultEvent) {
             EventName = eventName;
         }

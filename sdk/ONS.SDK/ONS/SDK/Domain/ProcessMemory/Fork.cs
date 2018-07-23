@@ -5,6 +5,9 @@ using ONS.SDK.Domain.Base;
 
 namespace ONS.SDK.Domain.ProcessMemmory {
     
+    /// <summary>
+    /// Representa os dados de fork para criação de branch na memória de processamento.
+    /// </summary>
     public class Fork: Model {
 
         public static string StatusOpen = "open";

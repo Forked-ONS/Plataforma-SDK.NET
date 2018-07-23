@@ -2,6 +2,10 @@ using Newtonsoft.Json;
 
 namespace ONS.SDK.Domain.ProcessMemmory {
     
+    /// <summary>
+    /// Dados de reprodução, em caso de execução de reprodução da instância, 
+    /// da memória de processamento.
+    /// </summary>
     public class Reproduction {
 
         [JsonProperty("from")]

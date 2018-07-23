@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using ONS.SDK.Builder;
 using ONS.SDK.Extensions.Builder;
+using ONS.SDK.Impl.Builder;
 
 namespace ONS.SDK.AppTest {
 
@@ -11,11 +12,11 @@ namespace ONS.SDK.AppTest {
 
         [Test]
         public void ShouldBuildApp(){
-            /*var app = AppBuilder.CreateDefaultBuilder(null)
+            var app = AppBuilder.CreateDefaultBuilder(null)
             .UseStartup<Startup>()
-            .UseSDK();*/
+            .RunSDK(); 
 
-            Assert.AreEqual(true, Startup.PassHere);
+            //Assert.AreEqual(true, Startup.PassHere);
         }
     }
 
@@ -29,14 +30,9 @@ namespace ONS.SDK.AppTest {
 
         public void Configure(IAppBuilder app)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
-
-    /*class Domain : IDomainContext
-    {
-
-    }*/
 
     class Payload {
 

@@ -15,12 +15,12 @@ namespace Plataforma_SDK.NET.Tests.ONS.SDK.Utils.Http {
             var client = new JsonHttpClient (mock.Object);
             var r = client.Get<Response> ("get");
             Assert.AreEqual (r.Nome, "Moneda");
-        }
+        } 
 
 
         [Test]
         public void ShouldPostJsonObjectAndReceive(){
-            var body = new Response {Nome="Moneda"};
+            var body = new Response {Nome="Moneda"}; 
             mock.Setup (s => s.Post (It.IsAny<string>(), It.IsAny<string>())).Returns (Task.FromResult(@"{ ""Nome"": ""Moneda2"" } "));
             var client = new JsonHttpClient (mock.Object);
             var r = client.Post<Response> ("post", body);

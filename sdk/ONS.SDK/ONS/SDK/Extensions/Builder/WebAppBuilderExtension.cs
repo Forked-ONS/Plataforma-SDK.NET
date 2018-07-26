@@ -34,7 +34,7 @@ namespace ONS.SDK.Extensions.Builder
             SDKConfiguration.ServiceProvider = app.Services;
 
             var execContext = app.Services.GetService<IExecutionContext>();
-            
+                        
             if (execContext.IsExecutionConsole) {
                 
                 var sdk = app.Services.GetService<ISDKWorker>();

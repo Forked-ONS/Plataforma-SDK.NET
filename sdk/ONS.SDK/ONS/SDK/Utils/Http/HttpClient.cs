@@ -86,13 +86,28 @@ namespace ONS.SDK.Utils.Http {
                         requestMessage.Headers.Add (header.Key, new List<string> () { header.Value });
                     }
 
-                    if (this._executionContext != null && this._executionContext.ExecutionParameter != null 
-                        && this._executionContext.ExecutionParameter.ReferenceDate.HasValue) 
+                    if (this._executionContext != null && this._executionContext.ExecutionParameter != null) 
                     {
-                        requestMessage.Headers.Add(
-                            "Reference-Date", 
-                            new List<string>(){ Convert.ToString(this._executionContext.ExecutionParameter.ReferenceDate.Value) }
-                        );
+                        var execParam = this._executionContext.ExecutionParameter;
+
+                        if (execParam.ReferenceDate.HasValue) {
+                            requestMessage.Headers.Add(
+                                "Reference-Date", 
+                                new List<string>(){ Convert.ToString(execParam.ReferenceDate.Value) }
+                            );
+                        }
+                        else if (!string.IsNullOrEmpty(execParam.Branch)) {
+                            requestMessage.Headers.Add(
+                                "Branch", 
+                                new List<string>(){ Convert.ToString(execParam.Branch) }
+                            );
+                        }
+                        else if (!string.IsNullOrEmpty(execParam.InstanceId)) {
+                            requestMessage.Headers.Add(
+                                "Instance-Id", 
+                                new List<string>(){ Convert.ToString(execParam.InstanceId) }
+                            );
+                        }
                     }
 
                     requestMessage.Content = content;

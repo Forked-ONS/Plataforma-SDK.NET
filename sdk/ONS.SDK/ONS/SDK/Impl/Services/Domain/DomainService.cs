@@ -64,6 +64,7 @@ namespace ONS.SDK.Impl.Services.Domain
         public T FindById<T>(string map, string type, string id) where T: Model {
             var url = $"{this._url}/{map}/{type}?filter=byId&id={id}";
             return this._client.Get<List<T>> (url,
+                    // TODO validar se não pode retirar esses parâmetros daqui, pois tem no client Http.
                     new Header () { Key = "Branch", Value = this._branch },
                     new Header () { Key = "Instance-Id", Value = this._instanceId })
                 .FirstOrDefault ();
@@ -90,6 +91,7 @@ namespace ONS.SDK.Impl.Services.Domain
             }
 
             return this._client.Get<List<T>>(url,
+                    // TODO validar se não pode retirar esses parâmetros daqui, pois tem no client Http.
                     new Header () { Key = "Branch", Value = this._branch },
                     new Header () { Key = "Instance-Id", Value = this._instanceId });
         }
@@ -99,6 +101,7 @@ namespace ONS.SDK.Impl.Services.Domain
             var url = $"{this._url}/{map}/persist";
 
             this._client.Post<object>(url, entities,
+                    // TODO validar se não pode retirar esses parâmetros daqui, pois tem no client Http.
                     new Header () { Key = "Branch", Value = this._branch },
                     new Header () { Key = "Instance-Id", Value = this._instanceId });
         }

@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.Configuration;
+using ONS.SDK.Configuration;
 using ONS.SDK.Context;
 
 namespace ONS.SDK.Impl.Context
@@ -16,6 +17,20 @@ namespace ONS.SDK.Impl.Context
             SystemId = configuration.GetValue("SYSTEM_ID","");
             ProcessId = configuration.GetValue("PROCESS_ID","");
             ProcessInstanceId = configuration.GetValue("INSTANCE_ID","");
+
+            this.Validate();
+        }
+
+        public void Validate() {
+            if (string.IsNullOrEmpty(SystemId) || string.IsNullOrEmpty(ProcessId)) {
+                throw new BadConfigException($"Invalid data information to execute process. SystemId={SystemId}, ProcessId={ProcessId}");
+            }
+        }
+
+        public void ValidateInstanceId() {
+            if (string.IsNullOrEmpty(ProcessInstanceId)) {
+                throw new BadConfigException($"Invalid data information to execute process. ProcessInstanceId={ProcessInstanceId}");
+            }
         }
 
         public bool IsExecutionWeb { 

@@ -9,6 +9,7 @@ using ONS.SDK.Builder;
 using ONS.SDK.Configuration;
 using ONS.SDK.Log;
 using ONS.SDK.Worker;
+using ONS.SDK.Context;
 
 namespace ONS.SDK.Impl.Builder 
 {
@@ -45,6 +46,10 @@ namespace ONS.SDK.Impl.Builder
             _validateConfigurations();
 
             var sdk = ServiceProvider.GetService<ISDKWorker>();
+            var execContext = ServiceProvider.GetService<IExecutionContext>();
+
+            execContext.ValidateInstanceId();
+
             sdk.Run();
         }
 

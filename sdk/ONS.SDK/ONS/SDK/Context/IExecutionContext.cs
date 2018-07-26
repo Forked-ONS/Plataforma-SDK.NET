@@ -49,6 +49,16 @@ namespace ONS.SDK.Context {
         /// <param name="executionParameter">Parâmetros </param>
         /// <returns>Contexto da execução.</returns>
         IExecutionContext Begin(ExecutionParameter executionParameter = null);
+
+        /// <summary>
+        /// Valida os dados de execução do processo.
+        /// </summary>
+        void Validate();
+
+        /// <summary>
+        /// Valida a instância de processamento para execução do process.
+        /// </summary>
+        void ValidateInstanceId();
     }
     
 }

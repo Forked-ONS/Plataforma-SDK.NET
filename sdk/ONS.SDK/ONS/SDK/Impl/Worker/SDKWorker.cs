@@ -70,14 +70,15 @@ namespace ONS.SDK.Impl.Worker
         private void _run(ContextBuilderParameters parameters) 
         {
             using(this._executionContext.Begin()) {
-
+                
+                IContext context = null;
                 try {
 
                     using(var watch = new SDKStopwatch(this._logger, "Execution of event through SDK.",
                         new LogValue("Params=", parameters), new LogValue("ExecContext=", this._executionContext))) 
                     {
 
-                        var context = _contextBuilder.Build(parameters);
+                        context = _contextBuilder.Build(parameters);
 
                         watch.Log("Built the context to attend the event.");
 
@@ -93,13 +94,27 @@ namespace ONS.SDK.Impl.Worker
                     }
                 
                 } catch(SDKRuntimeException srex) {
+                
                     this._logger.LogError($"Error execution of event through SDK. Params={parameters} / ExecContext={this._executionContext}", srex);
                     this._workerEvent.EmitEventError(srex);
                     throw;
+                
                 } catch(Exception ex) {
+                
                     this._logger.LogError($"Error execution of event through SDK. Params={parameters} / ExecContext={this._executionContext}");
                     this._workerEvent.EmitEventError(ex);
                     throw new SDKRuntimeException("Platform SDKWorker execution error.", ex);
+                
+                } finally {
+
+                    if (context != null) {
+                        try {
+                            // Salva novamente a memória para gravar os logs finais da operação.
+                            _processMemoryService.Commit(context.Memory);
+                        } catch(Exception ex) {
+                            this._logger.LogError($"Error attempting to save log data from execution of operation. Params={parameters} / ExecContext={this._executionContext}");
+                        }
+                    }
                 }
             }
         }
@@ -173,10 +188,10 @@ namespace ONS.SDK.Impl.Worker
                 this._fork(context);
             }
             
+            // TODO verificar se os dados não poderiam ser salvos uma única vez.
             _processMemoryService.Commit(context.UpdateMemory());
 
-            if (context.Commit 
-                && !context.Memory.Event.IsReproduction) 
+            if (context.Commit && !context.Memory.Event.IsReproduction) 
             {
                 if (this._executionContext.ExecutionParameter.SynchronousPersistence) 
                 {
@@ -186,7 +201,9 @@ namespace ONS.SDK.Impl.Worker
                         this._domainService.Persist(context.Memory.Map.Name, trackingEntities);
                     }
                     this._workerEvent.EmitEventOut(context);
-                } else {
+                } 
+                else 
+                {
                     this._workerEvent.EmitEventPersistence(context);
                 }
             }    

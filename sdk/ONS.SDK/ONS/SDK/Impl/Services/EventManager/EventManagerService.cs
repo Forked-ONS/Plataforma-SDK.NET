@@ -21,7 +21,8 @@ namespace ONS.SDK.Impl.Services.EventManager
                 //new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, RegexMessage = new Regex("has no subscribers")  },
                 //new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, ErrorCode="empty_queue",  RegexMessage = new Regex("empty_queue")  }
                 // TODO verificar pois o event manager está retornando erros estranhos
-                new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, ErrorCode="system_error"  }
+                new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, ErrorCode="system_error"  },
+                new AgreededErroSendEvent { StatusCode = HttpStatusCode.BadRequest, ErrorCode="empty_queue"  }
             };
         }
 
@@ -63,10 +64,12 @@ namespace ONS.SDK.Impl.Services.EventManager
                 }
 
                 ReponseSendEvent reponseSendEvent;
+                var error = _validateErrorSendEvent(stex, out reponseSendEvent);
+                System.Console.WriteLine("########################## error: " + error);
                 if (_validateErrorSendEvent(stex, out reponseSendEvent)) {
-                    this._logger.LogWarning($"There was an error sending the event[{e.Name}] to the manager in the instance execution. Response: {reponseSendEvent}");
+                    this._logger.LogWarning($"There was an error sending the event[{e.Name}] to the manager in the instance execution. Response: {reponseSendEvent}", stex);
                 } else {
-                    this._logger.LogError($"Error received from event manager is not allowed for correct system operation. Event[{e.Name}], Response: {reponseSendEvent}");
+                    this._logger.LogError($"Error received from event manager is not allowed for correct system operation. Event[{e.Name}], Response: {reponseSendEvent}", ex);
                     throw;
                 }
             }

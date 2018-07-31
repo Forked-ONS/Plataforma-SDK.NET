@@ -3,7 +3,7 @@ using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using ONS.SDK.Log;
+using ONS.SDK.Logger;
 using ONS.SDK.Worker;
 
 namespace ONS.SDK.Test.Web.Controllers

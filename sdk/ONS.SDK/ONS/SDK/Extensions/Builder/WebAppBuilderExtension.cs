@@ -29,7 +29,7 @@ namespace ONS.SDK.Extensions.Builder
         {
             var app = builder.Build();
 
-            SDKLoggerFactory.LoggerFactory = app.Services.GetService<ILoggerFactory>();
+            SDKLoggerFactory.Init(app.Services.GetService<ILoggerFactory>());
 
             SDKConfiguration.ServiceProvider = app.Services;
 

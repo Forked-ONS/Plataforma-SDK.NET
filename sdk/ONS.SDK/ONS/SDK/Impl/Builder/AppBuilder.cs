@@ -65,7 +65,7 @@ namespace ONS.SDK.Impl.Builder
             
             var serviceProvider = _buildServiceProvider();
 
-            SDKLoggerFactory.LoggerFactory = serviceProvider.GetService<ILoggerFactory>();
+            SDKLoggerFactory.Init(serviceProvider.GetService<ILoggerFactory>());
             
             this._app = new App(serviceProvider, _configuration);
 

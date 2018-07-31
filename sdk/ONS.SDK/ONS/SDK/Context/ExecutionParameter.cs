@@ -11,9 +11,18 @@ namespace ONS.SDK.Context {
     public class ExecutionParameter 
     {
         /// <summary>
+        /// Memória de processamento.
+        /// </summary>
+        public Memory Memory { get; internal set; }
+
+        /// <summary>
         /// Evento da memória de processamento.
         /// </summary>
-        public MemoryEvent MemoryEvent { get; internal set; }
+        public MemoryEvent MemoryEvent { 
+            get {
+                return Memory != null? Memory.Event : null;
+            } 
+        }
 
         /// <summary>
         /// Indica se a persistência dos dados deve ser executada de forma síncrona ou assíncrona, 

@@ -129,7 +129,7 @@ namespace ONS.SDK.Impl.Context {
                 memory.Event.Scope = SDKConstants.Reproduction;
             }
 
-            _executionContext.ExecutionParameter.MemoryEvent = memory.Event;
+            _executionContext.ExecutionParameter.Memory = memory;
             _executionContext.ExecutionParameter.InstanceId = instanceId;
 
             var operations = _operationService.FindByProcessId(processId);

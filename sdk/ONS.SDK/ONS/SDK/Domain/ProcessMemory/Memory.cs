@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -63,5 +64,23 @@ namespace ONS.SDK.Domain.ProcessMemmory {
         /// </summary>
         [JsonProperty("dataset")]
         public DataSetMap DataSet { get; set; }
+
+        /// <summary>
+        /// Informações de logs registrados durante o processamento da operação.
+        /// </summary>
+        [JsonProperty("logs")]
+        public IList<string> Logs { get; set; }
+
+        /// <summary>
+        /// Adiciona um registro de log na memória de processamento 
+        /// para a execução da operação.
+        /// </summary>
+        /// <param name="logText">Conteúdo para registro de log.</param>
+        public void AddLog(string logText) {
+            if (Logs == null) {
+                Logs = new List<string>();
+            }
+            Logs.Add(logText);
+        }
     }
 }

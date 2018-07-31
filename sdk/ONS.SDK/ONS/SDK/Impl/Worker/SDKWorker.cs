@@ -101,7 +101,7 @@ namespace ONS.SDK.Impl.Worker
                 
                 } catch(Exception ex) {
                 
-                    this._logger.LogError($"Error execution of event through SDK. Params={parameters} / ExecContext={this._executionContext}");
+                    this._logger.LogError($"Error execution of event through SDK. Params={parameters} / ExecContext={this._executionContext}", ex);
                     this._workerEvent.EmitEventError(ex);
                     throw new SDKRuntimeException("Platform SDKWorker execution error.", ex);
                 
@@ -112,7 +112,9 @@ namespace ONS.SDK.Impl.Worker
                             // Salva novamente a memória para gravar os logs finais da operação.
                             _processMemoryService.Commit(context.Memory);
                         } catch(Exception ex) {
-                            this._logger.LogError($"Error attempting to save log data from execution of operation. Params={parameters} / ExecContext={this._executionContext}");
+                            this._logger.LogError(
+                                $"Error attempting to save log data from execution of operation. Params={parameters} / ExecContext={this._executionContext}", 
+                                ex);
                         }
                     }
                 }

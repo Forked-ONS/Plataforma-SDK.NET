@@ -10,7 +10,7 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.Base;
 using ONS.SDK.Extensions.DependencyInjection;
-using ONS.SDK.Log;
+using ONS.SDK.Logger;
 
 namespace ONS.SDK.Impl.Builder
 {

@@ -7,7 +7,7 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Context;
 using ONS.SDK.Data.Persistence;
 using ONS.SDK.Domain.ProcessMemmory;
-using ONS.SDK.Log;
+using ONS.SDK.Logger;
 using ONS.SDK.Worker;
 
 namespace ONS.SDK.Impl.Context

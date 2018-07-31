@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using ONS.SDK.Context;
-using ONS.SDK.Log;
+using ONS.SDK.Logger;
 using ONS.SDK.Worker;
 
 namespace ONS.SDK.Utils.Http {

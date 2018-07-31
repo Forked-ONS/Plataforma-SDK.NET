@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using ONS.SDK.Builder;
 using ONS.SDK.Configuration;
-using ONS.SDK.Log;
+using ONS.SDK.Logger;
 using ONS.SDK.Worker;
 using ONS.SDK.Context;
 

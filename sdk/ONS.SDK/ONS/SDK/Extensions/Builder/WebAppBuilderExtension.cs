@@ -6,7 +6,7 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Worker;
 using Microsoft.AspNetCore.Hosting;
 using ONS.SDK.Context;
-using ONS.SDK.Log;
+using ONS.SDK.Logger;
 using Microsoft.Extensions.Logging;
 using ONS.SDK.Data;
 using ONS.SDK.Domain.Base;

@@ -7,7 +7,7 @@ using ONS.SDK.Configuration;
 using ONS.SDK.Context;
 using ONS.SDK.Data.Query;
 using ONS.SDK.Domain.Base;
-using ONS.SDK.Log;
+using ONS.SDK.Logger;
 using ONS.SDK.Services.Domain;
 using ONS.SDK.Worker;
 using System;

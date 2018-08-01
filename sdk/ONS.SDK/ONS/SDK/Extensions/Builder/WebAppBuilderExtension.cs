@@ -31,7 +31,7 @@ namespace ONS.SDK.Extensions.Builder
 
             SDKConfiguration.ServiceProvider = app.Services;
 
-            SDKLoggerFactory.Init(app.Services.GetService<ILoggerFactory>());
+            SDKLoggerFactory.Init();
 
             var execContext = app.Services.GetService<IExecutionContext>();
                         

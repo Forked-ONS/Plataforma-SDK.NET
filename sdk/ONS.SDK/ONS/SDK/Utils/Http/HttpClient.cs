@@ -118,7 +118,7 @@ namespace ONS.SDK.Utils.Http {
                         var statusCode = response.StatusCode;
                         var reason = response.ReasonPhrase;
                         var responseBody = response.Content.ReadAsStringAsync().Result;
-                        
+                
                         _ensureSuccessStatusCode(statusCode, responseBody, reason, url, response);    
 
                         if (_logger.IsEnabled(LogLevel.Debug))

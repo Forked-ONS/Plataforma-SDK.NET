@@ -69,7 +69,7 @@ namespace ONS.SDK.Impl.Builder
 
             SDKConfiguration.ServiceProvider = serviceProvider;
 
-            SDKLoggerFactory.Init(serviceProvider.GetService<ILoggerFactory>());
+            SDKLoggerFactory.Init();
             
             return this._app;
         }

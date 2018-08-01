@@ -4,10 +4,14 @@ namespace ONS.SDK.Logger
 {
     public class ExecutionLoggerConfiguration
     {
-        public ILogger LogLevelValidate { get; private set; }
+        public LogLevel LogLevel { get; private set; }
 
-        public ExecutionLoggerConfiguration(ILogger logLevelValidate) {
-            LogLevelValidate = logLevelValidate;
+        public ExecutionLoggerConfiguration(LogLevel logLevel) {
+            LogLevel = logLevel;
+        }
+
+        public bool IsEnabled(LogLevel logLevel) {
+            return logLevel >= LogLevel;
         }
         
     }

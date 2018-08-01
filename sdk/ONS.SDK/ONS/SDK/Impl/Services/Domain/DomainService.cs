@@ -51,7 +51,13 @@ namespace ONS.SDK.Impl.Services.Domain
                 }
             } else {
                 var systemId = executionContext.SystemId;
+                
+                var installed = installedAppService.FindBySystemIdAndType(systemId, "domain");
+                
                 var info = installedAppService.FindBySystemIdAndType(systemId, "domain").FirstOrDefault();
+                if (info == null) {
+                    throw new BadConfigException($"Not found installed app of type domain. SystemId={systemId}");
+                }
                 _url = $"http://{info.Host}:{info.Port}";
 
                 if (logger.IsEnabled(LogLevel.Debug)) {

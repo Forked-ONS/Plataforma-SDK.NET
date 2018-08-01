@@ -108,6 +108,7 @@ namespace ONS.SDK.Impl.Context {
             var memory = _recoveryMemory(processId, instanceId);
 
             return _buildContextFromMemory(memory);
+            //return null;
         }
 
         private Memory _recoveryMemory(string processId, string instanceId) 
@@ -170,6 +171,9 @@ namespace ONS.SDK.Impl.Context {
             var eventName = memory.Event.Name;
 
             var typePayload = SDKConfiguration.GetTypePayload(eventName);
+            if (typePayload == null) {
+                throw new BadConfigException($"Type of payload from context event not configurated. InstanceId={memory.InstanceId}");
+            }
 
             var typeContext = typeof(SDKContext<>).MakeGenericType(typePayload);
             

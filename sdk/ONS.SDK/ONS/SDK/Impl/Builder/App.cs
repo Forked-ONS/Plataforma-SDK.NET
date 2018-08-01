@@ -26,7 +26,7 @@ namespace ONS.SDK.Impl.Builder
             this.ServiceProvider = serviceProvider;
             this.Configuration = configuration;
             
-            this._logger = SDKLoggerFactory.Get<App>();
+            this._logger = (ILogger) serviceProvider.GetService(typeof(ILogger<App>));
         }
 
         private void _validateConfigurations() 
@@ -49,7 +49,7 @@ namespace ONS.SDK.Impl.Builder
             var execContext = ServiceProvider.GetService<IExecutionContext>();
 
             execContext.ValidateInstanceId();
-
+            
             sdk.Run();
         }
 

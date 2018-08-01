@@ -25,7 +25,7 @@ namespace ONS.SDK.Logger
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return _config.LogLevelValidate.IsEnabled(logLevel);
+            return _config.IsEnabled(logLevel);
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)

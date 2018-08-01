@@ -136,7 +136,7 @@ namespace ONS.SDK.Impl.Worker
                 throw new SDKRuntimeException(
                     string.Format("Method not found to event. Event={0}", eventName));
             }
-        
+       
             var runner = WorkerHelper.GetRunner(methodInfo.DeclaringType);    
 
             if (runner == null) {
@@ -149,6 +149,7 @@ namespace ONS.SDK.Impl.Worker
             }
 
             var args = WorkerHelper.ResolveArgs(methodInfo, context);
+
             try {
                 
                 using(new SDKStopwatch(this._logger, 

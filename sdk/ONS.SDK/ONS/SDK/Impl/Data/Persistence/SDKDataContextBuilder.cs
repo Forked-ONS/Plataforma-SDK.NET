@@ -77,10 +77,10 @@ namespace ONS.SDK.Impl.Data.Persistence
                         dataSets.Add(dataset);
 
                     } else {  
-                        this._logger.LogWarning($"Unregistered mapping type for map name. mapName: {mapName}");
+                        this._logger.LogWarning($"Unregistered mapping type[{entityName}] for map. mapName: {mapName}");
                     }
 
-                    dataSetMap.Entities[mapName] = null;
+                    dataSetMap.Entities[entityName] = null;
                 }
             }
 

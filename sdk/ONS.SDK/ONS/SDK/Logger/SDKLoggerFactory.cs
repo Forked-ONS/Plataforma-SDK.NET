@@ -61,6 +61,7 @@ namespace ONS.SDK.Logger
                     } 
                 }
             }
+
             return configLogLevel;
         }
 

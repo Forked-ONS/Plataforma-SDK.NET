@@ -77,7 +77,6 @@ namespace ONS.SDK.Impl.Worker
                     using(var watch = new SDKStopwatch(this._logger, "Execution of event through SDK.",
                         new LogValue("Params=", parameters), new LogValue("ExecContext=", this._executionContext))) 
                     {
-
                         context = _contextBuilder.Build(parameters);
 
                         watch.Log("Built the context to attend the event.");
@@ -110,7 +109,7 @@ namespace ONS.SDK.Impl.Worker
                     if (context != null) {
                         try {
                             // Salva novamente a memória para gravar os logs finais da operação.
-                            _processMemoryService.Commit(context.Memory);
+                            _processMemoryService.Commit(context.UpdateMemory());
                         } catch(Exception ex) {
                             this._logger.LogError(
                                 $"Error attempting to save log data from execution of operation. Params={parameters} / ExecContext={this._executionContext}", 
@@ -145,7 +144,8 @@ namespace ONS.SDK.Impl.Worker
             }
 
             if (context.DataContext.DataLoaded) {
-                _processMemoryService.Commit(context.UpdateMemory());
+                // TODO verificar se pode salvar apenas no final
+                // _processMemoryService.Commit(context.UpdateMemory());
             }
 
             var args = WorkerHelper.ResolveArgs(methodInfo, context);

@@ -75,14 +75,14 @@ namespace ONS.SDK.Impl.Context
             this.Memory.Event.Payload = this.GetEvent().GetPayload();
             foreach (var keyPair in this.Memory.DataSet.Entities.ToList()) 
             {
-                var mapName = keyPair.Key;
-                var typeEntity = SDKDataMap.GetMap(mapName);
+                var entityName = keyPair.Key;
+                var typeEntity = SDKDataMap.GetMap(entityName);
                 if (typeEntity != null) {
                     var setEntities = this.DataContext.Set(typeEntity);
-                    this.Memory.DataSet.Entities[mapName] = setEntities.AllEntities;
+                    this.Memory.DataSet.Entities[entityName] = setEntities.AllEntities;
                 } else {
                     var logger = SDKLoggerFactory.Get<SDKContext<T>>();
-                    logger.LogWarning($"Not found type corresponding to map name: {mapName}.");
+                    logger.LogWarning($"Not found type corresponding to entity name: {entityName}.");
                 }
             }
             return this.Memory;

@@ -36,7 +36,7 @@ namespace ONS.SDK.Impl.Data.Persistence
         public IDataContext Build(Memory memory) 
         {
             try {
-                return memory.DataSet != null ? _buildFromDataSet(memory.DataSet) : _loadDataSetFromMap(memory);
+                return memory.DataSet != null ? _buildFromDataSet(memory) : _loadDataSetFromMap(memory);
 
             } catch(Exception ex) {
                 throw new SDKRuntimeException($"Error while trying to build datacontext based on processing memory.", ex);
@@ -71,7 +71,7 @@ namespace ONS.SDK.Impl.Data.Persistence
                         
                         var dataset = (IDataSet) Activator.CreateInstance(
                             typeof(SDKDataSet<>).MakeGenericType(type), 
-                            mapName, entitiesSet
+                            entityName, entitiesSet
                         );
     
                         dataSets.Add(dataset);
@@ -161,41 +161,49 @@ namespace ONS.SDK.Impl.Data.Persistence
             return retorno;
         }
 
-        private IDataContext _buildFromDataSet(DataSetMap dataSetMap) 
+        private IDataContext _buildFromDataSet(Memory memory) 
         {
+            var dataSetMap = memory.DataSet;
+
             this._logger.LogDebug("Constructing the dataset from the data in the processing memory.");
 
             IList<IDataSet> dataSets = new List<IDataSet>();
 
-            if (dataSetMap != null && dataSetMap.Entities != null) 
+            var map = memory.Map;
+            if (map != null && map.Content != null) 
             {
-                foreach(var keyPair in dataSetMap.Entities) 
-                {       
-                    var mapName = keyPair.Key;
-                    var entities = keyPair.Value as JArray;
+                var mapName = map.Name;
 
-                    if (entities != null) 
-                    {
-                        var type = SDKDataMap.GetMap(mapName);
+                if (dataSetMap != null && dataSetMap.Entities != null) 
+                {
+                    foreach(var keyPair in dataSetMap.Entities) 
+                    {       
+                        var entityName = keyPair.Key;
+                        var entities = keyPair.Value as JArray;
 
-                        if (type != null) {
+                        if (entities != null) 
+                        {
+                            var type = SDKDataMap.GetMap(entityName);
 
-                            var entitiesSet = entities.ToObject(typeof(List<>).MakeGenericType(type));
+                            if (type != null) {
 
-                            var dataset = (IDataSet) Activator.CreateInstance(
-                                typeof(SDKDataSet<>).MakeGenericType(type), 
-                                mapName, entitiesSet
-                            );
-        
-                            dataSets.Add(dataset);
+                                var entitiesSet = entities.ToObject(typeof(List<>).MakeGenericType(type));
 
-                        } else {  
-                            this._logger.LogWarning($"Unregistered mapping type for map name. mapName: {mapName}");
+                                var dataset = (IDataSet) Activator.CreateInstance(
+                                    typeof(SDKDataSet<>).MakeGenericType(type), 
+                                    entityName, entitiesSet
+                                );
+            
+                                dataSets.Add(dataset);
+
+                            } else {  
+                                this._logger.LogWarning($"Unregistered mapping type for map name. mapName: {mapName}");
+                            }
                         }
-                    }
 
+                    }
+                    
                 }
-                
             }
             
             return new SDKDataContext(dataSets);

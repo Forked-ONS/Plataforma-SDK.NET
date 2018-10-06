@@ -76,6 +76,7 @@ namespace ONS.SDK.Impl.Data.Query
             if (string.IsNullOrEmpty(filterName)) {
                 throw new SDKRuntimeException("Filter name is required.");
             }
+            Console.WriteLine(">>>>>>>>filters:" + Newtonsoft.Json.JsonConvert.SerializeObject(_filters));
             if (!_filters.ContainsKey(filterName)) {
                 throw new SDKRuntimeException($"Filter not found in map of process. filterName:{filterName}");
             }

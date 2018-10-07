@@ -11,6 +11,7 @@ using ONS.SDK.Logger;
 using ONS.SDK.Services.Domain;
 using ONS.SDK.Worker;
 using System;
+using System.Linq;
 
 namespace ONS.SDK.Impl.Data.Query
 {
@@ -46,13 +47,15 @@ namespace ONS.SDK.Impl.Data.Query
         public bool Any(string filterName = null, object filter = null)
         {
             // TODO o ideal seria ter uma opção de count do domain
-            throw new System.NotImplementedException();
+            
+            return Find(filterName, filter).Any();
         }
 
         public bool Any(IQueryFilter filter)
         {
             // TODO o ideal seria ter uma opção de count do domain
-            throw new System.NotImplementedException();
+
+            return Find(filter).Any();
         }
 
         public T ById(string id)
@@ -63,13 +66,15 @@ namespace ONS.SDK.Impl.Data.Query
         public int Count(string filterName = null, object filter = null)
         {
             // TODO o ideal seria ter uma opção de count do domain
-            throw new System.NotImplementedException();
+            
+            return Find(filterName, filter).Count();
         }
 
         public int Count(IQueryFilter filter)
         {
             // TODO o ideal seria ter uma opção de count do domain
-            throw new System.NotImplementedException();
+            
+            return Find(filter).Count();
         }
 
         private void _validateFilter(string filterName) {

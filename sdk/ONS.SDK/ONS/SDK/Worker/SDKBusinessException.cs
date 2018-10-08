@@ -10,6 +10,11 @@ namespace ONS.SDK.Worker {
         /// <summary>
         /// Construtor.
         /// </summary>
+        public SDKBusinessException() : base () { }
+
+        /// <summary>
+        /// Construtor.
+        /// </summary>
         /// <param name="message">Mensagem da exceção</param>
         public SDKBusinessException(string message) : base (message) { }
 

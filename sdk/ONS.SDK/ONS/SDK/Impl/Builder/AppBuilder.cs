@@ -58,7 +58,7 @@ namespace ONS.SDK.Impl.Builder
         }
 
         private IServiceProvider _buildServiceProvider() {
-            return this._services.BuildServiceProvider();;
+            return this._services.BuildServiceProvider();
         }
 
         public IApp Build () {

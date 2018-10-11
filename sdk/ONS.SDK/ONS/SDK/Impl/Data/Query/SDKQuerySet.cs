@@ -63,6 +63,11 @@ namespace ONS.SDK.Impl.Data.Query
             return this._domainService.FindById<T>(_mapName, _entityName, id);
         }
 
+        public IList<T> History(string id)
+        {
+            return this._domainService.History<T>(_mapName, _entityName, id);
+        }
+
         public int Count(string filterName = null, object filter = null)
         {
             // TODO o ideal seria ter uma opção de count do domain

@@ -44,5 +44,12 @@ namespace ONS.SDK.Domain.Base {
         /// </summary>
         [JsonProperty("changeTrack")]
         public string ChangeTrack { get; set; }
+
+        /// <summary>
+        /// Versão do registro de entidade.
+        /// </summary>
+        [JsonProperty("version")]
+        public string Version { get; set; }
+
     }
 }

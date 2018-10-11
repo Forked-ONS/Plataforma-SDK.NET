@@ -24,6 +24,16 @@ namespace ONS.SDK.Services.Domain {
         T FindById<T>(string map, string type, string id) where T: Model;
 
         /// <summary>
+        /// Histórico da entidade.
+        /// </summary>
+        /// <param name="map">Mapa ao qual pertence a entidade da api de domínio</param>
+        /// <param name="type">Tipo da entidade da api de domínio</param>
+        /// <param name="id">Identificador da entidade</param>
+        /// <typeparam name="T">Tipo da entidade</typeparam>
+        /// <returns>Lista de histórico de entidades</returns>
+        IList<T> History<T>(string map, string type, string id) where T: Model;
+
+        /// <summary>
         /// Pesquisa da entidade na api de domínio pelo filtro e mapa informados.
         /// </summary>
         /// <param name="map">Mapa ao qual pertence a entidade da api de domínio</param>

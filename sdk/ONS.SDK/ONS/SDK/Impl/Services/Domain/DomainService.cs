@@ -67,6 +67,14 @@ namespace ONS.SDK.Impl.Services.Domain
 
         }
 
+        public IList<T> History<T>(string map, string type, string id) where T: Model {
+            var url = $"{this._url}/{map}/{type}/history/{id}";
+            return this._client.Get<List<T>> (url,
+                    // TODO validar se não pode retirar esses parâmetros daqui, pois tem no client Http.
+                    new Header () { Key = "Branch", Value = this._branch },
+                    new Header () { Key = "Instance-Id", Value = this._instanceId });
+        }
+
         public T FindById<T>(string map, string type, string id) where T: Model {
             var url = $"{this._url}/{map}/{type}?filter=byId&id={id}";
             return this._client.Get<List<T>> (url,

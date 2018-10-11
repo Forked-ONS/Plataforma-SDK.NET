@@ -56,6 +56,13 @@ namespace ONS.SDK.Data.Query
         T ById(string id);
 
         /// <summary>
+        /// Histórico de entidades
+        /// </summary>
+        /// <param name="id">Identificador da entidade</param>
+        /// <returns>Histórico de entidades</returns>
+        IList<T> History(string id);
+
+        /// <summary>
         /// Retorna todas as entidade de domínio para o tipo de entidade.
         /// </summary>
         /// <returns>Lista de todas entidade do tipo.</returns>

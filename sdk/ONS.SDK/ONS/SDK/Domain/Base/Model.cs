@@ -31,6 +31,6 @@ namespace ONS.SDK.Domain.Base {
         /// Metadados de persistência.
         /// </summary>
         [JsonProperty("_metadata")]
-        internal Metadata _Metadata { get; set; }
+        public Metadata _Metadata { get; set; }
     }
 }

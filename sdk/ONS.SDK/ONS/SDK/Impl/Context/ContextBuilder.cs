@@ -152,7 +152,8 @@ namespace ONS.SDK.Impl.Context {
                 
                 var maps = this._mapService.FindByProcessId(processId);
                 
-                var map = maps.FirstOrDefault();
+                // TODO map para desenvolvimento: var map = maps.FirstOrDefault();
+                var map = maps.LastOrDefault();
                 if (map != null) 
                 {    
                     memory.Map = ProcessMap.ConvertFromMap(map);

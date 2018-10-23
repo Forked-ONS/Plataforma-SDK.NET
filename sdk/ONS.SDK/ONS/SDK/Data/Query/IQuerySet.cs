@@ -90,6 +90,38 @@ namespace ONS.SDK.Data.Query
         /// <returns>Lista de entidades que atendem ao filtro informado.</returns>
         IPagedResult<T> FindPaged(IQueryPagedFilter filter);
 
+        /// <summary>
+        /// Obtém o primeiro registro de uma posição da consulta.
+        /// </summary>
+        /// <param name="filterName">Nome do filtro para pesquisa.</param>
+        /// <param name="filter">Objeto de filtro com os parâmetros da pesquisa.</param>
+        /// <returns>Entidade obtida da posição informada da lista de consulta.</returns>
+        T First(string filterName = null, object filter = null);
+
+        /// <summary>
+        /// Obtém o primeiro registro de uma posição da consulta.
+        /// </summary>
+        /// <param name="filter">Dados do filtro de pesquisa.</param>
+        /// <returns>Entidade obtida da posição informada da lista de consulta.</returns>
+        T First(IQueryFilter filter);
+
+        /// <summary>
+        /// Obtém o registro de uma determinada posição do resultado de uma consulta.
+        /// </summary>
+        /// <param name="index">Índice da posição que se deseja obter a entidade da lista.</param>
+        /// <param name="filterName">Nome do filtro para pesquisa.</param>
+        /// <param name="filter">Objeto de filtro com os parâmetros da pesquisa.</param>
+        /// <returns>Entidade obtida da posição informada da lista de consulta.</returns>
+        T GetPos(int index, string filterName = null, object filter = null);
+
+        /// <summary>
+        /// Obtém o registro de uma determinada posição do resultado de uma consulta.
+        /// </summary>
+        /// <param name="index">Índice da posição que se deseja obter a entidade da lista.</param>
+        /// <param name="filter">Dados do filtro de pesquisa.</param>
+        /// <returns>Entidade obtida da posição informada da lista de consulta.</returns>
+        T GetPos(int index, IQueryFilter filter);
+
     }
 
 }

@@ -86,7 +86,6 @@ namespace ONS.SDK.Impl.Data.Query
             if (string.IsNullOrEmpty(filterName)) {
                 throw new SDKRuntimeException("Filter name is required.");
             }
-            Console.WriteLine(">>>>>>>>filters:" + Newtonsoft.Json.JsonConvert.SerializeObject(_filters));
             if (!_filters.ContainsKey(filterName)) {
                 throw new SDKRuntimeException($"Filter not found in map of process. filterName:{filterName}");
             }
@@ -132,7 +131,6 @@ namespace ONS.SDK.Impl.Data.Query
             IDictionary<string, object> parameters = null;
             if (filter.GetParameters() != null) {
                 var parametersName = _filters[filter.Name];
-                Console.WriteLine("############# parametersName: " + Newtonsoft.Json.JsonConvert.SerializeObject(parametersName));
                 parameters = QueryHelper.MakeParameters(parametersName, filter.GetParameters());
             }
 
@@ -153,6 +151,28 @@ namespace ONS.SDK.Impl.Data.Query
                 TotalCount = totalCount,
                 Result = result
             };
+        }
+
+        public T First(string filterName = null, object filter = null) {
+            return GetPos(1, filterName, filter);
+        }
+
+        public T First(IQueryFilter filter) {
+            return GetPos(1, filter);
+        }
+
+        public T GetPos(int index, string filterName = null, object filter = null) 
+        {    
+            var queryFilter = new QueryPagedFilter<T> { Name = filterName, Page = 1, PageSize = index};
+            queryFilter.SetParameters(filter);
+            return FindPaged(queryFilter).Result.LastOrDefault();
+        }
+
+        public T GetPos(int index, IQueryFilter filter) 
+        { 
+            var queryFilter = new QueryPagedFilter<T> { Name = filter.Name, Page = 1, PageSize = index };
+            queryFilter.SetParameters(filter.GetParameters());
+            return FindPaged(queryFilter).Result.LastOrDefault();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace ONS.SDK.Utils.Http {
         private readonly HttpClient _client;
 
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings {
-            NullValueHandling = NullValueHandling.Ignore
+            // TODO gera erro de atualização de campos da entidade: NullValueHandling = NullValueHandling.Ignore
         };
 
         /// <summary>
